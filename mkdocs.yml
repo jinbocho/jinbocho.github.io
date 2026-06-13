@@ -41,6 +41,7 @@ theme:
     - toc.follow
 
 nav:
+  - Home: https://jinbocho.github.io/
   - Why Jinbocho:
       - Self-hosted Goodreads alternative: compare/goodreads-self-hosted-alternative.md
       - Catalog your home library: compare/catalog-your-home-library.md
@@ -104,6 +105,7 @@ extra_javascript:
   - https://unpkg.com/mermaid@10/dist/mermaid.min.js
 
 extra:
+  homepage: https://jinbocho.github.io/
   alternate:
     - name: English
       link: /manuals/
