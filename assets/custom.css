@@ -1,0 +1,456 @@
+/* =============================================================
+   Jinbocho Documentation — Custom Theme
+   Palette: mirrors the landing page (src/index.html)
+
+   Brand red   : #BC002D
+   Red dim     : #8a0020
+   Red bg      : #fdf4f5
+   Ink         : #111111
+   Ink mid     : #444444
+   Ink soft    : #777777
+   Line/border : #e5e3de
+   Bg warm     : #f8f7f4
+   White       : #ffffff
+
+   Fonts: Inter (body) · Playfair Display (headings) · JetBrains Mono (code)
+   ============================================================= */
+
+/* ---------- Google Fonts ---------- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ---------- Material CSS variable overrides — light mode ---------- */
+:root,
+[data-md-color-scheme="default"] {
+  /* Primary (header, active nav, buttons) */
+  --md-primary-fg-color:               #BC002D;
+  --md-primary-fg-color--light:        #d4003a;
+  --md-primary-fg-color--dark:         #8a0020;
+  --md-primary-bg-color:               #ffffff;
+  --md-primary-bg-color--light:        rgba(255, 255, 255, 0.72);
+
+  /* Accent (links, focus rings, inline highlights) */
+  --md-accent-fg-color:                #BC002D;
+  --md-accent-fg-color--transparent:   rgba(188, 0, 45, 0.10);
+  --md-accent-bg-color:                #ffffff;
+
+  /* Body text */
+  --md-default-fg-color:               #111111;
+  --md-default-fg-color--light:        #444444;
+  --md-default-fg-color--lighter:      #777777;
+  --md-default-fg-color--lightest:     rgba(17, 17, 17, 0.12);
+
+  /* Body backgrounds */
+  --md-default-bg-color:               #ffffff;
+  --md-default-bg-color--light:        #f8f7f4;
+  --md-default-bg-color--lighter:      #fdf4f5;
+  --md-default-bg-color--lightest:     rgba(248, 247, 244, 0.70);
+
+  /* Code */
+  --md-code-fg-color:                  #3d1f28;
+  --md-code-bg-color:                  #fdf4f5;
+  --md-code-hl-color:                  rgba(188, 0, 45, 0.12);
+  --md-code-hl-number-color:           #BC002D;
+  --md-code-hl-special-color:          #8a0020;
+  --md-code-hl-function-color:         #8a0020;
+  --md-code-hl-constant-color:         #BC002D;
+  --md-code-hl-keyword-color:          #BC002D;
+  --md-code-hl-string-color:           #2e7d32;
+  --md-code-hl-name-color:             #111111;
+  --md-code-hl-operator-color:         #444444;
+  --md-code-hl-punctuation-color:      #777777;
+  --md-code-hl-comment-color:          #777777;
+  --md-code-hl-generic-color:          #444444;
+  --md-code-hl-variable-color:         #3d1f28;
+
+  /* Admonition accent overrides */
+  --md-admonition-fg-color:            var(--md-default-fg-color);
+  --md-admonition-bg-color:            #fdf4f5;
+
+  /* Footer */
+  --md-footer-fg-color:                rgba(255, 255, 255, 0.90);
+  --md-footer-fg-color--light:         rgba(255, 255, 255, 0.70);
+  --md-footer-fg-color--lighter:       rgba(255, 255, 255, 0.45);
+  --md-footer-bg-color:                #BC002D;
+  --md-footer-bg-color--dark:          #8a0020;
+
+  /* Borders */
+  --md-typeset-table-color:            rgba(17, 17, 17, 0.12);
+}
+
+/* ---------- Dark mode ---------- */
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color:               #BC002D;
+  --md-primary-fg-color--light:        #d4003a;
+  --md-primary-fg-color--dark:         #8a0020;
+  --md-primary-bg-color:               #ffffff;
+  --md-primary-bg-color--light:        rgba(255, 255, 255, 0.72);
+
+  --md-accent-fg-color:                #ff4d6d;
+  --md-accent-fg-color--transparent:   rgba(255, 77, 109, 0.10);
+  --md-accent-bg-color:                #ffffff;
+
+  --md-default-fg-color:               hsla(0, 0%, 93%, 0.94);
+  --md-default-fg-color--light:        hsla(0, 0%, 93%, 0.62);
+  --md-default-fg-color--lighter:      hsla(0, 0%, 93%, 0.32);
+  --md-default-fg-color--lightest:     hsla(0, 0%, 93%, 0.12);
+
+  --md-default-bg-color:               #1a1a1a;
+  --md-default-bg-color--light:        #242424;
+  --md-default-bg-color--lighter:      #2e2020;
+  --md-default-bg-color--lightest:     rgba(42, 26, 26, 0.54);
+
+  --md-code-fg-color:                  #f8c8d0;
+  --md-code-bg-color:                  #2a1a1e;
+  --md-code-hl-color:                  rgba(255, 77, 109, 0.15);
+  --md-code-hl-number-color:           #ff8fa3;
+  --md-code-hl-special-color:          #ff4d6d;
+  --md-code-hl-function-color:         #ff6b84;
+  --md-code-hl-constant-color:         #ff4d6d;
+  --md-code-hl-keyword-color:          #ff4d6d;
+  --md-code-hl-string-color:           #80cfa9;
+  --md-code-hl-name-color:             hsla(0, 0%, 93%, 0.82);
+  --md-code-hl-operator-color:         hsla(0, 0%, 93%, 0.62);
+  --md-code-hl-punctuation-color:      hsla(0, 0%, 93%, 0.42);
+  --md-code-hl-comment-color:          hsla(0, 0%, 93%, 0.32);
+  --md-code-hl-generic-color:          hsla(0, 0%, 93%, 0.62);
+  --md-code-hl-variable-color:         #f8c8d0;
+
+  --md-admonition-bg-color:            #2a1a1e;
+
+  --md-footer-bg-color:                #BC002D;
+  --md-footer-bg-color--dark:          #8a0020;
+  --md-footer-fg-color:                rgba(255, 255, 255, 0.90);
+  --md-footer-fg-color--light:         rgba(255, 255, 255, 0.70);
+  --md-footer-fg-color--lighter:       rgba(255, 255, 255, 0.45);
+
+  --md-typeset-table-color:            rgba(255, 255, 255, 0.12);
+}
+
+/* ---------- Typography ---------- */
+.md-typeset {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 0.8rem;
+  line-height: 1.7;
+  color: var(--md-default-fg-color);
+}
+
+/* Headings use Playfair Display, same as the landing page */
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4 {
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--md-default-fg-color);
+}
+
+.md-typeset h1 {
+  font-size: 2rem;
+  border-bottom: 2px solid #BC002D;
+  padding-bottom: 0.4em;
+  margin-bottom: 1em;
+}
+
+.md-typeset h2 {
+  font-size: 1.45rem;
+  margin-top: 2em;
+}
+
+.md-typeset h3 {
+  font-size: 1.15rem;
+}
+
+[data-md-color-scheme="slate"] .md-typeset h1,
+[data-md-color-scheme="slate"] .md-typeset h2,
+[data-md-color-scheme="slate"] .md-typeset h3,
+[data-md-color-scheme="slate"] .md-typeset h4 {
+  color: hsla(0, 0%, 93%, 0.94);
+}
+
+/* ---------- Header ---------- */
+.md-header {
+  background-color: #BC002D;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.20);
+}
+
+[data-md-color-scheme="slate"] .md-header {
+  background-color: #BC002D;
+}
+
+.md-header__title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.01em;
+}
+
+/* Logo sizing inside header */
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+  height: 28px;
+  width: 28px;
+}
+
+/* ---------- Navigation tabs ---------- */
+.md-tabs {
+  background-color: #8a0020;
+}
+
+[data-md-color-scheme="slate"] .md-tabs {
+  background-color: #8a0020;
+}
+
+.md-tabs__link {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  opacity: 0.82;
+}
+
+.md-tabs__link--active,
+.md-tabs__link:hover {
+  opacity: 1;
+}
+
+/* ---------- Sidebar ---------- */
+.md-nav__title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 700;
+}
+
+.md-nav__link--active {
+  color: #BC002D !important;
+  font-weight: 600;
+}
+
+[data-md-color-scheme="slate"] .md-nav__link--active {
+  color: #ff4d6d !important;
+}
+
+/* ---------- Links ---------- */
+.md-typeset a {
+  color: #BC002D;
+  text-decoration: none;
+  text-underline-offset: 3px;
+  transition: color 0.15s;
+}
+
+.md-typeset a:hover {
+  color: #8a0020;
+  text-decoration: underline;
+}
+
+[data-md-color-scheme="slate"] .md-typeset a {
+  color: #ff4d6d;
+}
+
+[data-md-color-scheme="slate"] .md-typeset a:hover {
+  color: #ff8fa3;
+}
+
+/* ---------- Code ---------- */
+.md-typeset code {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 0.85em;
+  background-color: #fdf4f5;
+  color: #3d1f28;
+  border-radius: 4px;
+  padding: 0.1em 0.35em;
+  border: 1px solid rgba(188, 0, 45, 0.12);
+}
+
+[data-md-color-scheme="slate"] .md-typeset code {
+  background-color: #2a1a1e;
+  color: #f8c8d0;
+  border-color: rgba(255, 77, 109, 0.20);
+}
+
+.md-typeset pre > code {
+  background-color: transparent;
+  color: inherit;
+  border: none;
+  padding: 0;
+}
+
+/* ---------- Admonitions ---------- */
+/* Tone the red into the existing Material admonition system */
+.md-typeset .admonition,
+.md-typeset details {
+  border-radius: 6px;
+  border-left-width: 4px;
+}
+
+.md-typeset .admonition.note,
+.md-typeset details.note {
+  border-left-color: #BC002D;
+}
+
+.md-typeset .admonition.tip,
+.md-typeset details.tip {
+  border-left-color: #2e7d32;
+}
+
+.md-typeset .admonition.warning,
+.md-typeset details.warning {
+  border-left-color: #c77700;
+}
+
+.md-typeset .admonition.danger,
+.md-typeset details.danger {
+  border-left-color: #8a0020;
+}
+
+/* ---------- Tables ---------- */
+.md-typeset table:not([class]) {
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.07);
+}
+
+.md-typeset table:not([class]) th {
+  background-color: #BC002D;
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.65em 0.9em;
+}
+
+.md-typeset table:not([class]) td {
+  padding: 0.6em 0.9em;
+  border-top: 1px solid var(--md-typeset-table-color);
+}
+
+.md-typeset table:not([class]) tr:hover > td {
+  background-color: #fdf4f5;
+}
+
+[data-md-color-scheme="slate"] .md-typeset table:not([class]) th {
+  background-color: #8a0020;
+}
+
+[data-md-color-scheme="slate"] .md-typeset table:not([class]) tr:hover > td {
+  background-color: #2a1a1e;
+}
+
+/* ---------- Content tabs ---------- */
+.md-typeset .tabbed-labels > label {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 0.78rem;
+}
+
+.md-typeset .tabbed-labels > label:hover {
+  color: #BC002D;
+}
+
+[data-md-color-scheme="default"] .md-typeset .tabbed-labels > label.--active {
+  color: #BC002D;
+  border-bottom-color: #BC002D;
+}
+
+[data-md-color-scheme="slate"] .md-typeset .tabbed-labels > label.--active {
+  color: #ff4d6d;
+  border-bottom-color: #ff4d6d;
+}
+
+/* ---------- Search ---------- */
+.md-search__form {
+  border-radius: 6px;
+}
+
+.md-search__input::placeholder {
+  font-family: 'Inter', sans-serif;
+}
+
+/* ---------- Footer ---------- */
+.md-footer {
+  background-color: #BC002D;
+}
+
+.md-footer-meta {
+  background-color: #8a0020;
+}
+
+.md-footer__link:hover .md-footer__title {
+  text-decoration: underline;
+}
+
+/* ---------- Buttons (Material .md-button) ---------- */
+.md-typeset .md-button {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.8rem;
+  border-radius: 6px;
+  padding: 0.55em 1.2em;
+  background-color: #BC002D;
+  color: #ffffff;
+  border: 2px solid #BC002D;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+
+.md-typeset .md-button:hover {
+  background-color: #8a0020;
+  border-color: #8a0020;
+  color: #ffffff;
+}
+
+.md-typeset .md-button--secondary {
+  background-color: transparent;
+  color: #BC002D;
+  border-color: #BC002D;
+}
+
+.md-typeset .md-button--secondary:hover {
+  background-color: #fdf4f5;
+  color: #8a0020;
+  border-color: #8a0020;
+}
+
+/* ---------- Mermaid diagrams — minimal style alignment ---------- */
+.mermaid {
+  margin: 1.5em 0;
+  text-align: center;
+}
+
+/* ---------- Back-to-top button ---------- */
+.md-top {
+  background-color: #BC002D;
+  color: #ffffff;
+}
+
+.md-top:hover {
+  background-color: #8a0020;
+}
+
+/* ---------- Scrollbar (webkit) ---------- */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(188, 0, 45, 0.35);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(188, 0, 45, 0.65);
+}
+
+/* ---------- Permalink anchors ---------- */
+.md-typeset .headerlink {
+  color: rgba(188, 0, 45, 0.40);
+}
+
+.md-typeset .headerlink:hover {
+  color: #BC002D;
+}

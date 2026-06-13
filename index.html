@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jinbocho — La biblioteca di casa, finalmente in ordine</title>
+  <meta name="description" content="Jinbocho è il sistema open source per catalogare, organizzare e ritrovare i libri della tua famiglia. Scansiona ISBN, mappa le librerie, condividi con i tuoi cari." />
+  <meta property="og:title" content="Jinbocho — La biblioteca di casa, finalmente in ordine" />
+  <meta property="og:description" content="Cataloga i tuoi libri con uno scan. Trova ogni volume sullo scaffale giusto. Open source, per la tua famiglia." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red:     #BC002D;
+      --red-dim: #8a0020;
+      --red-bg:  #fdf4f5;
+      --ink:     #111111;
+      --ink-mid: #444444;
+      --ink-soft:#777777;
+      --line:    #e5e3de;
+      --bg:      #f8f7f4;
+      --white:   #ffffff;
+      --radius:  10px;
+      --max:     1120px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--ink);
+      background: var(--white);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    img { max-width: 100%; display: block; }
+
+    /* ── LAYOUT ── */
+    .container { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      gap: 16px;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--ink);
+      flex-shrink: 0;
+    }
+    .nav-logo svg { width: 32px; height: 32px; }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+      font-size: 14px;
+      color: var(--ink-mid);
+    }
+    .nav-links a:hover { color: var(--red); }
+    .nav-cta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 7px;
+      padding: 9px 18px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s, opacity 0.15s;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+    .btn-primary {
+      background: var(--red);
+      color: var(--white);
+      border-color: var(--red);
+    }
+    .btn-primary:hover { background: var(--red-dim); border-color: var(--red-dim); }
+    .btn-outline {
+      background: transparent;
+      color: var(--ink);
+      border-color: var(--line);
+    }
+    .btn-outline:hover { border-color: #bbb; }
+    .btn-lg { font-size: 16px; padding: 13px 28px; border-radius: 9px; }
+    .btn-ghost { color: var(--ink-mid); font-size: 14px; font-weight: 500; }
+    .btn-ghost:hover { color: var(--ink); }
+
+    /* ── LANG TOGGLE ── */
+    .lang-toggle {
+      display: flex;
+      align-items: center;
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 100px;
+      padding: 2px;
+      gap: 2px;
+    }
+    .lang-btn {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      padding: 4px 10px;
+      border-radius: 100px;
+      border: none;
+      background: transparent;
+      color: var(--ink-soft);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      line-height: 1.4;
+    }
+    .lang-btn.active {
+      background: var(--red);
+      color: var(--white);
+    }
+    .lang-btn:hover:not(.active) {
+      background: var(--line);
+      color: var(--ink);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 96px 0 80px;
+      text-align: center;
+      background: var(--white);
+    }
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--red);
+      background: var(--red-bg);
+      border: 1px solid #f5c5cb;
+      padding: 4px 12px;
+      border-radius: 100px;
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(36px, 5.5vw, 60px);
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--ink);
+      max-width: 760px;
+      margin: 0 auto 20px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--red);
+    }
+    .hero-sub {
+      font-size: clamp(16px, 2vw, 19px);
+      color: var(--ink-mid);
+      max-width: 560px;
+      margin: 0 auto 40px;
+      line-height: 1.6;
+    }
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .hero-meta {
+      margin-top: 20px;
+      font-size: 13px;
+      color: var(--ink-soft);
+    }
+    .hero-meta a { color: var(--ink-soft); text-decoration: underline; text-underline-offset: 3px; }
+    .hero-meta a:hover { color: var(--ink); }
+
+    /* ── BADGE STRIP ── */
+    .badge-strip {
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: var(--bg);
+      padding: 14px 0;
+    }
+    .badge-list {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      flex-wrap: wrap;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink-mid);
+    }
+    .badge-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--red);
+      flex-shrink: 0;
+    }
+
+    /* ── SECTION ── */
+    section { padding: 88px 0; }
+    .section-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(28px, 3.5vw, 40px);
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--ink);
+      max-width: 600px;
+      margin-bottom: 16px;
+    }
+    .section-sub {
+      font-size: 17px;
+      color: var(--ink-mid);
+      max-width: 540px;
+      line-height: 1.6;
+    }
+
+    /* ── FEATURES GRID ── */
+    .features-bg { background: var(--bg); }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2px;
+      border: 2px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-top: 56px;
+    }
+    .feature-card {
+      background: var(--white);
+      padding: 32px;
+    }
+    .feature-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--red-bg);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      flex-shrink: 0;
+    }
+    .feature-icon svg { width: 22px; height: 22px; stroke: var(--red); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .feature-card h3 {
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--ink);
+    }
+    .feature-card p {
+      font-size: 15px;
+      color: var(--ink-mid);
+      line-height: 1.6;
+    }
+
+    /* ── HOW IT WORKS ── */
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 40px; margin-top: 56px; }
+    .step { position: relative; }
+    .step-num {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--line);
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+    .step h3 { font-size: 18px; font-weight: 600; margin-bottom: 10px; color: var(--ink); }
+    .step p { font-size: 15px; color: var(--ink-mid); line-height: 1.65; }
+    .step-divider {
+      width: 40px;
+      height: 3px;
+      background: var(--red);
+      border-radius: 2px;
+      margin-bottom: 16px;
+    }
+
+    /* ── DETAIL SECTIONS ── */
+    .detail {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .detail.reverse { direction: rtl; }
+    .detail.reverse > * { direction: ltr; }
+    .detail-text .section-title { max-width: 440px; }
+    .detail-text .section-sub { max-width: 440px; }
+    .detail-list {
+      margin-top: 24px;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .detail-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 15px;
+      color: var(--ink-mid);
+    }
+    .detail-list li::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--red);
+      margin-top: 8px;
+      flex-shrink: 0;
+    }
+
+    /* mock UI panels */
+    .mock-panel {
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.06);
+    }
+    .mock-topbar {
+      background: var(--white);
+      border-bottom: 1px solid var(--line);
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .mock-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .mock-title {
+      margin-left: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink-mid);
+    }
+    .mock-body { padding: 20px; }
+
+    /* book list mock */
+    .mock-book-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .mock-book-row:last-child { border-bottom: none; }
+    .mock-cover {
+      width: 32px;
+      height: 44px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+    .mock-book-info { flex: 1; min-width: 0; }
+    .mock-book-title { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .mock-book-author { font-size: 11px; color: var(--ink-soft); }
+    .mock-badge { font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 100px; flex-shrink: 0; }
+    .badge-read { background: #e8f5e9; color: #2e7d32; }
+    .badge-reading { background: #fff8e1; color: #f57f17; }
+    .badge-toread { background: #f3f3f3; color: #666; }
+
+    /* shelf mock */
+    .mock-shelf {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+    .mock-shelf-header {
+      background: var(--bg);
+      padding: 8px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink-soft);
+      border-bottom: 1px solid var(--line);
+    }
+    .mock-shelf-books {
+      display: flex;
+      gap: 6px;
+      padding: 12px 14px;
+      flex-wrap: wrap;
+    }
+    .mock-spine {
+      width: 14px;
+      height: 56px;
+      border-radius: 2px;
+    }
+
+    /* stats mock */
+    .mock-stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .mock-stat-card {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+    .mock-stat-label { font-size: 11px; color: var(--ink-soft); margin-bottom: 4px; }
+    .mock-stat-value { font-family: 'Playfair Display', Georgia, serif; font-size: 28px; font-weight: 700; color: var(--ink); }
+    .mock-stat-value.red { color: var(--red); }
+    .mock-stat-value.green { color: #2e7d32; }
+    .mock-stat-value.amber { color: #c77700; }
+
+    /* scan mock */
+    .mock-scan-area {
+      background: var(--ink);
+      border-radius: 10px;
+      aspect-ratio: 16/9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .mock-scan-frame {
+      width: 60%;
+      height: 40%;
+      border: 2px solid var(--red);
+      border-radius: 4px;
+      position: relative;
+    }
+    .mock-scan-line {
+      position: absolute;
+      left: 0; right: 0;
+      height: 2px;
+      background: var(--red);
+      opacity: 0.8;
+      top: 50%;
+      animation: scanline 2s ease-in-out infinite;
+    }
+    @keyframes scanline {
+      0%,100% { top: 10%; }
+      50% { top: 90%; }
+    }
+    .mock-scan-caption {
+      position: absolute;
+      bottom: 10px;
+      left: 0; right: 0;
+      text-align: center;
+      font-size: 11px;
+      color: rgba(255,255,255,0.7);
+    }
+
+    /* ── OPEN SOURCE ── */
+    .opensource-bg { background: var(--bg); }
+    .opensource-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .opensource-inner .section-title { max-width: 420px; }
+    .opensource-inner .section-sub { max-width: 420px; }
+    .tech-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 24px;
+    }
+    .chip {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 12px;
+      border-radius: 100px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      color: var(--ink-mid);
+    }
+    .license-block {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 28px;
+    }
+    .license-block h4 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+    .license-block p { font-size: 14px; color: var(--ink-mid); line-height: 1.6; }
+    .license-block a { color: var(--red); text-decoration: underline; text-underline-offset: 3px; }
+    .github-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 16px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--ink);
+      border: 1px solid var(--line);
+      background: var(--white);
+      padding: 8px 14px;
+      border-radius: 7px;
+      transition: border-color 0.15s;
+    }
+    .github-link:hover { border-color: #aaa; }
+
+    /* ── DOCS SECTION ── */
+    .docs-section { background: var(--white); }
+    .docs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 48px;
+    }
+    .docs-card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      text-decoration: none;
+      color: inherit;
+    }
+    .docs-card:hover {
+      border-color: var(--red);
+      box-shadow: 0 4px 24px rgba(188,0,45,0.08);
+    }
+    .docs-card-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .docs-card-icon svg { width: 26px; height: 26px; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+    .docs-card-icon.dev { background: #f0f4ff; }
+    .docs-card-icon.dev svg { stroke: #3b5bdb; }
+    .docs-card-icon.user { background: var(--red-bg); }
+    .docs-card-icon.user svg { stroke: var(--red); }
+    .docs-card-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    .docs-card h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.25;
+      margin: 0;
+    }
+    .docs-card p {
+      font-size: 15px;
+      color: var(--ink-mid);
+      line-height: 1.65;
+      margin: 0;
+      flex: 1;
+    }
+    .docs-card-chapters {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .docs-card-chapters li {
+      font-size: 13px;
+      color: var(--ink-mid);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .docs-card-chapters li::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--line);
+      flex-shrink: 0;
+    }
+    .docs-card-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--red);
+      margin-top: 4px;
+    }
+    .docs-card-cta svg { width: 14px; height: 14px; transition: transform 0.15s; }
+    .docs-card:hover .docs-card-cta svg { transform: translateX(3px); }
+    @media (max-width: 820px) {
+      .docs-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 400px) {
+      .docs-card { padding: 20px; gap: 12px; }
+      .docs-card-icon { width: 44px; height: 44px; border-radius: 10px; }
+      .docs-card-icon svg { width: 22px; height: 22px; }
+      .docs-card h3 { font-size: 18px; }
+      .docs-card p { font-size: 13px; }
+      .docs-card-chapters li { font-size: 12px; }
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      text-align: center;
+      background: var(--ink);
+      color: var(--white);
+    }
+    .cta-section .section-title { color: var(--white); max-width: none; margin: 0 auto 16px; }
+    .cta-section .section-sub { color: rgba(255,255,255,0.65); max-width: none; margin: 0 auto 36px; }
+    .cta-actions { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .btn-white { background: var(--white); color: var(--ink); border-color: var(--white); }
+    .btn-white:hover { background: #f0f0f0; }
+    .btn-outline-white { background: transparent; color: var(--white); border-color: rgba(255,255,255,0.3); }
+    .btn-outline-white:hover { border-color: rgba(255,255,255,0.6); }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 40px 0;
+      background: var(--white);
+    }
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .footer-logo svg { width: 28px; height: 28px; }
+    .footer-text { font-size: 13px; color: var(--ink-soft); }
+    .footer-links {
+      display: flex;
+      gap: 20px;
+      list-style: none;
+      font-size: 13px;
+      color: var(--ink-soft);
+    }
+    .footer-links a:hover { color: var(--ink); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 820px) {
+      .nav-links { display: none; }
+      .detail { grid-template-columns: 1fr; gap: 40px; }
+      .detail.reverse { direction: ltr; }
+      .opensource-inner { grid-template-columns: 1fr; gap: 40px; }
+      .mock-stats-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 560px) {
+      .hero { padding: 60px 0 56px; }
+      section { padding: 64px 0; }
+      .hero-actions .btn-lg { width: 100%; }
+      .steps { gap: 32px; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 400px) {
+      .container { padding: 0 12px; }
+      body { font-size: 15px; }
+      .nav-inner { height: 52px; gap: 8px; }
+      .nav-logo { font-size: 14px; gap: 8px; }
+      .nav-logo svg { width: 24px; height: 24px; }
+      .nav-cta { gap: 6px; }
+      .btn { padding: 7px 12px; font-size: 12px; }
+      .btn-lg { padding: 9px 14px; font-size: 13px; }
+      .hero { padding: 40px 0 32px; }
+      .hero h1 { font-size: clamp(20px, 5vw, 36px); line-height: 1.1; }
+      .hero-sub { font-size: clamp(14px, 2vw, 16px); margin-bottom: 28px; }
+      .hero-eyebrow { font-size: 10px; padding: 3px 10px; margin-bottom: 16px; }
+      .hero-actions { gap: 8px; }
+      .hero-meta { font-size: 11px; }
+      .badge-list { gap: 12px; font-size: 12px; }
+      section { padding: 48px 0; }
+      .section-label { font-size: 10px; margin-bottom: 10px; }
+      .section-title { font-size: clamp(18px, 3.5vw, 28px); margin-bottom: 12px; }
+      .section-sub { font-size: 14px; margin-bottom: 24px; }
+      .features-grid { grid-template-columns: 1fr; gap: 1px; margin-top: 40px; }
+      .feature-card { padding: 20px; }
+      .feature-icon { width: 36px; height: 36px; border-radius: 8px; margin-bottom: 14px; }
+      .feature-icon svg { width: 18px; height: 18px; }
+      .feature-card h3 { font-size: 15px; margin-bottom: 6px; }
+      .feature-card p { font-size: 13px; }
+      .steps { grid-template-columns: 1fr; gap: 24px; margin-top: 40px; }
+      .step-num { font-size: 36px; margin-bottom: 8px; }
+      .step h3 { font-size: 15px; margin-bottom: 8px; }
+      .step p { font-size: 13px; }
+      .step-divider { margin-bottom: 12px; }
+      .detail { gap: 24px; }
+      .detail-text .section-title { max-width: none; }
+      .detail-text .section-sub { max-width: none; }
+      .detail-list { gap: 8px; margin-top: 16px; }
+      .detail-list li { font-size: 13px; gap: 8px; }
+      .mock-panel { border-radius: 10px; box-shadow: 0 2px 16px rgba(0,0,0,0.04); }
+      .mock-topbar { padding: 10px 14px; gap: 6px; }
+      .mock-dot { width: 8px; height: 8px; }
+      .mock-title { font-size: 12px; margin-left: 6px; }
+      .mock-body { padding: 14px; }
+      .mock-book-row { gap: 8px; padding: 8px 0; }
+      .mock-cover { width: 28px; height: 38px; }
+      .mock-book-title { font-size: 12px; }
+      .mock-book-author { font-size: 10px; }
+      .mock-badge { font-size: 9px; padding: 2px 6px; }
+      .mock-shelf { border-radius: 6px; margin-bottom: 8px; }
+      .mock-shelf-header { padding: 6px 10px; font-size: 11px; }
+      .mock-shelf-books { gap: 4px; padding: 8px 10px; }
+      .mock-spine { width: 12px; height: 48px; }
+      .mock-stats-grid { gap: 8px; margin-bottom: 10px; }
+      .mock-stat-card { padding: 10px 12px; }
+      .mock-stat-label { font-size: 10px; margin-bottom: 3px; }
+      .mock-stat-value { font-size: 22px; }
+      .opensource-inner { gap: 32px; }
+      .opensource-inner .section-title { max-width: none; }
+      .opensource-inner .section-sub { max-width: none; }
+      .tech-chips { gap: 6px; margin-top: 16px; }
+      .chip { font-size: 11px; padding: 4px 10px; }
+      .license-block { padding: 16px; }
+      .license-block h4 { font-size: 13px; }
+      .license-block p { font-size: 12px; }
+      .github-link { font-size: 12px; padding: 6px 10px; margin-top: 12px; }
+      .github-link svg { width: 14px; height: 14px; }
+      .footer-inner { gap: 12px; }
+      .footer-logo { font-size: 14px; gap: 8px; }
+      .footer-logo svg { width: 22px; height: 22px; }
+      .footer-text { font-size: 11px; }
+      .footer-links { gap: 12px; font-size: 11px; }
+      .cta-section { padding: 56px 0; }
+      .lang-btn { padding: 3px 8px; font-size: 11px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="container">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="16" cy="16" r="15" fill="#BC002D"/>
+          <path d="M8 10 L12 8 L12 22 L8 21 Z" fill="white"/>
+          <path d="M12 8 L16 9.5 L16 23.5 L12 22 Z" fill="rgba(255,255,255,0.85)"/>
+          <path d="M16 9.5 L20 8 L20 21 L16 23.5 Z" fill="rgba(255,255,255,0.7)"/>
+          <path d="M20 8 L24 10 L24 21 L20 21 Z" fill="white"/>
+        </svg>
+        Jinbocho
+      </a>
+      <ul class="nav-links">
+        <li><a href="#funzionalita" data-i18n="nav-features">Funzionalità</a></li>
+        <li><a href="#come-funziona" data-i18n="nav-how">Come funziona</a></li>
+        <li><a href="#opensource" data-i18n="nav-opensource">Open source</a></li>
+        <li><a href="./manuals/" data-i18n="nav-docs" data-href-it="./manuals/it/" data-href-en="./manuals/">Documentazione</a></li>
+      </ul>
+      <div class="nav-cta">
+        <div class="lang-toggle" aria-label="Scegli lingua / Choose language">
+          <button class="lang-btn" data-lang="it" onclick="setLang('it')">IT</button>
+          <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+        </div>
+        <a href="https://github.com/jinbocho" class="btn-ghost btn" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://jinbocho.github.io/jinbocho-demo/" class="btn btn-primary" target="_blank" rel="noopener" data-i18n="nav-cta-demo">Prova la demo</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="container">
+    <span class="hero-eyebrow" data-i18n="hero-eyebrow">Gestionale per biblioteche domestiche</span>
+    <h1 data-i18n-html="hero-h1">La tua biblioteca di casa,<br /><em>finalmente in ordine</em></h1>
+    <p class="hero-sub" data-i18n="hero-sub">
+      Jinbocho ti aiuta a catalogare tutti i libri di casa, trovare ogni volume sullo scaffale giusto e condividere la biblioteca con tutta la famiglia.
+    </p>
+    <div class="hero-actions">
+      <a href="https://jinbocho.github.io/jinbocho-demo/" class="btn btn-primary btn-lg" target="_blank" rel="noopener" data-i18n="hero-cta-demo">Prova la demo interattiva</a>
+      <a href="https://github.com/jinbocho" class="btn btn-outline btn-lg" target="_blank" rel="noopener" data-i18n="hero-cta-code">Vedi il codice</a>
+    </div>
+    <p class="hero-meta" data-i18n-html="hero-meta">Open source · Licenza CC BY-NC-ND 4.0 · <a href="https://github.com/jinbocho" target="_blank" rel="noopener">github.com/jinbocho</a></p>
+  </div>
+</section>
+
+<!-- ── BADGE STRIP ── -->
+<div class="badge-strip">
+  <div class="container">
+    <ul class="badge-list">
+      <li class="badge-item"><span class="badge-dot"></span><span data-i18n="badge-isbn">Scansione ISBN in-browser</span></li>
+      <li class="badge-item"><span class="badge-dot"></span><span data-i18n="badge-map">Mappa interattiva delle librerie</span></li>
+      <li class="badge-item"><span class="badge-dot"></span><span data-i18n="badge-multiuser">Multiutente e multi-ruolo</span></li>
+      <li class="badge-item"><span class="badge-dot"></span><span data-i18n="badge-lang">Italiano, inglese, spagnolo e francese</span></li>
+      <li class="badge-item"><span class="badge-dot"></span><span data-i18n="badge-export">Esportazione CSV e JSON</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ── FEATURES ── -->
+<section id="funzionalita" class="features-bg">
+  <div class="container">
+    <p class="section-label" data-i18n="feat-label">Perché Jinbocho</p>
+    <h2 class="section-title" data-i18n="feat-title">Tutto quello che serve, niente di superfluo</h2>
+    <p class="section-sub" data-i18n="feat-sub">Progettato per chi ha molti libri e vuole smettere di dire "ce l'ho già questo?"</p>
+    <div class="features-grid">
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="3" y1="9" x2="9" y2="9"/><line x1="3" y1="15" x2="9" y2="15"/></svg>
+        </div>
+        <h3 data-i18n="feat1-title">Scansione ISBN automatica</h3>
+        <p data-i18n="feat1-p">Punta la fotocamera del telefono sul codice a barre: titolo, autore, editore, anno e copertina arrivano da Open Library e Google Books in meno di un secondo. Nessuna digitazione manuale.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <h3 data-i18n="feat2-title">Mappa di ogni libreria</h3>
+        <p data-i18n="feat2-p">Ogni libro ha una posizione precisa: stanza, libreria, sezione e scaffale. La mappa visiva ti mostra dove si trova ogni volume con un clic. Niente più ore a cercare.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 21v-2a4 4 0 0 0-3-3.85"/></svg>
+        </div>
+        <h3 data-i18n="feat3-title">Condivisa con la famiglia</h3>
+        <p data-i18n="feat3-p">Ogni membro ha il suo profilo, i suoi libri e il suo obiettivo di lettura annuale. I ruoli admin, editor e viewer permettono di gestire chi può modificare cosa.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
+        <h3 data-i18n="feat4-title">Dashboard di biblioteca</h3>
+        <p data-i18n="feat4-p">Libri attualmente in lettura, prestiti in corso, cosa leggere dopo con un suggerimento casuale, preferiti di famiglia, obiettivi di lettura. La dashboard tiene tutto sott'occhio.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </div>
+        <h3 data-i18n="feat5-title">Esportazione completa</h3>
+        <p data-i18n="feat5-p">Scarica l'intero catalogo in CSV o JSON, con metadati bibliografici, posizioni, stato di lettura, prestiti e note. I tuoi dati sono tuoi, sempre e comunque.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <h3 data-i18n="feat6-title">Multilingua</h3>
+        <p data-i18n="feat6-p">Interfaccia disponibile in italiano, inglese, spagnolo e francese. La lingua si sincronizza sul profilo utente, così l'app parla la stessa lingua su qualsiasi dispositivo.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── HOW IT WORKS ── -->
+<section id="come-funziona">
+  <div class="container">
+    <p class="section-label" data-i18n="how-label">Come funziona</p>
+    <h2 class="section-title" data-i18n="how-title">Tre passi per avere la biblioteca in ordine</h2>
+    <p class="section-sub" data-i18n="how-sub">Non servono configurazioni complesse. Dalla registrazione al primo libro catalogato in pochi minuti.</p>
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-divider"></div>
+        <h3 data-i18n="step1-title">Crea le librerie</h3>
+        <p data-i18n="step1-p">Aggiungi le stanze di casa, inserisci le librerie e definisci sezioni e scaffali. La struttura fisica diventa una mappa navigabile dentro all'app.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-divider"></div>
+        <h3 data-i18n="step2-title">Cataloga i libri</h3>
+        <p data-i18n="step2-p">Scansiona l'ISBN con la fotocamera del telefono oppure cerca il titolo. I metadati arrivano in automatico. In modalità scaffale puoi aggiungere una serie di libri uno dopo l'altro senza mai cambiare schermata.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-divider"></div>
+        <h3 data-i18n="step3-title">Trova e condividi</h3>
+        <p data-i18n="step3-p">Cerca per titolo, autore, ISBN o stanza. Oppure apri la mappa della libreria e naviga scaffale per scaffale. Condividi l'accesso con la famiglia e tieni traccia di chi ha letto cosa.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── DETAIL: SCAN ── -->
+<section style="background: var(--bg);">
+  <div class="container">
+    <div class="detail">
+      <div class="detail-text">
+        <p class="section-label" data-i18n="scan-label">Aggiunta libri</p>
+        <h2 class="section-title" data-i18n="scan-title">Dalla fotocamera al catalogo</h2>
+        <p class="section-sub" data-i18n="scan-sub">Nessun inserimento manuale. Punta il telefono sul codice a barre del libro: titolo, autore, editore, anno di pubblicazione e copertina vengono recuperati in automatico.</p>
+        <ul class="detail-list">
+          <li data-i18n="scan-li1">Funziona dal browser del telefono, senza installare nulla</li>
+          <li data-i18n="scan-li2">Lookup su Open Library e Google Books in sequenza</li>
+          <li data-i18n="scan-li3">Se il libro non viene trovato, puoi inserire i dati manualmente</li>
+          <li data-i18n="scan-li4">Modalità scaffale: scansiona libri in serie su uno stesso ripiano</li>
+        </ul>
+      </div>
+      <div>
+        <div class="mock-panel">
+          <div class="mock-topbar">
+            <div class="mock-dot" style="background:#ff5f57"></div>
+            <div class="mock-dot" style="background:#febc2e"></div>
+            <div class="mock-dot" style="background:#28c840"></div>
+            <span class="mock-title" data-i18n="scan-mock-title">Aggiungi un libro</span>
+          </div>
+          <div class="mock-body">
+            <div class="mock-scan-area">
+              <div class="mock-scan-frame">
+                <div class="mock-scan-line"></div>
+              </div>
+              <div class="mock-scan-caption" data-i18n="scan-mock-caption">Inquadra il codice a barre</div>
+            </div>
+            <div style="margin-top:16px; background:var(--white); border:1px solid var(--line); border-radius:8px; padding:16px;">
+              <div style="display:flex;gap:12px;align-items:flex-start;">
+                <div style="width:48px;height:64px;background:#BC002D;border-radius:4px;flex-shrink:0;"></div>
+                <div>
+                  <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:3px;">Il nome della rosa</div>
+                  <div style="font-size:12px;color:var(--ink-soft);">Umberto Eco · Bompiani · 1980</div>
+                  <div style="margin-top:8px;display:inline-block;font-size:11px;background:var(--red-bg);color:var(--red);padding:3px 8px;border-radius:100px;" data-i18n="scan-mock-found">Trovato — rivedi e salva</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── DETAIL: MAP ── -->
+<section>
+  <div class="container">
+    <div class="detail reverse">
+      <div class="detail-text">
+        <p class="section-label" data-i18n="map-label">Mappa delle librerie</p>
+        <h2 class="section-title" data-i18n="map-title">Sai sempre dove si trova ogni libro</h2>
+        <p class="section-sub" data-i18n="map-sub">Ogni libreria ha una mappa visiva con sezioni e scaffali. Clicca su uno scaffale per vedere i libri che contiene, o naviga direttamente al dettaglio di ogni volume.</p>
+        <ul class="detail-list">
+          <li data-i18n="map-li1">Struttura a quattro livelli: stanza, libreria, sezione, scaffale</li>
+          <li data-i18n="map-li2">Le sezioni possono avere un numero diverso di scaffali</li>
+          <li data-i18n="map-li3">Sposta un libro trascinandolo sulla nuova posizione</li>
+          <li data-i18n="map-li4">Il conteggio per scaffale è sempre aggiornato</li>
+        </ul>
+      </div>
+      <div>
+        <div class="mock-panel">
+          <div class="mock-topbar">
+            <div class="mock-dot" style="background:#ff5f57"></div>
+            <div class="mock-dot" style="background:#febc2e"></div>
+            <div class="mock-dot" style="background:#28c840"></div>
+            <span class="mock-title" data-i18n="map-mock-title">Studio — Libreria A</span>
+          </div>
+          <div class="mock-body">
+            <div class="mock-shelf">
+              <div class="mock-shelf-header" data-i18n="map-shelf1">Sezione 1 — Scaffale alto</div>
+              <div class="mock-shelf-books">
+                <div class="mock-spine" style="background:#BC002D;"></div>
+                <div class="mock-spine" style="background:#2c4a7c;"></div>
+                <div class="mock-spine" style="background:#4a7c4e;"></div>
+                <div class="mock-spine" style="background:#7c4a2c;"></div>
+                <div class="mock-spine" style="background:#4a2c7c;"></div>
+                <div class="mock-spine" style="background:#7c7c2c;"></div>
+                <div class="mock-spine" style="background:#2c7c7c;"></div>
+              </div>
+            </div>
+            <div class="mock-shelf">
+              <div class="mock-shelf-header" data-i18n="map-shelf2">Sezione 1 — Scaffale basso</div>
+              <div class="mock-shelf-books">
+                <div class="mock-spine" style="background:#5a3e2b;"></div>
+                <div class="mock-spine" style="background:#3b5998;"></div>
+                <div class="mock-spine" style="background:#6d4c41;"></div>
+                <div class="mock-spine" style="background:#1b5e20;"></div>
+                <div class="mock-spine" style="background:#4a148c;"></div>
+              </div>
+            </div>
+            <div class="mock-shelf" style="margin-bottom:0">
+              <div class="mock-shelf-header" data-i18n="map-shelf3">Sezione 2 — Scaffale unico</div>
+              <div class="mock-shelf-books">
+                <div class="mock-spine" style="background:#bf360c;"></div>
+                <div class="mock-spine" style="background:#006064;"></div>
+                <div class="mock-spine" style="background:#37474f;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── DETAIL: DASHBOARD ── -->
+<section style="background: var(--bg);">
+  <div class="container">
+    <div class="detail">
+      <div class="detail-text">
+        <p class="section-label" data-i18n="dash-label">Dashboard</p>
+        <h2 class="section-title" data-i18n="dash-title">Un colpo d'occhio su tutta la biblioteca</h2>
+        <p class="section-sub" data-i18n="dash-sub">La dashboard raccoglie quello che conta: cosa sta leggendo la famiglia, libri in prestito da recuperare, un suggerimento su cosa leggere dopo e i progressi verso gli obiettivi annuali.</p>
+        <ul class="detail-list">
+          <li data-i18n="dash-li1">Libri in lettura con il nome del lettore</li>
+          <li data-i18n="dash-li2">Prestiti attivi con avviso se la scadenza è passata</li>
+          <li data-i18n="dash-li3">Suggerimento casuale dalla lista "da leggere"</li>
+          <li data-i18n="dash-li4">Libri letti da più membri della famiglia</li>
+          <li data-i18n="dash-li5">Obiettivo di lettura annuale per ogni membro</li>
+        </ul>
+      </div>
+      <div>
+        <div class="mock-panel">
+          <div class="mock-topbar">
+            <div class="mock-dot" style="background:#ff5f57"></div>
+            <div class="mock-dot" style="background:#febc2e"></div>
+            <div class="mock-dot" style="background:#28c840"></div>
+            <span class="mock-title" data-i18n="dash-mock-title">Dashboard</span>
+          </div>
+          <div class="mock-body">
+            <div class="mock-stats-grid" style="margin-bottom:14px;">
+              <div class="mock-stat-card">
+                <div class="mock-stat-label" data-i18n="dash-stat-total">Libri totali</div>
+                <div class="mock-stat-value">247</div>
+              </div>
+              <div class="mock-stat-card">
+                <div class="mock-stat-label" data-i18n="dash-stat-read">Letti</div>
+                <div class="mock-stat-value green">128</div>
+              </div>
+              <div class="mock-stat-card">
+                <div class="mock-stat-label" data-i18n="dash-stat-reading">In lettura</div>
+                <div class="mock-stat-value amber">3</div>
+              </div>
+              <div class="mock-stat-card">
+                <div class="mock-stat-label" data-i18n="dash-stat-toread">Da leggere</div>
+                <div class="mock-stat-value red">116</div>
+              </div>
+            </div>
+            <div style="background:var(--white);border:1px solid var(--line);border-radius:8px;padding:14px;">
+              <div style="font-size:12px;font-weight:600;color:var(--ink);margin-bottom:10px;" data-i18n="dash-reading">In lettura</div>
+              <div class="mock-book-row">
+                <div class="mock-cover" style="background:#2c4a7c;"></div>
+                <div class="mock-book-info">
+                  <div class="mock-book-title">La coscienza di Zeno</div>
+                  <div class="mock-book-author">Italo Svevo · Marco</div>
+                </div>
+                <span class="mock-badge badge-reading" data-i18n="mock-badge-reading">lettura</span>
+              </div>
+              <div class="mock-book-row">
+                <div class="mock-cover" style="background:#4a7c4e;"></div>
+                <div class="mock-book-info">
+                  <div class="mock-book-title">Cent'anni di solitudine</div>
+                  <div class="mock-book-author">García Márquez · Sara</div>
+                </div>
+                <span class="mock-badge badge-reading" data-i18n="mock-badge-reading">lettura</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── OPEN SOURCE ── -->
+<section id="opensource" class="opensource-bg">
+  <div class="container">
+    <div class="opensource-inner">
+      <div>
+        <p class="section-label" data-i18n="os-label">Open source</p>
+        <h2 class="section-title" data-i18n="os-title">Il codice è pubblico, i dati sono tuoi</h2>
+        <p class="section-sub" data-i18n="os-sub">Il codice di Jinbocho è pubblico e disponibile per trasparenza, rilasciato con licenza CC BY-NC-ND 4.0. Puoi visualizzarlo e verificare cosa fa con i tuoi dati.</p>
+        <div class="tech-chips">
+          <span class="chip">Python 3.12 + FastAPI</span>
+          <span class="chip">React 18 + TypeScript</span>
+          <span class="chip">PostgreSQL</span>
+          <span class="chip">Docker Compose</span>
+          <span class="chip">TanStack Query</span>
+          <span class="chip">Tailwind CSS</span>
+          <span class="chip">Clean Architecture</span>
+        </div>
+        <a href="https://github.com/jinbocho" class="github-link" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.167 6.839 9.49.5.09.682-.218.682-.482 0-.237-.009-.868-.013-1.703-2.782.605-3.369-1.34-3.369-1.34-.454-1.154-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.532 1.03 1.532 1.03.891 1.529 2.341 1.087 2.91.831.091-.646.349-1.086.635-1.337-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.03-2.682-.104-.253-.447-1.27.097-2.646 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836a9.59 9.59 0 0 1 2.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.376.202 2.393.1 2.646.64.698 1.026 1.591 1.026 2.682 0 3.841-2.337 4.687-4.565 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+          github.com/jinbocho
+        </a>
+      </div>
+      <div class="license-block">
+        <h4 data-i18n="lic-title1">Licenza CC BY-NC-ND 4.0</h4>
+        <p data-i18n-html="lic-p1">
+          Il codice è reso pubblico per trasparenza. Puoi visualizzarlo e condividerlo con attribuzione, ma non puoi modificarlo né usarlo per scopi commerciali senza permesso esplicito, secondo i termini della
+          <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0</a>.
+        </p>
+        <br />
+        <h4 data-i18n="lic-title2" style="margin-bottom:8px;">Self-hosted</h4>
+        <p data-i18n="lic-p2">
+          L'intera applicazione — backend, frontend e database — gira su Docker Compose con un singolo comando.
+          Porta Jinbocho sul tuo server, sul tuo NAS o su qualsiasi provider cloud che supporti container.
+        </p>
+      </div>
+    </div>
+</section>
+
+<!-- ── DOCUMENTATION ── -->
+<section id="documentazione" class="docs-section">
+  <div class="container">
+    <p class="section-label" data-i18n="docs-label">Documentazione</p>
+    <h2 class="section-title" data-i18n="docs-title">Tutto quello che ti serve per iniziare</h2>
+    <p class="section-sub" data-i18n="docs-sub">Due manuali completi: uno per chi vuole installare e gestire Jinbocho, uno per chi vuole semplicemente usarlo.</p>
+    <div class="docs-grid">
+
+      <a href="./manuals/developer/" class="docs-card" data-href-it="./manuals/it/developer/" data-href-en="./manuals/developer/">
+        <div class="docs-card-icon dev">
+          <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        </div>
+        <div>
+          <div class="docs-card-label" data-i18n="dev-label">Per sviluppatori e DevOps</div>
+          <h3 data-i18n="dev-title">Manuale tecnico</h3>
+        </div>
+        <p data-i18n="dev-desc">Guida completa per installare, configurare e mettere in produzione Jinbocho — in locale con Docker Compose o su cloud con Render e Neon.</p>
+        <ul class="docs-card-chapters">
+          <li data-i18n="dev-ch1">Prerequisiti e setup dell'ambiente</li>
+          <li data-i18n="dev-ch2">Sviluppo locale con Docker Compose</li>
+          <li data-i18n="dev-ch3">Deploy in produzione (Render + Neon)</li>
+          <li data-i18n="dev-ch4">CI/CD con GitHub Actions</li>
+          <li data-i18n="dev-ch5">Monitoring, rollback e troubleshooting</li>
+        </ul>
+        <span class="docs-card-cta">
+          <span data-i18n="dev-cta">Leggi il manuale tecnico</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a href="./manuals/user/" class="docs-card" data-href-it="./manuals/it/user/" data-href-en="./manuals/user/">
+        <div class="docs-card-icon user">
+          <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        </div>
+        <div>
+          <div class="docs-card-label" data-i18n="user-label">Per utenti e famiglie</div>
+          <h3 data-i18n="user-title">Manuale utente</h3>
+        </div>
+        <p data-i18n="user-desc">Tutto quello che serve per usare Jinbocho al meglio: dalla creazione dell'account alla gestione completa della biblioteca di famiglia.</p>
+        <ul class="docs-card-chapters">
+          <li data-i18n="user-ch1">Creazione dell'account e primo accesso</li>
+          <li data-i18n="user-ch2">Aggiungere libri: scansione ISBN e inserimento manuale</li>
+          <li data-i18n="user-ch3">Organizzare stanze, librerie e scaffali</li>
+          <li data-i18n="user-ch4">Invitare i membri della famiglia</li>
+          <li data-i18n="user-ch5">Esportazione dati e funzionalità avanzate</li>
+        </ul>
+        <span class="docs-card-cta">
+          <span data-i18n="user-cta">Leggi il manuale utente</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section class="cta-section">
+  <div class="container">
+    <h2 class="section-title" style="font-family:'Playfair Display',Georgia,serif;" data-i18n="cta-title">Pronto a mettere ordine nella tua biblioteca?</h2>
+    <p class="section-sub" data-i18n="cta-sub">La demo interattiva è disponibile subito, senza registrazione. Esplora tutte le funzionalità con dati di esempio.</p>
+    <div class="cta-actions">
+      <a href="https://jinbocho.github.io/jinbocho-demo/" class="btn btn-white btn-lg" target="_blank" rel="noopener" data-i18n="cta-demo">Prova la demo</a>
+      <a href="https://github.com/jinbocho" class="btn btn-outline-white btn-lg" target="_blank" rel="noopener" data-i18n="cta-github">Vedi su GitHub</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <a href="/" class="footer-logo">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="16" cy="16" r="15" fill="#BC002D"/>
+          <path d="M8 10 L12 8 L12 22 L8 21 Z" fill="white"/>
+          <path d="M12 8 L16 9.5 L16 23.5 L12 22 Z" fill="rgba(255,255,255,0.85)"/>
+          <path d="M16 9.5 L20 8 L20 21 L16 23.5 Z" fill="rgba(255,255,255,0.7)"/>
+          <path d="M20 8 L24 10 L24 21 L20 21 Z" fill="white"/>
+        </svg>
+        Jinbocho
+      </a>
+      <ul class="footer-links">
+        <li><a href="https://github.com/jinbocho" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://jinbocho.github.io/jinbocho-demo/" target="_blank" rel="noopener" data-i18n="footer-demo">Demo</a></li>
+        <li><a href="./manuals/" data-i18n="footer-docs" data-href-it="./manuals/it/" data-href-en="./manuals/">Documentazione</a></li>
+        <li><a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="noopener" data-i18n="footer-license">Licenza</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var dict = {
+    it: {
+      'nav-features': 'Funzionalità',
+      'nav-how': 'Come funziona',
+      'nav-opensource': 'Open source',
+      'nav-docs': 'Documentazione',
+      'nav-cta-demo': 'Prova la demo',
+      'hero-eyebrow': 'Gestionale per biblioteche domestiche',
+      'hero-h1': 'La tua biblioteca di casa,<br /><em>finalmente in ordine</em>',
+      'hero-sub': 'Jinbocho ti aiuta a catalogare tutti i libri di casa, trovare ogni volume sullo scaffale giusto e condividere la biblioteca con tutta la famiglia.',
+      'hero-cta-demo': 'Prova la demo interattiva',
+      'hero-cta-code': 'Vedi il codice',
+      'hero-meta': 'Open source · Licenza CC BY-NC-ND 4.0 · <a href="https://github.com/jinbocho" target="_blank" rel="noopener">github.com/jinbocho</a>',
+      'badge-isbn': 'Scansione ISBN in-browser',
+      'badge-map': 'Mappa interattiva delle librerie',
+      'badge-multiuser': 'Multiutente e multi-ruolo',
+      'badge-lang': 'Italiano, inglese, spagnolo e francese',
+      'badge-export': 'Esportazione CSV e JSON',
+      'feat-label': 'Perché Jinbocho',
+      'feat-title': 'Tutto quello che serve, niente di superfluo',
+      'feat-sub': 'Progettato per chi ha molti libri e vuole smettere di dire "ce l\'ho già questo?"',
+      'feat1-title': 'Scansione ISBN automatica',
+      'feat1-p': 'Punta la fotocamera del telefono sul codice a barre: titolo, autore, editore, anno e copertina arrivano da Open Library e Google Books in meno di un secondo. Nessuna digitazione manuale.',
+      'feat2-title': 'Mappa di ogni libreria',
+      'feat2-p': 'Ogni libro ha una posizione precisa: stanza, libreria, sezione e scaffale. La mappa visiva ti mostra dove si trova ogni volume con un clic. Niente più ore a cercare.',
+      'feat3-title': 'Condivisa con la famiglia',
+      'feat3-p': 'Ogni membro ha il suo profilo, i suoi libri e il suo obiettivo di lettura annuale. I ruoli admin, editor e viewer permettono di gestire chi può modificare cosa.',
+      'feat4-title': 'Dashboard di biblioteca',
+      'feat4-p': 'Libri attualmente in lettura, prestiti in corso, cosa leggere dopo con un suggerimento casuale, preferiti di famiglia, obiettivi di lettura. La dashboard tiene tutto sott\'occhio.',
+      'feat5-title': 'Esportazione completa',
+      'feat5-p': 'Scarica l\'intero catalogo in CSV o JSON, con metadati bibliografici, posizioni, stato di lettura, prestiti e note. I tuoi dati sono tuoi, sempre e comunque.',
+      'feat6-title': 'Multilingua',
+      'feat6-p': 'Interfaccia disponibile in italiano, inglese, spagnolo e francese. La lingua si sincronizza sul profilo utente, così l\'app parla la stessa lingua su qualsiasi dispositivo.',
+      'how-label': 'Come funziona',
+      'how-title': 'Tre passi per avere la biblioteca in ordine',
+      'how-sub': 'Non servono configurazioni complesse. Dalla registrazione al primo libro catalogato in pochi minuti.',
+      'step1-title': 'Crea le librerie',
+      'step1-p': 'Aggiungi le stanze di casa, inserisci le librerie e definisci sezioni e scaffali. La struttura fisica diventa una mappa navigabile dentro all\'app.',
+      'step2-title': 'Cataloga i libri',
+      'step2-p': 'Scansiona l\'ISBN con la fotocamera del telefono oppure cerca il titolo. I metadati arrivano in automatico. In modalità scaffale puoi aggiungere una serie di libri uno dopo l\'altro senza mai cambiare schermata.',
+      'step3-title': 'Trova e condividi',
+      'step3-p': 'Cerca per titolo, autore, ISBN o stanza. Oppure apri la mappa della libreria e naviga scaffale per scaffale. Condividi l\'accesso con la famiglia e tieni traccia di chi ha letto cosa.',
+      'scan-label': 'Aggiunta libri',
+      'scan-title': 'Dalla fotocamera al catalogo',
+      'scan-sub': 'Nessun inserimento manuale. Punta il telefono sul codice a barre del libro: titolo, autore, editore, anno di pubblicazione e copertina vengono recuperati in automatico.',
+      'scan-li1': 'Funziona dal browser del telefono, senza installare nulla',
+      'scan-li2': 'Lookup su Open Library e Google Books in sequenza',
+      'scan-li3': 'Se il libro non viene trovato, puoi inserire i dati manualmente',
+      'scan-li4': 'Modalità scaffale: scansiona libri in serie su uno stesso ripiano',
+      'scan-mock-title': 'Aggiungi un libro',
+      'scan-mock-caption': 'Inquadra il codice a barre',
+      'scan-mock-found': 'Trovato — rivedi e salva',
+      'map-label': 'Mappa delle librerie',
+      'map-title': 'Sai sempre dove si trova ogni libro',
+      'map-sub': 'Ogni libreria ha una mappa visiva con sezioni e scaffali. Clicca su uno scaffale per vedere i libri che contiene, o naviga direttamente al dettaglio di ogni volume.',
+      'map-li1': 'Struttura a quattro livelli: stanza, libreria, sezione, scaffale',
+      'map-li2': 'Le sezioni possono avere un numero diverso di scaffali',
+      'map-li3': 'Sposta un libro trascinandolo sulla nuova posizione',
+      'map-li4': 'Il conteggio per scaffale è sempre aggiornato',
+      'map-mock-title': 'Studio — Libreria A',
+      'map-shelf1': 'Sezione 1 — Scaffale alto',
+      'map-shelf2': 'Sezione 1 — Scaffale basso',
+      'map-shelf3': 'Sezione 2 — Scaffale unico',
+      'dash-label': 'Dashboard',
+      'dash-title': 'Un colpo d\'occhio su tutta la biblioteca',
+      'dash-sub': 'La dashboard raccoglie quello che conta: cosa sta leggendo la famiglia, libri in prestito da recuperare, un suggerimento su cosa leggere dopo e i progressi verso gli obiettivi annuali.',
+      'dash-li1': 'Libri in lettura con il nome del lettore',
+      'dash-li2': 'Prestiti attivi con avviso se la scadenza è passata',
+      'dash-li3': 'Suggerimento casuale dalla lista "da leggere"',
+      'dash-li4': 'Libri letti da più membri della famiglia',
+      'dash-li5': 'Obiettivo di lettura annuale per ogni membro',
+      'dash-mock-title': 'Dashboard',
+      'dash-stat-total': 'Libri totali',
+      'dash-stat-read': 'Letti',
+      'dash-stat-reading': 'In lettura',
+      'dash-stat-toread': 'Da leggere',
+      'dash-reading': 'In lettura',
+      'mock-badge-reading': 'lettura',
+      'os-label': 'Open source',
+      'os-title': 'Il codice è pubblico, i dati sono tuoi',
+      'os-sub': 'Il codice di Jinbocho è pubblico e disponibile per trasparenza, rilasciato con licenza CC BY-NC-ND 4.0. Puoi visualizzarlo e verificare cosa fa con i tuoi dati.',
+      'lic-title1': 'Licenza CC BY-NC-ND 4.0',
+      'lic-p1': 'Il codice è reso pubblico per trasparenza. Puoi visualizzarlo e condividerlo con attribuzione, ma non puoi modificarlo né usarlo per scopi commerciali senza permesso esplicito, secondo i termini della <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0</a>.',
+      'lic-title2': 'Self-hosted',
+      'lic-p2': 'L\'intera applicazione — backend, frontend e database — gira su Docker Compose con un singolo comando. Porta Jinbocho sul tuo server, sul tuo NAS o su qualsiasi provider cloud che supporti container.',
+      'docs-label': 'Documentazione',
+      'docs-title': 'Tutto quello che ti serve per iniziare',
+      'docs-sub': 'Due manuali completi: uno per chi vuole installare e gestire Jinbocho, uno per chi vuole semplicemente usarlo.',
+      'dev-label': 'Per sviluppatori e DevOps',
+      'dev-title': 'Manuale tecnico',
+      'dev-desc': 'Guida completa per installare, configurare e mettere in produzione Jinbocho — in locale con Docker Compose o su cloud con Render e Neon.',
+      'dev-ch1': 'Prerequisiti e setup dell\'ambiente',
+      'dev-ch2': 'Sviluppo locale con Docker Compose',
+      'dev-ch3': 'Deploy in produzione (Render + Neon)',
+      'dev-ch4': 'CI/CD con GitHub Actions',
+      'dev-ch5': 'Monitoring, rollback e troubleshooting',
+      'dev-cta': 'Leggi il manuale tecnico',
+      'user-label': 'Per utenti e famiglie',
+      'user-title': 'Manuale utente',
+      'user-desc': 'Tutto quello che serve per usare Jinbocho al meglio: dalla creazione dell\'account alla gestione completa della biblioteca di famiglia.',
+      'user-ch1': 'Creazione dell\'account e primo accesso',
+      'user-ch2': 'Aggiungere libri: scansione ISBN e inserimento manuale',
+      'user-ch3': 'Organizzare stanze, librerie e scaffali',
+      'user-ch4': 'Invitare i membri della famiglia',
+      'user-ch5': 'Esportazione dati e funzionalità avanzate',
+      'user-cta': 'Leggi il manuale utente',
+      'cta-title': 'Pronto a mettere ordine nella tua biblioteca?',
+      'cta-sub': 'La demo interattiva è disponibile subito, senza registrazione. Esplora tutte le funzionalità con dati di esempio.',
+      'cta-demo': 'Prova la demo',
+      'cta-github': 'Vedi su GitHub',
+      'footer-text': 'Gestionale per biblioteche domestiche · Licenza CC BY-NC-ND 4.0',
+      'footer-demo': 'Demo',
+      'footer-docs': 'Documentazione',
+      'footer-license': 'Licenza'
+    },
+    en: {
+      'nav-features': 'Features',
+      'nav-how': 'How it works',
+      'nav-opensource': 'Open source',
+      'nav-docs': 'Documentation',
+      'nav-cta-demo': 'Try the demo',
+      'hero-eyebrow': 'Home library management system',
+      'hero-h1': 'Your home library,<br /><em>finally organised</em>',
+      'hero-sub': 'Jinbocho helps you catalogue all your books, find every volume on the right shelf and share the library with the whole family.',
+      'hero-cta-demo': 'Try the interactive demo',
+      'hero-cta-code': 'View the code',
+      'hero-meta': 'Open source · CC BY-NC-ND 4.0 licence · <a href="https://github.com/jinbocho" target="_blank" rel="noopener">github.com/jinbocho</a>',
+      'badge-isbn': 'In-browser ISBN scanning',
+      'badge-map': 'Interactive bookcase map',
+      'badge-multiuser': 'Multi-user and multi-role',
+      'badge-lang': 'Italian, English, Spanish and French',
+      'badge-export': 'CSV and JSON export',
+      'feat-label': 'Why Jinbocho',
+      'feat-title': 'Everything you need, nothing extra',
+      'feat-sub': 'Designed for people with many books who want to stop asking "do I already own this?"',
+      'feat1-title': 'Automatic ISBN scanning',
+      'feat1-p': 'Point your phone camera at the barcode: title, author, publisher, year and cover art come from Open Library and Google Books in under a second. No manual typing.',
+      'feat2-title': 'Map every bookcase',
+      'feat2-p': 'Each book has a precise location: room, bookcase, section and shelf. The visual map shows you where every volume is with a single click. No more hours of searching.',
+      'feat3-title': 'Shared with the family',
+      'feat3-p': 'Each member has their own profile, books and annual reading goal. Admin, editor and viewer roles let you control who can change what.',
+      'feat4-title': 'Library dashboard',
+      'feat4-p': 'Books currently being read, active loans, a suggestion for what to read next, family favourites and annual reading goals. The dashboard keeps everything in view.',
+      'feat5-title': 'Full export',
+      'feat5-p': 'Download the entire catalogue as CSV or JSON, with bibliographic metadata, locations, reading status, loans and notes. Your data is yours, always.',
+      'feat6-title': 'Multilingual',
+      'feat6-p': 'Interface available in Italian, English, Spanish and French. The language setting syncs to your user profile, so the app speaks your language on every device.',
+      'how-label': 'How it works',
+      'how-title': 'Three steps to an organised library',
+      'how-sub': 'No complex setup required. From registration to your first catalogued book in minutes.',
+      'step1-title': 'Set up your bookcases',
+      'step1-p': 'Add your home\'s rooms, insert the bookcases and define sections and shelves. The physical structure becomes a navigable map inside the app.',
+      'step2-title': 'Catalogue the books',
+      'step2-p': 'Scan the ISBN with your phone camera or search by title. Metadata arrives automatically. In shelf mode you can add a series of books one after another without changing screen.',
+      'step3-title': 'Find and share',
+      'step3-p': 'Search by title, author, ISBN or room. Or open the bookcase map and browse shelf by shelf. Share access with the family and track who has read what.',
+      'scan-label': 'Adding books',
+      'scan-title': 'From camera to catalogue',
+      'scan-sub': 'No manual entry. Point your phone at the book\'s barcode: title, author, publisher, year and cover are retrieved automatically.',
+      'scan-li1': 'Works from your phone\'s browser, no installation needed',
+      'scan-li2': 'Lookup on Open Library and Google Books in sequence',
+      'scan-li3': 'If the book isn\'t found, you can enter the details manually',
+      'scan-li4': 'Shelf mode: scan a series of books on the same shelf',
+      'scan-mock-title': 'Add a book',
+      'scan-mock-caption': 'Frame the barcode',
+      'scan-mock-found': 'Found — review and save',
+      'map-label': 'Bookcase map',
+      'map-title': 'Always know where every book is',
+      'map-sub': 'Every bookcase has a visual map with sections and shelves. Click a shelf to see the books it contains, or navigate directly to any volume.',
+      'map-li1': 'Four-level structure: room, bookcase, section, shelf',
+      'map-li2': 'Sections can have different numbers of shelves',
+      'map-li3': 'Move a book by dragging it to the new position',
+      'map-li4': 'Per-shelf book count always up to date',
+      'map-mock-title': 'Study — Bookcase A',
+      'map-shelf1': 'Section 1 — Top shelf',
+      'map-shelf2': 'Section 1 — Bottom shelf',
+      'map-shelf3': 'Section 2 — Single shelf',
+      'dash-label': 'Dashboard',
+      'dash-title': 'Your library at a glance',
+      'dash-sub': 'The dashboard brings together what matters: what the family is reading, loans to recover, a suggestion for what to read next and progress toward annual goals.',
+      'dash-li1': 'Books being read with the reader\'s name',
+      'dash-li2': 'Active loans with an alert if the due date has passed',
+      'dash-li3': 'Random suggestion from the "to read" list',
+      'dash-li4': 'Books read by multiple family members',
+      'dash-li5': 'Annual reading goal for each member',
+      'dash-mock-title': 'Dashboard',
+      'dash-stat-total': 'Total books',
+      'dash-stat-read': 'Read',
+      'dash-stat-reading': 'Reading',
+      'dash-stat-toread': 'To read',
+      'dash-reading': 'Currently reading',
+      'mock-badge-reading': 'reading',
+      'os-label': 'Open source',
+      'os-title': 'The code is public, the data is yours',
+      'os-sub': 'Jinbocho’s code is made public for transparency, released under CC BY-NC-ND 4.0. You may view it and verify what it does with your data.',
+      'lic-title1': 'CC BY-NC-ND 4.0 licence',
+      'lic-p1': 'The code is made public for transparency. You may view it and share it with attribution, but you may not modify it or use it for commercial purposes without explicit permission, under the terms of the <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0</a>.',
+      'lic-title2': 'Self-hosted',
+      'lic-p2': 'The entire application — backend, frontend and database — runs on Docker Compose with a single command. Run Jinbocho on your own server, NAS or any cloud provider that supports containers.',
+      'docs-label': 'Documentation',
+      'docs-title': 'Everything you need to get started',
+      'docs-sub': 'Two complete manuals: one for those who want to install and manage Jinbocho, one for those who simply want to use it.',
+      'dev-label': 'For developers and DevOps',
+      'dev-title': 'Technical manual',
+      'dev-desc': 'Complete guide for installing, configuring and deploying Jinbocho — locally with Docker Compose or in the cloud with Render and Neon.',
+      'dev-ch1': 'Prerequisites and environment setup',
+      'dev-ch2': 'Local development with Docker Compose',
+      'dev-ch3': 'Production deployment (Render + Neon)',
+      'dev-ch4': 'CI/CD with GitHub Actions',
+      'dev-ch5': 'Monitoring, rollback and troubleshooting',
+      'dev-cta': 'Read the technical manual',
+      'user-label': 'For users and families',
+      'user-title': 'User manual',
+      'user-desc': 'Everything needed to get the most from Jinbocho: from creating an account to fully managing the family library.',
+      'user-ch1': 'Account creation and first login',
+      'user-ch2': 'Adding books: ISBN scanning and manual entry',
+      'user-ch3': 'Organising rooms, bookcases and shelves',
+      'user-ch4': 'Inviting family members',
+      'user-ch5': 'Data export and advanced features',
+      'user-cta': 'Read the user manual',
+      'cta-title': 'Ready to bring order to your library?',
+      'cta-sub': 'The interactive demo is available right now, no sign-up required. Explore all features with sample data.',
+      'cta-demo': 'Try the demo',
+      'cta-github': 'View on GitHub',
+      'footer-text': 'Home library management system · CC BY-NC-ND 4.0 licence',
+      'footer-demo': 'Demo',
+      'footer-docs': 'Documentation',
+      'footer-license': 'Licence'
+    }
+  };
+
+  function setLang(lang) {
+    if (lang !== 'it' && lang !== 'en') lang = 'it';
+    document.documentElement.lang = lang;
+    localStorage.setItem('jinbocho-lang', lang);
+
+    var t = dict[lang];
+
+    document.querySelectorAll('[data-i18n]').forEach(function (el) {
+      var key = el.getAttribute('data-i18n');
+      if (t[key] !== undefined) el.textContent = t[key];
+    });
+
+    document.querySelectorAll('[data-i18n-html]').forEach(function (el) {
+      var key = el.getAttribute('data-i18n-html');
+      if (t[key] !== undefined) el.innerHTML = t[key];
+    });
+
+    document.querySelectorAll('[data-href-it]').forEach(function (el) {
+      el.href = lang === 'it'
+        ? el.getAttribute('data-href-it')
+        : el.getAttribute('data-href-en');
+    });
+
+    document.querySelectorAll('.lang-btn').forEach(function (btn) {
+      btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+    });
+  }
+
+  window.setLang = setLang;
+
+  var saved = localStorage.getItem('jinbocho-lang');
+  var browser = (navigator.language || navigator.userLanguage || 'it').toLowerCase();
+  var detected = browser.startsWith('it') ? 'it' : 'en';
+  setLang(saved || detected);
+})();
+</script>
+
+</body>
+</html>

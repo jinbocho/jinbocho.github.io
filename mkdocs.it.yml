@@ -1,0 +1,123 @@
+site_name: Jinbocho Documentazione
+site_description: Sistema di gestione biblioteca domestica — Documentazione completa
+site_url: https://jinbocho.github.io/manuals/it/
+repo_url: https://github.com/jinbocho/
+repo_name: jinbocho
+docs_dir: docs_it
+site_dir: site/manuals/it
+
+theme:
+  name: material
+  logo: assets/jinbocho-logo.svg
+  favicon: assets/jinbocho-logo.svg
+  font:
+    text: Inter
+    code: JetBrains Mono
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-night
+        name: Passa alla modalità scura
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-sunny
+        name: Passa alla modalità chiara
+  features:
+    - navigation.instant
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.expand
+    - navigation.indexes
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - toc.follow
+  language: it
+
+nav:
+  - Home: index.md
+  - Perché Jinbocho:
+      - Alternativa a Goodreads self-hosted: compare/alternativa-goodreads-self-hosted.md
+      - Come catalogare la biblioteca di casa: compare/come-catalogare-biblioteca-di-casa.md
+      - Sapere su quale scaffale è un libro: compare/sapere-su-quale-scaffale-e-un-libro.md
+  - Manuale Sviluppatori:
+      - Panoramica: developer/index.md
+      - Prerequisiti: developer/01-prerequisites.md
+      - Sviluppo locale: developer/02-local-development.md
+      - Servizi backend: developer/03-backend-services.md
+      - Frontend: developer/04-frontend.md
+      - Database e migrazioni: developer/05-database-migrations.md
+      - CI/CD: developer/06-cicd.md
+      - Deploy in produzione: developer/07-production-deployment.md
+      - Monitoring e logging: developer/08-monitoring-logging.md
+      - Troubleshooting: developer/09-troubleshooting.md
+      - Architettura: developer/10-architecture.md
+  - Manuale Utente:
+      - Panoramica: user/index.md
+      - Per iniziare: user/01-getting-started.md
+      - Autenticazione: user/02-authentication.md
+      - Gestire la biblioteca: user/03-managing-library.md
+      - Posizioni: user/04-locations.md
+      - Dettaglio libro: user/05-book-details.md
+      - Presentazione del libro: user/15-book-presentation.md
+      - Ricerca e filtri: user/06-search-filters.md
+      - Scansione ISBN: user/07-isbn-scanning.md
+      - Esportazione: user/08-export-import.md
+      - Gestione utenti: user/09-user-management.md
+      - Progressi di lettura: user/10-reading-progress.md
+      - Esperienza mobile: user/11-mobile.md
+      - Lingua e localizzazione: user/12-localization.md
+      - Domande frequenti: user/13-faq.md
+      - Risoluzione problemi: user/14-troubleshooting.md
+
+plugins:
+  - search:
+      lang: it
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      use_pygments: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+extra_javascript:
+  - https://unpkg.com/mermaid@10/dist/mermaid.min.js
+
+extra:
+  alternate:
+    - name: English
+      link: /manuals/
+      lang: en
+    - name: Italiano
+      link: /manuals/it/
+      lang: it
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/jinbocho
+      name: Organizzazione GitHub
+
+extra_css:
+  - ../assets/custom.css
+
+copyright: Copyright &copy; 2026 Carmelo La Gamba. Tutti i diritti riservati. | Licenza CC BY-NC-ND 4.0
