@@ -75,6 +75,7 @@ nav:
       - Language & Localization: user/12-localization.md
       - FAQ: user/13-faq.md
       - Troubleshooting: user/14-troubleshooting.md
+  - Managed Installation: managed-install.md
 
 plugins:
   - search:
@@ -121,4 +122,4 @@ extra:
 extra_css:
   - assets/custom.css
 
-copyright: Copyright &copy; 2026 Carmelo La Gamba. All rights reserved. | CC BY-NC-ND 4.0 License
+copyright: Copyright &copy; 2026 Carmelo La Gamba. All rights reserved. | Proprietary – Community Use Allowed
