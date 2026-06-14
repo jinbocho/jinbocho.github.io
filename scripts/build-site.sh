@@ -36,10 +36,17 @@ cp index.html site/index.html
 echo "✅ Landing page deployed"
 echo ""
 
-# Step 5: Verify structure
-echo "🔍 Step 5: Verifying site structure..."
+# Step 5: Copy pricing page
+echo "💰 Step 5: Deploying pricing page..."
+mkdir -p site/pricing
+cp pricing/index.html site/pricing/index.html
+echo "✅ Pricing page deployed → site/pricing/"
+echo ""
+
+# Step 6: Verify structure
+echo "🔍 Step 6: Verifying site structure..."
 ERRORS=0
-for path in "site/index.html" "site/manuals/index.html" "site/manuals/it/index.html"; do
+for path in "site/index.html" "site/manuals/index.html" "site/manuals/it/index.html" "site/pricing/index.html"; do
   if [ -f "$path" ]; then
     echo "   ✅ $path"
   else
@@ -55,7 +62,7 @@ if [ $ERRORS -gt 0 ]; then
 fi
 echo ""
 
-# Step 6: Display summary
+# Step 7: Display summary
 echo "╔════════════════════════════════════════════════════════╗"
 echo "║  ✅ Site Build Complete!                              ║"
 echo "╚════════════════════════════════════════════════════════╝"

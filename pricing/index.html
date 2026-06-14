@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prezzi — Jinbocho</title>
+  <meta name="description" content="Jinbocho è gratuito per uso personale. Il modulo AI Pro è disponibile su richiesta. Scopri i piani." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red:     #BC002D;
+      --red-dim: #8a0020;
+      --red-bg:  #fdf4f5;
+      --ink:     #111111;
+      --ink-mid: #444444;
+      --ink-soft:#777777;
+      --line:    #e5e3de;
+      --bg:      #f8f7f4;
+      --white:   #ffffff;
+      --radius:  10px;
+      --max:     1120px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--ink);
+      background: var(--white);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .nav-logo span { color: var(--red); }
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+      margin-left: auto;
+    }
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--ink-mid);
+      transition: color .15s;
+    }
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--red); }
+    .nav-cta {
+      margin-left: 16px;
+      padding: 7px 18px;
+      background: var(--red);
+      color: var(--white);
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: background .15s;
+    }
+    .nav-cta:hover { background: var(--red-dim); }
+
+    /* ── HERO ── */
+    .pricing-hero {
+      background: var(--bg);
+      border-bottom: 1px solid var(--line);
+      padding: 72px 24px 56px;
+      text-align: center;
+    }
+    .pricing-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 16px;
+    }
+    .pricing-hero p {
+      font-size: 18px;
+      color: var(--ink-mid);
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    /* ── CARDS ── */
+    .pricing-section {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 64px 24px;
+    }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 32px;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+    .pricing-card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 36px 32px;
+      background: var(--white);
+      position: relative;
+    }
+    .pricing-card.featured {
+      border-color: var(--red);
+      box-shadow: 0 0 0 1px var(--red);
+    }
+    .badge {
+      position: absolute;
+      top: -13px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--red);
+      color: var(--white);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: 3px 14px;
+      border-radius: 20px;
+    }
+    .plan-name {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .plan-tagline {
+      font-size: 14px;
+      color: var(--ink-soft);
+      margin-bottom: 24px;
+    }
+    .plan-price {
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 4px;
+      font-family: 'Playfair Display', serif;
+    }
+    .plan-price-note {
+      font-size: 13px;
+      color: var(--ink-soft);
+      margin-bottom: 28px;
+    }
+    .plan-features {
+      list-style: none;
+      margin-bottom: 32px;
+    }
+    .plan-features li {
+      font-size: 14px;
+      color: var(--ink-mid);
+      padding: 7px 0;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .plan-features li:last-child { border-bottom: none; }
+    .check { color: #2e7d32; font-size: 15px; }
+    .cross { color: #b0b0b0; font-size: 15px; }
+    .plan-cta {
+      display: block;
+      width: 100%;
+      padding: 13px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      text-align: center;
+      transition: background .15s, border-color .15s;
+    }
+    .plan-cta.outline {
+      border: 2px solid var(--line);
+      color: var(--ink);
+      background: transparent;
+    }
+    .plan-cta.outline:hover { border-color: var(--ink-mid); }
+    .plan-cta.solid {
+      background: var(--red);
+      color: var(--white);
+      border: 2px solid var(--red);
+    }
+    .plan-cta.solid:hover { background: var(--red-dim); border-color: var(--red-dim); }
+
+    /* ── COMPARISON TABLE ── */
+    .compare-section {
+      background: var(--bg);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 64px 24px;
+    }
+    .compare-inner {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .compare-inner h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 32px;
+      text-align: center;
+    }
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .compare-table th {
+      padding: 12px 16px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      border-bottom: 2px solid var(--line);
+    }
+    .compare-table th:first-child { text-align: left; }
+    .compare-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+      color: var(--ink-mid);
+    }
+    .compare-table td:first-child { font-weight: 500; color: var(--ink); }
+    .compare-table td:not(:first-child) { text-align: center; }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .t-check { color: #2e7d32; font-size: 16px; }
+    .t-cross { color: #ccc; font-size: 16px; }
+    .t-pro { color: var(--red); font-weight: 600; font-size: 12px; }
+
+    /* ── FAQ ── */
+    .faq-section {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 64px 24px;
+    }
+    .faq-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 36px;
+      text-align: center;
+    }
+    .faq-item { margin-bottom: 28px; }
+    .faq-q {
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .faq-a {
+      font-size: 14px;
+      color: var(--ink-mid);
+      line-height: 1.7;
+    }
+    .faq-a a { color: var(--red); text-decoration: underline; text-underline-offset: 3px; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      color: var(--white);
+      padding: 40px 24px;
+    }
+    .footer-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .footer-brand span { color: var(--red); }
+    .footer-copy { font-size: 13px; color: #aaa; }
+    .footer-links { display: flex; gap: 20px; list-style: none; }
+    .footer-links a { font-size: 13px; color: #aaa; transition: color .15s; }
+    .footer-links a:hover { color: var(--white); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .pricing-hero { padding: 48px 20px 40px; }
+      .pricing-hero h1 { font-size: 28px; }
+      .pricing-section, .compare-section, .faq-section { padding: 48px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="../" class="nav-logo">Jinbo<span>cho</span></a>
+    <ul class="nav-links">
+      <li><a href="../">Home</a></li>
+      <li><a href="../manuals/">Docs</a></li>
+      <li><a href="../manuals/managed-install/">Installazione gestita</a></li>
+      <li><a href="../pricing/" class="active">Prezzi</a></li>
+    </ul>
+    <a href="mailto:jinbochoapp@gmail.com" class="nav-cta">Contattaci</a>
+  </div>
+</nav>
+
+<section class="pricing-hero">
+  <h1>Semplice e trasparente</h1>
+  <p>Jinbocho è gratuito per uso personale. Il modulo AI Pro è disponibile su richiesta per chi vuole di più.</p>
+</section>
+
+<section class="pricing-section">
+  <div class="pricing-grid">
+
+    <!-- COMMUNITY -->
+    <div class="pricing-card">
+      <div class="plan-name">Community</div>
+      <div class="plan-tagline">Per uso personale e familiare</div>
+      <div class="plan-price">Gratis</div>
+      <div class="plan-price-note">Per sempre · Self-hosted</div>
+      <ul class="plan-features">
+        <li><span class="check">✓</span> Catalogo libri completo</li>
+        <li><span class="check">✓</span> Mappa fisica degli scaffali</li>
+        <li><span class="check">✓</span> Scansione ISBN</li>
+        <li><span class="check">✓</span> Account famiglia + ruoli</li>
+        <li><span class="check">✓</span> Export CSV / JSON</li>
+        <li><span class="check">✓</span> Multilingua (EN, IT, ES, FR)</li>
+        <li><span class="cross">–</span> Modulo AI (presentazione libri)</li>
+      </ul>
+      <a href="https://github.com/jinbocho/jinbocho-infrastructure-v1" target="_blank" rel="noopener" class="plan-cta outline">
+        Scarica e installa →
+      </a>
+    </div>
+
+    <!-- PRO -->
+    <div class="pricing-card featured">
+      <div class="badge">Pro</div>
+      <div class="plan-name">Pro</div>
+      <div class="plan-tagline">Community + modulo AI</div>
+      <div class="plan-price" style="font-size:28px; margin-top:8px;">Su richiesta</div>
+      <div class="plan-price-note">Licenza commerciale · Self-hosted</div>
+      <ul class="plan-features">
+        <li><span class="check">✓</span> Tutto di Community</li>
+        <li><span class="check">✓</span> <strong>Presentazione AI dei libri</strong></li>
+        <li><span class="check">✓</span> Compatibile con qualsiasi LLM<br><small style="color:var(--ink-soft)">OpenAI, Gemini, Groq, Ollama…</small></li>
+        <li><span class="check">✓</span> Licenza commerciale inclusa</li>
+        <li><span class="check">✓</span> Supporto via email</li>
+      </ul>
+      <a href="mailto:jinbochoapp@gmail.com?subject=Jinbocho%20Pro%20-%20Richiesta%20licenza" class="plan-cta solid">
+        Richiedi licenza Pro →
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- COMPARISON TABLE -->
+<section class="compare-section">
+  <div class="compare-inner">
+    <h2>Confronto completo</h2>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Funzionalità</th>
+          <th>Community</th>
+          <th>Pro</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Catalogo libri</td>
+          <td><span class="t-check">✓</span></td>
+          <td><span class="t-check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Mappa scaffali (Room → Bookcase → Shelf)</td>
+          <td><span class="t-check">✓</span></td>
+          <td><span class="t-check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Scansione ISBN (camera mobile)</td>
+          <td><span class="t-check">✓</span></td>
+          <td><span class="t-check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Account famiglia + ruoli + JWT</td>
+          <td><span class="t-check">✓</span></td>
+          <td><span class="t-check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Stato lettura e posizione sullo scaffale</td>
+          <td><span class="t-check">✓</span></td>
+          <td><span class="t-check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Export CSV / JSON</td>
+          <td><span class="t-check">✓</span></td>
+          <td><span class="t-check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Multilingua (EN, IT, ES, FR)</td>
+          <td><span class="t-check">✓</span></td>
+          <td><span class="t-check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Self-hosted (Docker)</td>
+          <td><span class="t-check">✓</span></td>
+          <td><span class="t-check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Presentazione AI dei libri</td>
+          <td><span class="t-cross">–</span></td>
+          <td><span class="t-check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Compatibilità LLM (OpenAI, Groq, Ollama…)</td>
+          <td><span class="t-cross">–</span></td>
+          <td><span class="t-check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Licenza commerciale</td>
+          <td><span class="t-cross">–</span></td>
+          <td><span class="t-check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Supporto via email</td>
+          <td><span class="t-cross">–</span></td>
+          <td><span class="t-check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Prezzo</td>
+          <td><strong>Gratis</strong></td>
+          <td><span class="t-pro">Su richiesta</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <h2>Domande frequenti</h2>
+
+  <div class="faq-item">
+    <div class="faq-q">Jinbocho Community è davvero gratuito?</div>
+    <div class="faq-a">Sì. La Community Edition è completamente gratuita per uso personale e familiare, senza limiti di libri o utenti. Basta un server Docker.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">Cos'è il modulo AI?</div>
+    <div class="faq-a">Il modulo AI genera una presentazione calorosamente scritta per ogni libro — simile a una quarta di copertina, senza spoiler. Funziona con qualsiasi provider compatibile con l'API OpenAI: OpenAI, Gemini, Groq, OpenRouter, o un LLM locale con Ollama.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">I miei dati rimangono miei?</div>
+    <div class="faq-a">Sempre. Jinbocho gira sulla tua infrastruttura, su un tuo database PostgreSQL. Nessun dato viene inviato a server esterni, a meno che tu non configuri un provider LLM (solo per la funzione AI Pro).</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">Posso provare l'AI prima di acquistare la licenza Pro?</div>
+    <div class="faq-a">Scrivi a <a href="mailto:jinbochoapp@gmail.com">jinbochoapp@gmail.com</a> per concordare una demo o un periodo di valutazione.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">Esiste un servizio di installazione?</div>
+    <div class="faq-a">Sì. Se preferisci non occuparti del setup tecnico, offriamo un <a href="../manuals/managed-install/">servizio di installazione gestita</a> sulla tua infrastruttura.</div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">Jinbo<span>cho</span></div>
+      <div class="footer-copy">© 2026 Carmelo La Gamba · Jinbocho Source-Available License</div>
+    </div>
+    <ul class="footer-links">
+      <li><a href="https://github.com/jinbocho" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a href="../manuals/">Documentazione</a></li>
+      <li><a href="../manuals/managed-install/">Installazione gestita</a></li>
+      <li><a href="https://github.com/jinbocho/jinbocho.github.io/blob/main/LICENSE" target="_blank" rel="noopener">Licenza</a></li>
+    </ul>
+  </div>
+</footer>
+
+</body>
+</html>
