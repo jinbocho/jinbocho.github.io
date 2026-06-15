@@ -61,6 +61,7 @@
       font-size: 20px;
       font-weight: 700;
       color: var(--ink);
+      flex-shrink: 0;
     }
     .nav-logo span { color: var(--red); }
     .nav-links {
@@ -77,8 +78,13 @@
     }
     .nav-links a:hover,
     .nav-links a.active { color: var(--red); }
+    .nav-end {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
     .nav-cta {
-      margin-left: 16px;
       padding: 7px 18px;
       background: var(--red);
       color: var(--white);
@@ -86,8 +92,41 @@
       font-size: 14px;
       font-weight: 600;
       transition: background .15s;
+      white-space: nowrap;
     }
     .nav-cta:hover { background: var(--red-dim); }
+
+    /* ── LANG TOGGLE ── */
+    .lang-toggle {
+      display: flex;
+      align-items: center;
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 100px;
+      padding: 2px;
+      gap: 2px;
+    }
+    .lang-btn {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      padding: 4px 10px;
+      border-radius: 100px;
+      border: none;
+      background: transparent;
+      color: var(--ink-soft);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      line-height: 1.4;
+    }
+    .lang-btn.active {
+      background: var(--red);
+      color: var(--white);
+    }
+    .lang-btn:hover:not(.active) {
+      background: var(--line);
+      color: var(--ink);
+    }
 
     /* ── HERO ── */
     .pricing-hero {
@@ -106,7 +145,7 @@
     .pricing-hero p {
       font-size: 18px;
       color: var(--ink-mid);
-      max-width: 560px;
+      max-width: 580px;
       margin: 0 auto;
     }
 
@@ -148,6 +187,7 @@
       padding: 3px 14px;
       border-radius: 20px;
     }
+    .badge-neutral { background: var(--ink-soft); }
     .plan-name {
       font-size: 22px;
       font-weight: 700;
@@ -184,13 +224,9 @@
       align-items: flex-start;
       gap: 10px;
     }
-    .check, .cross { flex-shrink: 0; margin-top: 1px; }
-    .badge-neutral {
-      background: var(--ink-soft);
-    }
     .plan-features li:last-child { border-bottom: none; }
-    .check { color: #2e7d32; font-size: 15px; }
-    .cross { color: #b0b0b0; font-size: 15px; }
+    .check { color: #2e7d32; font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+    .cross { color: #b0b0b0; font-size: 15px; flex-shrink: 0; margin-top: 1px; }
     .plan-cta {
       display: block;
       width: 100%;
@@ -222,7 +258,7 @@
       padding: 64px 24px;
     }
     .compare-inner {
-      max-width: 760px;
+      max-width: 900px;
       margin: 0 auto;
     }
     .compare-inner h2 {
@@ -318,6 +354,8 @@
       .pricing-hero { padding: 48px 20px 40px; }
       .pricing-hero h1 { font-size: 28px; }
       .pricing-section, .compare-section, .faq-section { padding: 48px 20px; }
+      .pricing-card { padding: 28px 20px; }
+      .compare-table th, .compare-table td { padding: 10px 8px; font-size: 13px; }
     }
   </style>
 </head>
@@ -327,18 +365,23 @@
   <div class="nav-inner">
     <a href="../" class="nav-logo">Jinbo<span>cho</span></a>
     <ul class="nav-links">
-      <li><a href="../">Home</a></li>
-      <li><a href="../manuals/">Docs</a></li>
-      <li><a href="../manuals/managed-install/">Installazione gestita</a></li>
-      <li><a href="../pricing/" class="active">Prezzi</a></li>
+      <li><a href="../" data-i18n="p-nav-home">Home</a></li>
+      <li><a href="../manuals/" data-i18n="p-nav-docs" data-href-it="../manuals/it/" data-href-en="../manuals/">Documentazione</a></li>
+      <li><a href="../pricing/" class="active" data-i18n="p-nav-pricing">Prezzi</a></li>
     </ul>
-    <a href="mailto:jinbochoapp@gmail.com" class="nav-cta">Contattaci</a>
+    <div class="nav-end">
+      <div class="lang-toggle" aria-label="Scegli lingua / Choose language">
+        <button class="lang-btn" data-lang="it" onclick="setLang('it')">IT</button>
+        <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+      </div>
+      <a href="mailto:jinbochoapp@gmail.com" class="nav-cta" data-i18n="p-nav-contact">Contattaci</a>
+    </div>
   </div>
 </nav>
 
 <section class="pricing-hero">
-  <h1>Semplice e trasparente</h1>
-  <p>Jinbocho Community è gratuito per sempre. Il modulo AI Pro aggiunge funzionalità di intelligenza artificiale per completare e arricchire il flusso di catalogazione.</p>
+  <h1 data-i18n="p-hero-h1">Semplice e trasparente</h1>
+  <p data-i18n="p-hero-sub">Jinbocho Community è gratuito per sempre. Il modulo AI Pro aggiunge funzionalità di intelligenza artificiale per completare e arricchire il flusso di catalogazione.</p>
 </section>
 
 <section class="pricing-section">
@@ -346,59 +389,60 @@
 
     <!-- COMMUNITY -->
     <div class="pricing-card">
-      <div class="plan-name">Community</div>
-      <div class="plan-tagline">Per uso personale e familiare</div>
-      <div class="plan-price">Gratis</div>
-      <div class="plan-price-note">Per sempre · Self-hosted · Infrastruttura a carico dell'utente</div>
+      <div class="plan-name" data-i18n="p-c-name">Community</div>
+      <div class="plan-tagline" data-i18n="p-c-tagline">Per uso personale e familiare</div>
+      <div class="plan-price" data-i18n="p-c-price">Gratis</div>
+      <div class="plan-price-note" data-i18n="p-c-price-note">Per sempre · Self-hosted · Infrastruttura a carico dell'utente</div>
       <ul class="plan-features">
-        <li><span class="check">✓</span> Catalogo libri completo</li>
-        <li><span class="check">✓</span> Mappa fisica degli scaffali</li>
-        <li><span class="check">✓</span> Scansione ISBN</li>
-        <li><span class="check">✓</span> Account famiglia + ruoli</li>
-        <li><span class="check">✓</span> Export CSV / JSON</li>
-        <li><span class="check">✓</span> Multilingua (EN, IT, ES, FR)</li>
-        <li><span class="cross">–</span> Modulo AI Pro</li>
+        <li><span class="check">✓</span><span data-i18n="p-c-f1">Catalogo libri completo</span></li>
+        <li><span class="check">✓</span><span data-i18n="p-c-f2">Mappa fisica degli scaffali</span></li>
+        <li><span class="check">✓</span><span data-i18n="p-c-f3">Scansione ISBN</span></li>
+        <li><span class="check">✓</span><span data-i18n="p-c-f4">Account famiglia + ruoli</span></li>
+        <li><span class="check">✓</span><span data-i18n="p-c-f5">Export CSV / JSON</span></li>
+        <li><span class="check">✓</span><span data-i18n="p-c-f6">Multilingua (EN, IT, ES, FR)</span></li>
+        <li><span class="cross">–</span><span data-i18n="p-c-f7">Modulo AI Pro</span></li>
       </ul>
-      <a href="https://github.com/jinbocho/jinbocho-infrastructure-v1" target="_blank" rel="noopener" class="plan-cta outline">
+      <a href="https://github.com/jinbocho/jinbocho-infrastructure-v1" target="_blank" rel="noopener" class="plan-cta outline" data-i18n="p-c-cta">
         Scarica e installa →
       </a>
     </div>
 
     <!-- ASSISTITO -->
     <div class="pricing-card">
-      <div class="badge badge-neutral">Servizio</div>
-      <div class="plan-name">Assistito</div>
-      <div class="plan-tagline">Per chi vuole Jinbocho senza pensieri tecnici</div>
+      <div class="badge badge-neutral" data-i18n="p-a-badge">Servizio</div>
+      <div class="plan-name" data-i18n="p-a-name">Assistito</div>
+      <div class="plan-tagline" data-i18n="p-a-tagline">Per chi vuole Jinbocho senza pensieri tecnici</div>
       <div class="plan-price">€ 99</div>
-      <div class="plan-price-note">Una tantum · Prima installazione · Infrastruttura a carico dell'utente</div>
+      <div class="plan-price-note" data-i18n="p-a-price-note">Una tantum · Prima installazione · Infrastruttura a carico dell'utente</div>
       <ul class="plan-features">
-        <li><span class="check">✓</span> Tutto di Community</li>
-        <li><span class="check">✓</span> <strong>Prima installazione in produzione</strong><br><small style="color:var(--ink-soft)">Configurazione Docker Compose o deploy cloud (Render + Neon) a cura mia</small></li>
-        <li><span class="check">✓</span> Verifica funzionamento e test post-deploy</li>
-        <li><span class="cross">–</span> Modulo AI Pro</li>
+        <li><span class="check">✓</span><span data-i18n="p-a-f1">Tutto di Community</span></li>
+        <li><span class="check">✓</span><span data-i18n-html="p-a-f2"><strong>Prima installazione in produzione</strong><br><small style="color:var(--ink-soft)">Configurazione Docker Compose o deploy cloud (Render + Neon) a cura mia</small></span></li>
+        <li><span class="check">✓</span><span data-i18n="p-a-f3">Verifica funzionamento e test post-deploy</span></li>
+        <li><span class="cross">–</span><span data-i18n="p-a-f4">Modulo AI Pro</span></li>
       </ul>
-      <a href="mailto:jinbochoapp@gmail.com?subject=Jinbocho%20-%20Richiesta%20installazione%20guidata" class="plan-cta outline">
+      <a href="mailto:jinbochoapp@gmail.com?subject=Jinbocho%20-%20Richiesta%20installazione%20guidata" class="plan-cta outline" data-i18n="p-a-cta">
         Richiedi installazione guidata →
       </a>
     </div>
 
     <!-- PRO -->
     <div class="pricing-card featured">
-      <div class="badge">Pro</div>
-      <div class="plan-name">Pro</div>
-      <div class="plan-tagline">Community + modulo AI Pro</div>
-      <div class="plan-price" style="font-size:28px; margin-top:8px;">Su richiesta</div>
-      <div class="plan-price-note">Licenza commerciale · Self-hosted · Infrastruttura a carico dell'utente</div>
+      <div class="badge" data-i18n="p-p-badge">Pro</div>
+      <div class="plan-name" data-i18n="p-p-name">Pro</div>
+      <div class="plan-tagline" data-i18n="p-p-tagline">Community + modulo AI Pro</div>
+      <div class="plan-price" style="font-size:28px; margin-top:8px;" data-i18n="p-p-price">Su richiesta</div>
+      <div class="plan-price-note" data-i18n="p-p-price-note">Licenza commerciale · Self-hosted · Infrastruttura a carico dell'utente</div>
       <ul class="plan-features">
-        <li><span class="check">✓</span> Tutto di Community</li>
-        <li><span class="check">✓</span> <strong>Descrizione AI automatica</strong><br><small style="color:var(--ink-soft)">Generata via LLM quando non trovata online durante la scansione</small></li>
-        <li><span class="check">✓</span> <strong>Riconoscimento titolo e autore via AI</strong><br><small style="color:var(--ink-soft)">Algoritmi ML per identificare titolo e autore quando l'ISBN non è leggibile o il libro non è in nessun database</small></li>
-        <li><span class="check">✓</span> Compatibile con qualsiasi LLM<br><small style="color:var(--ink-soft)">OpenAI, Gemini, Groq, Ollama…</small></li>
-        <li><span class="check">✓</span> Licenza commerciale inclusa</li>
-        <li><span class="check">✓</span> Supporto via email</li>
-        <li style="color:var(--ink-soft); font-style:italic; border-bottom:none; padding-top:4px;"><small>+ altre funzionalità AI in arrivo</small></li>
+        <li><span class="check">✓</span><span data-i18n="p-p-f1">Tutto di Community</span></li>
+        <li><span class="check">✓</span><span data-i18n="p-p-f2">Prima installazione guidata</span></li>
+        <li><span class="check">✓</span><span data-i18n-html="p-p-f3"><strong>Descrizione AI automatica</strong><br><small style="color:var(--ink-soft)">Generata via LLM quando non trovata online durante la scansione</small></span></li>
+        <li><span class="check">✓</span><span data-i18n-html="p-p-f4"><strong>Riconoscimento titolo e autore via AI</strong><br><small style="color:var(--ink-soft)">Algoritmi ML per identificare titolo e autore quando l'ISBN non è leggibile o il libro non è in nessun database</small></span></li>
+        <li><span class="check">✓</span><span data-i18n-html="p-p-f5">Compatibile con qualsiasi LLM<br><small style="color:var(--ink-soft)">OpenAI, Gemini, Groq, Ollama…</small></span></li>
+        <li><span class="check">✓</span><span data-i18n="p-p-f6">Licenza commerciale inclusa</span></li>
+        <li><span class="check">✓</span><span data-i18n="p-p-f7">Supporto via email</span></li>
+        <li style="color:var(--ink-soft); font-style:italic; border-bottom:none; padding-top:4px;"><small data-i18n="p-p-f8">+ altre funzionalità AI in arrivo</small></li>
       </ul>
-      <a href="mailto:jinbochoapp@gmail.com?subject=Jinbocho%20Pro%20-%20Richiesta%20licenza" class="plan-cta solid">
+      <a href="mailto:jinbochoapp@gmail.com?subject=Jinbocho%20Pro%20-%20Richiesta%20licenza" class="plan-cta solid" data-i18n="p-p-cta">
         Richiedi licenza Pro →
       </a>
     </div>
@@ -409,106 +453,106 @@
 <!-- COMPARISON TABLE -->
 <section class="compare-section">
   <div class="compare-inner">
-    <h2>Confronto completo</h2>
+    <h2 data-i18n="p-t-title">Confronto completo</h2>
     <table class="compare-table">
       <thead>
         <tr>
-          <th>Funzionalità</th>
-          <th>Community</th>
-          <th>Assistito</th>
-          <th>Pro</th>
+          <th data-i18n="p-t-h1">Funzionalità</th>
+          <th data-i18n="p-t-h2">Community</th>
+          <th data-i18n="p-t-h3">Assistito</th>
+          <th data-i18n="p-t-h4">Pro</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>Catalogo libri</td>
+          <td data-i18n="p-t-r1">Catalogo libri</td>
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
         </tr>
         <tr>
-          <td>Mappa scaffali (Room → Bookcase → Shelf)</td>
+          <td data-i18n="p-t-r2">Mappa scaffali (Room → Bookcase → Shelf)</td>
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
         </tr>
         <tr>
-          <td>Scansione ISBN (camera mobile)</td>
+          <td data-i18n="p-t-r3">Scansione ISBN (camera mobile)</td>
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
         </tr>
         <tr>
-          <td>Account famiglia + ruoli + JWT</td>
+          <td data-i18n="p-t-r4">Account famiglia + ruoli + JWT</td>
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
         </tr>
         <tr>
-          <td>Stato lettura e posizione sullo scaffale</td>
+          <td data-i18n="p-t-r5">Stato lettura e posizione sullo scaffale</td>
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
         </tr>
         <tr>
-          <td>Export CSV / JSON</td>
+          <td data-i18n="p-t-r6">Export CSV / JSON</td>
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
         </tr>
         <tr>
-          <td>Multilingua (EN, IT, ES, FR)</td>
+          <td data-i18n="p-t-r7">Multilingua (EN, IT, ES, FR)</td>
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
         </tr>
         <tr>
-          <td>Self-hosted (Docker)</td>
+          <td data-i18n="p-t-r8">Self-hosted (Docker)</td>
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
         </tr>
         <tr>
-          <td>Prima installazione guidata in produzione</td>
+          <td data-i18n="p-t-r9">Prima installazione guidata in produzione</td>
           <td><span class="t-cross">–</span></td>
           <td><span class="t-check">✓</span></td>
-          <td><span class="t-cross">–</span></td>
-        </tr>
-        <tr>
-          <td>Descrizione AI automatica<br><small style="color:var(--ink-soft); font-weight:400;">Generata via LLM quando non trovata online</small></td>
-          <td><span class="t-cross">–</span></td>
-          <td><span class="t-cross">–</span></td>
           <td><span class="t-check">✓</span></td>
         </tr>
         <tr>
-          <td>Riconoscimento titolo e autore via AI<br><small style="color:var(--ink-soft); font-weight:400;">ML per identificare titolo/autore senza ISBN</small></td>
+          <td><span data-i18n="p-t-r10">Descrizione AI automatica</span><br><small style="color:var(--ink-soft); font-weight:400;" data-i18n="p-t-r10s">Generata via LLM quando non trovata online</small></td>
           <td><span class="t-cross">–</span></td>
           <td><span class="t-cross">–</span></td>
           <td><span class="t-check">✓</span></td>
         </tr>
         <tr>
-          <td>Compatibilità LLM (OpenAI, Gemini, Groq, Ollama…)</td>
+          <td><span data-i18n="p-t-r11">Riconoscimento titolo e autore via AI</span><br><small style="color:var(--ink-soft); font-weight:400;" data-i18n="p-t-r11s">ML per identificare titolo/autore senza ISBN</small></td>
           <td><span class="t-cross">–</span></td>
           <td><span class="t-cross">–</span></td>
           <td><span class="t-check">✓</span></td>
         </tr>
         <tr>
-          <td>Licenza commerciale</td>
+          <td data-i18n="p-t-r12">Compatibilità LLM (OpenAI, Gemini, Groq, Ollama…)</td>
           <td><span class="t-cross">–</span></td>
           <td><span class="t-cross">–</span></td>
           <td><span class="t-check">✓</span></td>
         </tr>
         <tr>
-          <td>Supporto via email</td>
+          <td data-i18n="p-t-r13">Licenza commerciale</td>
           <td><span class="t-cross">–</span></td>
           <td><span class="t-cross">–</span></td>
           <td><span class="t-check">✓</span></td>
         </tr>
         <tr>
-          <td>Prezzo</td>
-          <td><strong>Gratis</strong></td>
-          <td><span class="t-pro" style="color:var(--ink);">€ 99 una tantum</span></td>
-          <td><span class="t-pro">Su richiesta</span></td>
+          <td data-i18n="p-t-r14">Supporto via email</td>
+          <td><span class="t-cross">–</span></td>
+          <td><span class="t-cross">–</span></td>
+          <td><span class="t-check">✓</span></td>
+        </tr>
+        <tr>
+          <td data-i18n="p-t-r15">Prezzo</td>
+          <td><strong data-i18n="p-t-v-free">Gratis</strong></td>
+          <td><span style="font-weight:600;" data-i18n="p-t-v-assistito">€ 99 una tantum</span></td>
+          <td><span class="t-pro" data-i18n="p-t-v-pro">Su richiesta</span></td>
         </tr>
       </tbody>
     </table>
@@ -517,36 +561,36 @@
 
 <!-- FAQ -->
 <section class="faq-section">
-  <h2>Domande frequenti</h2>
+  <h2 data-i18n="p-faq-title">Domande frequenti</h2>
 
   <div class="faq-item">
-    <div class="faq-q">Jinbocho Community è davvero gratuito?</div>
-    <div class="faq-a">Sì. La Community Edition è completamente gratuita per uso personale e familiare, senza limiti di libri o utenti. Basta un server Docker.</div>
+    <div class="faq-q" data-i18n="p-faq1-q">Jinbocho Community è davvero gratuito?</div>
+    <div class="faq-a" data-i18n="p-faq1-a">Sì. La Community Edition è completamente gratuita per uso personale e familiare, senza limiti di libri o utenti. Basta un server Docker.</div>
   </div>
 
   <div class="faq-item">
-    <div class="faq-q">Cos'è il modulo AI Pro?</div>
-    <div class="faq-a">Il modulo AI Pro aggiunge due funzionalità alla piattaforma: <strong>descrizione automatica dei libri</strong> — quando la scansione ISBN non trova una sinossi nei database bibliografici (Open Library, Google Books), un LLM genera automaticamente la descrizione; e <strong>riconoscimento di titolo e autore via machine learning</strong> — per catalogare libri il cui ISBN non è leggibile o non è presente online, identificando titolo e autore in automatico. La generazione della descrizione è compatibile con qualsiasi provider LLM (OpenAI, Gemini, Groq, OpenRouter, Ollama). Altre funzionalità AI verranno aggiunte alla versione Pro nel tempo.</div>
+    <div class="faq-q" data-i18n="p-faq2-q">Cos'è il modulo AI Pro?</div>
+    <div class="faq-a" data-i18n-html="p-faq2-a">Il modulo AI Pro aggiunge due funzionalità alla piattaforma: <strong>descrizione automatica dei libri</strong> — quando la scansione ISBN non trova una sinossi nei database bibliografici (Open Library, Google Books), un LLM genera automaticamente la descrizione; e <strong>riconoscimento di titolo e autore via machine learning</strong> — per catalogare libri il cui ISBN non è leggibile o non è presente online. La generazione della descrizione è compatibile con qualsiasi provider LLM (OpenAI, Gemini, Groq, OpenRouter, Ollama). Altre funzionalità AI verranno aggiunte nel tempo.</div>
   </div>
 
   <div class="faq-item">
-    <div class="faq-q">I miei dati rimangono miei?</div>
-    <div class="faq-a">Sempre. Jinbocho gira sulla tua infrastruttura, su un tuo database PostgreSQL. Nessun dato viene inviato a server esterni, a meno che tu non configuri un provider LLM (solo per la funzione AI Pro).</div>
+    <div class="faq-q" data-i18n="p-faq3-q">I miei dati rimangono miei?</div>
+    <div class="faq-a" data-i18n="p-faq3-a">Sempre. Jinbocho gira sulla tua infrastruttura, su un tuo database PostgreSQL. Nessun dato viene inviato a server esterni, a meno che tu non configuri un provider LLM (solo per la funzione AI Pro).</div>
   </div>
 
   <div class="faq-item">
-    <div class="faq-q">Posso provare l'AI prima di acquistare la licenza Pro?</div>
-    <div class="faq-a">Scrivi a <a href="mailto:jinbochoapp@gmail.com">jinbochoapp@gmail.com</a> per concordare una demo o un periodo di valutazione.</div>
+    <div class="faq-q" data-i18n="p-faq4-q">Posso provare l'AI prima di acquistare la licenza Pro?</div>
+    <div class="faq-a" data-i18n-html="p-faq4-a">Scrivi a <a href="mailto:jinbochoapp@gmail.com">jinbochoapp@gmail.com</a> per concordare una demo o un periodo di valutazione.</div>
   </div>
 
   <div class="faq-item">
-    <div class="faq-q">Cos'è il piano Assistito?</div>
-    <div class="faq-a">Il piano Assistito include le stesse funzionalità di Community, più la prima installazione in produzione a cura mia: configurazione Docker Compose oppure deploy cloud su Render + Neon, verifica del funzionamento e test post-deploy. Il costo è di <strong>€ 99 una tantum</strong>. L'infrastruttura cloud o il server dove verrà installato il software è a carico dell'utente.</div>
+    <div class="faq-q" data-i18n="p-faq5-q">Cos'è il piano Assistito?</div>
+    <div class="faq-a" data-i18n="p-faq5-a">Il piano Assistito include le stesse funzionalità di Community, più la prima installazione in produzione a cura mia: configurazione Docker Compose oppure deploy cloud su Render + Neon, verifica del funzionamento e test post-deploy. Il costo è di €99 una tantum. L'infrastruttura cloud o il server è a carico dell'utente.</div>
   </div>
 
   <div class="faq-item">
-    <div class="faq-q">Il costo del server è incluso?</div>
-    <div class="faq-a">No. Nei piani Community e Assistito il software è self-hosted: il costo dell'infrastruttura (server, VPS, NAS o cloud provider) è interamente a carico dell'utente. Per un deploy su Render + Neon il costo di partenza può essere zero (free tier) o pochi euro al mese a seconda del traffico. Scrivi a <a href="mailto:jinbochoapp@gmail.com">jinbochoapp@gmail.com</a> per una stima personalizzata.</div>
+    <div class="faq-q" data-i18n="p-faq6-q">Il costo del server è incluso?</div>
+    <div class="faq-a" data-i18n-html="p-faq6-a">No. In tutti i piani il software è self-hosted: il costo dell'infrastruttura (server, VPS, NAS o cloud provider) è interamente a carico dell'utente. Per un deploy su Render + Neon il costo di partenza può essere zero (free tier) o pochi euro al mese a seconda del traffico. Scrivi a <a href="mailto:jinbochoapp@gmail.com">jinbochoapp@gmail.com</a> per una stima personalizzata.</div>
   </div>
 </section>
 
@@ -558,12 +602,218 @@
     </div>
     <ul class="footer-links">
       <li><a href="https://github.com/jinbocho" target="_blank" rel="noopener">GitHub</a></li>
-      <li><a href="../manuals/">Documentazione</a></li>
-      <li><a href="../manuals/managed-install/">Installazione gestita</a></li>
-      <li><a href="https://github.com/jinbocho/jinbocho.github.io/blob/main/LICENSE" target="_blank" rel="noopener">Licenza</a></li>
+      <li><a href="../manuals/" data-i18n="p-footer-docs" data-href-it="../manuals/it/" data-href-en="../manuals/">Documentazione</a></li>
+      <li><a href="https://github.com/jinbocho/jinbocho.github.io/blob/main/LICENSE" target="_blank" rel="noopener" data-i18n="p-footer-license">Licenza</a></li>
     </ul>
   </div>
 </footer>
+
+<script>
+(function () {
+  var dict = {
+    it: {
+      'p-nav-home': 'Home',
+      'p-nav-docs': 'Documentazione',
+      'p-nav-pricing': 'Prezzi',
+      'p-nav-contact': 'Contattaci',
+      'p-hero-h1': 'Semplice e trasparente',
+      'p-hero-sub': 'Jinbocho Community è gratuito per sempre. Il modulo AI Pro aggiunge funzionalità di intelligenza artificiale per completare e arricchire il flusso di catalogazione.',
+      'p-c-name': 'Community',
+      'p-c-tagline': 'Per uso personale e familiare',
+      'p-c-price': 'Gratis',
+      'p-c-price-note': 'Per sempre · Self-hosted · Infrastruttura a carico dell\'utente',
+      'p-c-f1': 'Catalogo libri completo',
+      'p-c-f2': 'Mappa fisica degli scaffali',
+      'p-c-f3': 'Scansione ISBN',
+      'p-c-f4': 'Account famiglia + ruoli',
+      'p-c-f5': 'Export CSV / JSON',
+      'p-c-f6': 'Multilingua (EN, IT, ES, FR)',
+      'p-c-f7': 'Modulo AI Pro',
+      'p-c-cta': 'Scarica e installa →',
+      'p-a-badge': 'Servizio',
+      'p-a-name': 'Assistito',
+      'p-a-tagline': 'Per chi vuole Jinbocho senza pensieri tecnici',
+      'p-a-price-note': 'Una tantum · Prima installazione · Infrastruttura a carico dell\'utente',
+      'p-a-f1': 'Tutto di Community',
+      'p-a-f2': '<strong>Prima installazione in produzione</strong><br><small style="color:var(--ink-soft)">Configurazione Docker Compose o deploy cloud (Render + Neon) a cura mia</small>',
+      'p-a-f3': 'Verifica funzionamento e test post-deploy',
+      'p-a-f4': 'Modulo AI Pro',
+      'p-a-cta': 'Richiedi installazione guidata →',
+      'p-p-badge': 'Pro',
+      'p-p-name': 'Pro',
+      'p-p-tagline': 'Community + modulo AI Pro',
+      'p-p-price': 'Su richiesta',
+      'p-p-price-note': 'Licenza commerciale · Self-hosted · Infrastruttura a carico dell\'utente',
+      'p-p-f1': 'Tutto di Community',
+      'p-p-f2': 'Prima installazione guidata',
+      'p-p-f3': '<strong>Descrizione AI automatica</strong><br><small style="color:var(--ink-soft)">Generata via LLM quando non trovata online durante la scansione</small>',
+      'p-p-f4': '<strong>Riconoscimento titolo e autore via AI</strong><br><small style="color:var(--ink-soft)">Algoritmi ML per identificare titolo e autore quando l\'ISBN non è leggibile o il libro non è in nessun database</small>',
+      'p-p-f5': 'Compatibile con qualsiasi LLM<br><small style="color:var(--ink-soft)">OpenAI, Gemini, Groq, Ollama…</small>',
+      'p-p-f6': 'Licenza commerciale inclusa',
+      'p-p-f7': 'Supporto via email',
+      'p-p-f8': '+ altre funzionalità AI in arrivo',
+      'p-p-cta': 'Richiedi licenza Pro →',
+      'p-t-title': 'Confronto completo',
+      'p-t-h1': 'Funzionalità',
+      'p-t-h2': 'Community',
+      'p-t-h3': 'Assistito',
+      'p-t-h4': 'Pro',
+      'p-t-r1': 'Catalogo libri',
+      'p-t-r2': 'Mappa scaffali (Room → Bookcase → Shelf)',
+      'p-t-r3': 'Scansione ISBN (camera mobile)',
+      'p-t-r4': 'Account famiglia + ruoli + JWT',
+      'p-t-r5': 'Stato lettura e posizione sullo scaffale',
+      'p-t-r6': 'Export CSV / JSON',
+      'p-t-r7': 'Multilingua (EN, IT, ES, FR)',
+      'p-t-r8': 'Self-hosted (Docker)',
+      'p-t-r9': 'Prima installazione guidata in produzione',
+      'p-t-r10': 'Descrizione AI automatica',
+      'p-t-r10s': 'Generata via LLM quando non trovata online',
+      'p-t-r11': 'Riconoscimento titolo e autore via AI',
+      'p-t-r11s': 'ML per identificare titolo/autore senza ISBN',
+      'p-t-r12': 'Compatibilità LLM (OpenAI, Gemini, Groq, Ollama…)',
+      'p-t-r13': 'Licenza commerciale',
+      'p-t-r14': 'Supporto via email',
+      'p-t-r15': 'Prezzo',
+      'p-t-v-free': 'Gratis',
+      'p-t-v-assistito': '€ 99 una tantum',
+      'p-t-v-pro': 'Su richiesta',
+      'p-faq-title': 'Domande frequenti',
+      'p-faq1-q': 'Jinbocho Community è davvero gratuito?',
+      'p-faq1-a': 'Sì. La Community Edition è completamente gratuita per uso personale e familiare, senza limiti di libri o utenti. Basta un server Docker.',
+      'p-faq2-q': 'Cos\'è il modulo AI Pro?',
+      'p-faq2-a': 'Il modulo AI Pro aggiunge due funzionalità alla piattaforma: <strong>descrizione automatica dei libri</strong> — quando la scansione ISBN non trova una sinossi nei database bibliografici (Open Library, Google Books), un LLM genera automaticamente la descrizione; e <strong>riconoscimento di titolo e autore via machine learning</strong> — per catalogare libri il cui ISBN non è leggibile o non è presente online. La generazione della descrizione è compatibile con qualsiasi provider LLM (OpenAI, Gemini, Groq, OpenRouter, Ollama). Altre funzionalità AI verranno aggiunte nel tempo.',
+      'p-faq3-q': 'I miei dati rimangono miei?',
+      'p-faq3-a': 'Sempre. Jinbocho gira sulla tua infrastruttura, su un tuo database PostgreSQL. Nessun dato viene inviato a server esterni, a meno che tu non configuri un provider LLM (solo per la funzione AI Pro).',
+      'p-faq4-q': 'Posso provare l\'AI prima di acquistare la licenza Pro?',
+      'p-faq4-a': 'Scrivi a <a href="mailto:jinbochoapp@gmail.com">jinbochoapp@gmail.com</a> per concordare una demo o un periodo di valutazione.',
+      'p-faq5-q': 'Cos\'è il piano Assistito?',
+      'p-faq5-a': 'Il piano Assistito include le stesse funzionalità di Community, più la prima installazione in produzione a cura mia: configurazione Docker Compose oppure deploy cloud su Render + Neon, verifica del funzionamento e test post-deploy. Il costo è di €99 una tantum. L\'infrastruttura cloud o il server è a carico dell\'utente.',
+      'p-faq6-q': 'Il costo del server è incluso?',
+      'p-faq6-a': 'No. In tutti i piani il software è self-hosted: il costo dell\'infrastruttura (server, VPS, NAS o cloud provider) è interamente a carico dell\'utente. Per un deploy su Render + Neon il costo di partenza può essere zero (free tier) o pochi euro al mese a seconda del traffico. Scrivi a <a href="mailto:jinbochoapp@gmail.com">jinbochoapp@gmail.com</a> per una stima personalizzata.',
+      'p-footer-docs': 'Documentazione',
+      'p-footer-license': 'Licenza'
+    },
+    en: {
+      'p-nav-home': 'Home',
+      'p-nav-docs': 'Documentation',
+      'p-nav-pricing': 'Pricing',
+      'p-nav-contact': 'Contact us',
+      'p-hero-h1': 'Simple and transparent',
+      'p-hero-sub': 'Jinbocho Community is free forever. The AI Pro module adds artificial intelligence features to complete and enrich the cataloguing workflow.',
+      'p-c-name': 'Community',
+      'p-c-tagline': 'For personal and family use',
+      'p-c-price': 'Free',
+      'p-c-price-note': 'Forever · Self-hosted · Infrastructure at user\'s expense',
+      'p-c-f1': 'Full book catalogue',
+      'p-c-f2': 'Physical shelf map',
+      'p-c-f3': 'ISBN scanning',
+      'p-c-f4': 'Family accounts + roles',
+      'p-c-f5': 'CSV / JSON export',
+      'p-c-f6': 'Multilingual (EN, IT, ES, FR)',
+      'p-c-f7': 'AI Pro module',
+      'p-c-cta': 'Download and install →',
+      'p-a-badge': 'Service',
+      'p-a-name': 'Assisted',
+      'p-a-tagline': 'For those who want Jinbocho without technical hassle',
+      'p-a-price-note': 'One-time · First installation · Infrastructure at user\'s expense',
+      'p-a-f1': 'Everything in Community',
+      'p-a-f2': '<strong>First production installation</strong><br><small style="color:var(--ink-soft)">Docker Compose setup or cloud deploy (Render + Neon) handled by me</small>',
+      'p-a-f3': 'Functionality check and post-deploy testing',
+      'p-a-f4': 'AI Pro module',
+      'p-a-cta': 'Request guided installation →',
+      'p-p-badge': 'Pro',
+      'p-p-name': 'Pro',
+      'p-p-tagline': 'Community + AI Pro module',
+      'p-p-price': 'On request',
+      'p-p-price-note': 'Commercial licence · Self-hosted · Infrastructure at user\'s expense',
+      'p-p-f1': 'Everything in Community',
+      'p-p-f2': 'Guided first installation',
+      'p-p-f3': '<strong>Automatic AI description</strong><br><small style="color:var(--ink-soft)">Generated via LLM when not found online during scanning</small>',
+      'p-p-f4': '<strong>AI-based title and author recognition</strong><br><small style="color:var(--ink-soft)">ML algorithms to identify title and author when the ISBN is unreadable or the book is not in any database</small>',
+      'p-p-f5': 'Compatible with any LLM<br><small style="color:var(--ink-soft)">OpenAI, Gemini, Groq, Ollama…</small>',
+      'p-p-f6': 'Commercial licence included',
+      'p-p-f7': 'Email support',
+      'p-p-f8': '+ more AI features coming',
+      'p-p-cta': 'Request Pro licence →',
+      'p-t-title': 'Full comparison',
+      'p-t-h1': 'Feature',
+      'p-t-h2': 'Community',
+      'p-t-h3': 'Assisted',
+      'p-t-h4': 'Pro',
+      'p-t-r1': 'Book catalogue',
+      'p-t-r2': 'Shelf map (Room → Bookcase → Shelf)',
+      'p-t-r3': 'ISBN scanning (mobile camera)',
+      'p-t-r4': 'Family accounts + roles + JWT',
+      'p-t-r5': 'Reading status and shelf position',
+      'p-t-r6': 'CSV / JSON export',
+      'p-t-r7': 'Multilingual (EN, IT, ES, FR)',
+      'p-t-r8': 'Self-hosted (Docker)',
+      'p-t-r9': 'Guided first production installation',
+      'p-t-r10': 'Automatic AI description',
+      'p-t-r10s': 'Generated via LLM when not found online',
+      'p-t-r11': 'AI-based title and author recognition',
+      'p-t-r11s': 'ML to identify title/author without ISBN',
+      'p-t-r12': 'LLM compatibility (OpenAI, Gemini, Groq, Ollama…)',
+      'p-t-r13': 'Commercial licence',
+      'p-t-r14': 'Email support',
+      'p-t-r15': 'Price',
+      'p-t-v-free': 'Free',
+      'p-t-v-assistito': '€ 99 one-time',
+      'p-t-v-pro': 'On request',
+      'p-faq-title': 'Frequently asked questions',
+      'p-faq1-q': 'Is Jinbocho Community really free?',
+      'p-faq1-a': 'Yes. The Community Edition is completely free for personal and family use, with no limits on books or users. All you need is a Docker server.',
+      'p-faq2-q': 'What is the AI Pro module?',
+      'p-faq2-a': 'The AI Pro module adds two features to the platform: <strong>automatic book descriptions</strong> — when an ISBN scan finds no synopsis in the bibliographic databases (Open Library, Google Books), an LLM generates a description automatically; and <strong>AI-based title and author recognition</strong> — to catalogue books whose ISBN is unreadable or not in any online database. Description generation is compatible with any LLM provider (OpenAI, Gemini, Groq, OpenRouter, Ollama). More AI features will be added over time.',
+      'p-faq3-q': 'Do my data stay mine?',
+      'p-faq3-a': 'Always. Jinbocho runs on your own infrastructure, on your own PostgreSQL database. No data is sent to external servers unless you configure an LLM provider (only for the AI Pro feature).',
+      'p-faq4-q': 'Can I try the AI before buying a Pro licence?',
+      'p-faq4-a': 'Write to <a href="mailto:jinbochoapp@gmail.com">jinbochoapp@gmail.com</a> to arrange a demo or an evaluation period.',
+      'p-faq5-q': 'What is the Assisted plan?',
+      'p-faq5-a': 'The Assisted plan includes the same features as Community, plus the first production installation carried out by me: Docker Compose setup or cloud deploy on Render + Neon, functionality check and post-deploy testing. The cost is €99 one-time. The cloud infrastructure or server is at the user\'s expense.',
+      'p-faq6-q': 'Is the server cost included?',
+      'p-faq6-a': 'No. In all plans the software is self-hosted: the infrastructure cost (server, VPS, NAS or cloud provider) is entirely at the user\'s expense. For a deploy on Render + Neon the starting cost can be zero (free tier) or a few euros per month depending on traffic. Write to <a href="mailto:jinbochoapp@gmail.com">jinbochoapp@gmail.com</a> for a personalised estimate.',
+      'p-footer-docs': 'Documentation',
+      'p-footer-license': 'Licence'
+    }
+  };
+
+  function setLang(lang) {
+    if (lang !== 'it' && lang !== 'en') lang = 'it';
+    document.documentElement.lang = lang;
+    localStorage.setItem('jinbocho-lang', lang);
+
+    var t = dict[lang];
+
+    document.querySelectorAll('[data-i18n]').forEach(function (el) {
+      var key = el.getAttribute('data-i18n');
+      if (t[key] !== undefined) el.textContent = t[key];
+    });
+
+    document.querySelectorAll('[data-i18n-html]').forEach(function (el) {
+      var key = el.getAttribute('data-i18n-html');
+      if (t[key] !== undefined) el.innerHTML = t[key];
+    });
+
+    document.querySelectorAll('[data-href-it]').forEach(function (el) {
+      el.href = lang === 'it'
+        ? el.getAttribute('data-href-it')
+        : el.getAttribute('data-href-en');
+    });
+
+    document.querySelectorAll('.lang-btn').forEach(function (btn) {
+      btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+    });
+  }
+
+  window.setLang = setLang;
+
+  var saved = localStorage.getItem('jinbocho-lang');
+  var browser = (navigator.language || navigator.userLanguage || 'it').toLowerCase();
+  setLang(saved || (browser.startsWith('it') ? 'it' : 'en'));
+})();
+</script>
 
 </body>
 </html>
