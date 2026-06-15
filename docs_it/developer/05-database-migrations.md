@@ -8,7 +8,6 @@ Jinbocho usa **PostgreSQL 16** con un database per servizio. Le migrazioni sono 
 |----------|---------|-------------|
 | `auth_db` | auth-service | `5432` |
 | `catalog_db` | catalog-service | `5433` |
-| `ai_db` | ai-service (opzionale) | `5434` |
 
 In Docker Compose queste porte sono legate solo a `127.0.0.1` — non sono accessibili dall'esterno della macchina.
 
@@ -28,9 +27,6 @@ psql -U postgres -h 127.0.0.1 -p 5432 -d auth_db
 
 # catalog_db
 psql -U postgres -h 127.0.0.1 -p 5433 -d catalog_db
-
-# ai_db (se in esecuzione)
-psql -U postgres -h 127.0.0.1 -p 5434 -d ai_db
 ```
 
 Password: `postgres` (solo sviluppo locale).
@@ -220,9 +216,9 @@ CREATE TABLE audit_log (
 Per cancellare tutti i dati locali e ripartire da zero:
 
 ```bash
-cd ~/workspace/jinbocho/jinbocho-infrastructure-v1
-docker compose down -v   # rimuove container E volumi
-docker compose up --build -d   # ricrea tutto da zero
+cd ~/workspace/jinbocho
+docker compose down -v          # rimuove container E volumi
+docker compose up --build -d    # ricrea tutto da zero
 # Le migrazioni vengono eseguite automaticamente all'avvio
 ```
 

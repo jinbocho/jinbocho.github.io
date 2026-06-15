@@ -20,23 +20,23 @@
 │                                                                  │
 │  Validazione JWT · CORS · Reverse proxy                         │
 └─────────┬─────────────────┬──────────────────────────────┘
-          │ HTTP interno       │ HTTP interno
-          ▼                     ▼
-┌──────────────────┐   ┌──────────────────┐   ┌───────────────┐
-│  auth-service    │   │  catalog-service  │   │  ai-service   │
-│  (Privato)       │   │  (Privato)        │   │  (Privato)    │
-│                  │   │                   │   │  opzionale    │
-│  famiglie        │   │  stanze            │   │               │
-│  utenti          │   │  librerie          │   │  tag           │
-│  JWT             │   │  libri             │   │  dedup         │
-│  refresh token   │   │  ricerca ISBN      │   │  raccomand.   │
-└────────┬───────┘   └────────┬─────────┘   └───────┬───────┘
-         │                      │                       │
-         ▼                      ▼                       ▼
-   ┌────────┐         ┌──────────┐           ┌────────┐
-   │ auth_db│         │catalog_db│           │  ai_db  │
-   │ (Neon) │         │ (Neon)   │           │  (Neon) │
-   └────────┘         └──────────┘           └────────┘
+          │ HTTP interno    │ HTTP interno
+          ▼                 ▼
+┌──────────────────┐   ┌──────────────────┐
+│  auth-service    │   │  catalog-service  │
+│  (Privato)       │   │  (Privato)        │
+│                  │   │                   │
+│  famiglie        │   │  stanze           │
+│  utenti          │   │  librerie         │
+│  JWT             │   │  libri            │
+│  refresh token   │   │  ricerca ISBN     │
+└────────┬────────┘   └────────┬──────────┘
+         │                      │
+         ▼                      ▼
+   ┌──────────┐       ┌────────────┐
+   │ auth_db  │       │ catalog_db │
+   │ (Neon)   │       │ (Neon)     │
+   └──────────┘       └────────────┘
 ```
 
 ## Bounded Context
@@ -70,10 +70,6 @@ Nessuna logica di dominio, nessun database. Agisce come:
 - Validatore JWT (sicurezza al confine)
 - Applicatore della policy CORS
 - Reverse proxy verso i servizi interni
-
-### Contesto AI (`ai-service` + `ai_db`) — Opzionale
-
-Servizio opzionale per funzionalità basate su AI. Comunica con catalog-service per arricchire i libri con tag e rilevare duplicati.
 
 ## Flusso dati: aggiunta di un libro tramite ISBN
 

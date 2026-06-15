@@ -17,20 +17,20 @@ Internet
 │  jinbocho-api-gateway  (Web Service)    │  https://jinbocho-api-gateway.onrender.com
 └───────────┬──────────────────────────────┘
              │ Render internal network
-    ┌────────┼────────┐
-    ▼        ▼        ▼
-┌────────┐ ┌────────┐ ┌────────┐
-│ auth   │ │catalog │ │  ai   │  Private Services (not reachable from internet)
-│:8001   │ │:8002   │ │:8003   │
-└───┬───┘ └───┬───┘ └────────┘
-    │           │
-    ▼           ▼
-┌─────────┐ ┌──────────┐
-│ auth_db │ │catalog_db│   Neon PostgreSQL (external — not on Render)
-└─────────┘ └──────────┘
+    ┌────────┴────────┐
+    ▼                 ▼
+┌────────┐       ┌────────┐
+│ auth   │       │catalog │   Private Services (not reachable from internet)
+│:8001   │       │:8002   │
+└───┬───┘       └───┬────┘
+    │               │
+    ▼               ▼
+┌─────────┐   ┌──────────┐
+│ auth_db │   │catalog_db│   Neon PostgreSQL (external — not on Render)
+└─────────┘   └──────────┘
 ```
 
-**Only two components are public**: the API gateway and the frontend. The three backend services are Private Services — reachable only from within Render's internal network.
+**Only two components are public**: the API gateway and the frontend. The two backend services are Private Services — reachable only from within Render's internal network.
 
 ## Step 0 — Generate Secrets
 
@@ -53,7 +53,6 @@ Save this value. You will enter it multiple times. Call it `<JWT_SECRET>` in the
 2. From the Neon console → **Databases → New Database**, create:
    - `auth_db`
    - `catalog_db`
-   - `ai_db` *(optional — skip if not using AI service)*
 3. For each database, go to **Connection Details** → copy the connection string
 
 ### Adapting the Connection String
@@ -75,11 +74,11 @@ Final result:
 postgresql+asyncpg://user:password@ep-xxxx.eu-central-1.aws.neon.tech/auth_db?ssl=require
 ```
 
-Do this transformation for each database URL. Keep the three URLs private.
+Do this transformation for each database URL. Keep both URLs private.
 
 ## Step 2 — Deploy Backend Services
 
-Deploy in this order: **auth → catalog → (ai) → gateway**. The gateway needs the internal URLs of the other services.
+Deploy in this order: **auth → catalog → gateway**. The gateway needs the internal URLs of the other services.
 
 ### auth-service
 
@@ -124,21 +123,6 @@ Deploy in this order: **auth → catalog → (ai) → gateway**. The gateway nee
 | `GOOGLE_BOOKS_API_KEY` | Your Google Books API key (get one free) |
 | `DEBUG` | `false` |
 | `PORT` | `8002` |
-
-### ai-service *(optional)*
-
-Skip this if you are not using AI features.
-
-1. **New + → Private Service**
-2. Repository: `jinbocho-ai-v1`, Docker, same region
-
-| Variable | Value |
-|----------|-------|
-| `DATABASE_URL` | Neon `ai_db` connection string (transformed) |
-| `CATALOG_SERVICE_URL` | Internal address of catalog-service |
-| `OPENAI_API_KEY` | Your OpenAI API key |
-| `DEBUG` | `false` |
-| `PORT` | `8003` |
 
 ### api-gateway
 
@@ -225,15 +209,6 @@ curl "$GW/v1/records/isbn-lookup?isbn=9788845292613" \
 - [ ] ISBN lookup returns metadata (Google Books key is set)
 - [ ] No CORS errors in browser developer console
 
-## Alternative: Blueprint Deployment
-
-If you prefer Infrastructure-as-Code, the `render.yaml` in `jinbocho-infrastructure-v1` defines the entire stack:
-
-1. Update the `repo:` fields in `render.yaml` with your GitHub org/username
-2. Render Dashboard → **New + → Blueprint** → select `jinbocho-infrastructure-v1`
-3. Render creates all services at once; enter the secrets when prompted
-4. After first deploy, close the URL loop (Step 4 above)
-
 ## Costs and Free Tier Limits
 
 | Component | Provider | Cost | Limits |
@@ -247,4 +222,4 @@ If you prefer Infrastructure-as-Code, the `render.yaml` in `jinbocho-infrastruct
 To eliminate cold starts, upgrade to Render Starter ($7/month per service). The databases remain free on Neon regardless.
 
 !!! tip "Keep services in the same region"
-    Render Private Services can only communicate within the same region. Always deploy auth, catalog, ai, and gateway in the same region. Choose the Neon region closest to that Render region to minimize database latency.
+    Render Private Services can only communicate within the same region. Always deploy auth, catalog, and gateway in the same region. Choose the Neon region closest to that Render region to minimize database latency.

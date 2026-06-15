@@ -15,22 +15,22 @@ Internet
                        ▼
 ┌─────────────────────────────────────────┐
 │  jinbocho-api-gateway  (Web Service)    │  https://jinbocho-api-gateway.onrender.com
-└────────────┬───────────────────────────────┘
+└───────────┬──────────────────────────────┘
              │ Rete interna Render
-    ┌────────┬────────┐
-    ▼        ▼        ▼
-┌────────┐ ┌────────┐ ┌────────┐
-│ auth   │ │catalog │ │  ai   │  Servizi Privati (non raggiungibili da internet)
-│:8001   │ │:8002   │ │:8003   │
-└───┬───┘ └───┬───┘ └────────┘
-    │           │
-    ▼           ▼
-┌─────────┐ ┌──────────┐
-│ auth_db │ │catalog_db│   Neon PostgreSQL (esterno — non su Render)
-└─────────┘ └──────────┘
+    ┌────────┴────────┐
+    ▼                 ▼
+┌────────┐       ┌────────┐
+│ auth   │       │catalog │   Servizi Privati (non raggiungibili da internet)
+│:8001   │       │:8002   │
+└───┬───┘       └───┬────┘
+    │               │
+    ▼               ▼
+┌─────────┐   ┌──────────┐
+│ auth_db │   │catalog_db│   Neon PostgreSQL (esterno — non su Render)
+└─────────┘   └──────────┘
 ```
 
-**Solo due componenti sono pubblici**: l'API gateway e il frontend. I tre servizi backend sono Servizi Privati — raggiungibili solo dalla rete interna di Render.
+**Solo due componenti sono pubblici**: l'API gateway e il frontend. I due servizi backend sono Servizi Privati — raggiungibili solo dalla rete interna di Render.
 
 ## Step 0 — Genera i segreti
 
@@ -53,7 +53,6 @@ Salva questo valore. Lo inserirai più volte. Chiamalo `<JWT_SECRET>` nei passi 
 2. Dalla console Neon → **Database → Nuovo Database**, crea:
    - `auth_db`
    - `catalog_db`
-   - `ai_db` *(opzionale — salta se non usi il servizio AI)*
 3. Per ogni database, vai su **Dettagli di connessione** → copia la stringa di connessione
 
 ### Adattare la stringa di connessione
@@ -75,11 +74,11 @@ Risultato finale:
 postgresql+asyncpg://user:password@ep-xxxx.eu-central-1.aws.neon.tech/auth_db?ssl=require
 ```
 
-Fai questa trasformazione per ogni URL del database. Tieni privati i tre URL.
+Fai questa trasformazione per ogni URL del database. Tieni privati entrambi gli URL.
 
 ## Step 2 — Distribuisci i servizi backend
 
-Distribuisci in questo ordine: **auth → catalog → (ai) → gateway**. Il gateway ha bisogno degli URL interni degli altri servizi.
+Distribuisci in questo ordine: **auth → catalog → gateway**. Il gateway ha bisogno degli URL interni degli altri servizi.
 
 ### auth-service
 
@@ -125,21 +124,6 @@ Distribuisci in questo ordine: **auth → catalog → (ai) → gateway**. Il gat
 | `DEBUG` | `false` |
 | `PORT` | `8002` |
 
-### ai-service *(opzionale)*
-
-Salta questo se non usi le funzioni AI.
-
-1. **New + → Private Service**
-2. Repository: `jinbocho-ai-v1`, Docker, stessa regione
-
-| Variabile | Valore |
-|-----------|-------|
-| `DATABASE_URL` | Stringa di connessione Neon `ai_db` (trasformata) |
-| `CATALOG_SERVICE_URL` | Indirizzo interno di catalog-service |
-| `OPENAI_API_KEY` | La tua chiave API OpenAI |
-| `DEBUG` | `false` |
-| `PORT` | `8003` |
-
 ### api-gateway
 
 Il gateway è l'**unico** componente backend pubblico.
@@ -155,7 +139,6 @@ Il gateway è l'**unico** componente backend pubblico.
 | `JWT_ALGORITHM` | `HS256` |
 | `AUTH_SERVICE_URL` | Indirizzo interno di auth-service |
 | `CATALOG_SERVICE_URL` | Indirizzo interno di catalog-service |
-| `AI_SERVICE_URL` | Indirizzo interno di ai-service *(ometti se non distribuito)* |
 | `CORS_ORIGINS` | `["https://jinbocho-fe.onrender.com"]` — imposta dopo il deploy del FE |
 | `DEBUG` | `false` |
 
@@ -225,15 +208,6 @@ curl "$GW/v1/records/isbn-lookup?isbn=9788845292613" \
 - [ ] La ricerca ISBN restituisce metadati (la chiave Google Books è impostata)
 - [ ] Nessun errore CORS nella console del browser
 
-## Alternativa: Deployment con Blueprint
-
-Se preferisci Infrastructure-as-Code, il file `render.yaml` in `jinbocho-infrastructure-v1` definisce l'intero stack:
-
-1. Aggiorna i campi `repo:` in `render.yaml` con la tua org/username GitHub
-2. Dashboard Render → **New + → Blueprint** → seleziona `jinbocho-infrastructure-v1`
-3. Render crea tutti i servizi in una volta; inserisci i segreti quando richiesto
-4. Dopo il primo deploy, chiudi il ciclo degli URL (Step 4 sopra)
-
 ## Costi e limiti del livello gratuito
 
 | Componente | Provider | Costo | Limiti |
@@ -247,4 +221,4 @@ Se preferisci Infrastructure-as-Code, il file `render.yaml` in `jinbocho-infrast
 Per eliminare i cold start, passa a Render Starter ($7/mese per servizio). I database rimangono gratuiti su Neon indipendentemente.
 
 !!! tip "Mantieni i servizi nella stessa regione"
-    I Servizi Privati di Render possono comunicare solo all'interno della stessa regione. Distribuisci sempre auth, catalog, ai e gateway nella stessa regione. Scegli la regione Neon più vicina a quella Render per minimizzare la latenza del database.
+    I Servizi Privati di Render possono comunicare solo all'interno della stessa regione. Distribuisci sempre auth, catalog e gateway nella stessa regione. Scegli la regione Neon più vicina a quella Render per minimizzare la latenza del database.

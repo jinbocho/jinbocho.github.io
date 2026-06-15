@@ -8,7 +8,7 @@ Complete guide for developers and DevOps engineers to set up, deploy, and mainta
 |---|---------|------------------|
 | 1 | [Prerequisites](01-prerequisites.md) | System requirements: Docker, Python 3.12, Node.js 18, API keys |
 | 2 | [Local Development](02-local-development.md) | Docker Compose setup, port mapping, env files, verification |
-| 3 | [Backend Services](03-backend-services.md) | auth, catalog, gateway, ai — endpoints, env vars, tests |
+| 3 | [Backend Services](03-backend-services.md) | auth, catalog, gateway — endpoints, env vars, tests |
 | 4 | [Frontend](04-frontend.md) | React setup, TanStack Query patterns, critical gotchas |
 | 5 | [Database & Migrations](05-database-migrations.md) | Alembic, PostgreSQL schema, local reset |
 | 6 | [CI/CD](06-cicd.md) | GitHub Actions workflows for all services |
@@ -22,7 +22,7 @@ Complete guide for developers and DevOps engineers to set up, deploy, and mainta
 ### I want to run Jinbocho locally
 
 1. [Prerequisites](01-prerequisites.md) — install Docker, Python, Node.js
-2. [Local Development](02-local-development.md) — `docker compose up --build -d` and you're done
+2. [Local Development](02-local-development.md) — create a `docker-compose.yml` and start all services
 
 ### I want to deploy to production
 

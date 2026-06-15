@@ -133,13 +133,7 @@ For enhanced ISBN lookup functionality, consider obtaining:
 - **Why**: Fallback for ISBN metadata when Open Library is slow
 - **Cost**: Free tier (100 queries/day)
 - **How to get**: https://developers.google.com/books/docs/v1/using#APIKey
-- **When needed**: Set `GOOGLE_BOOKS_API_KEY` in `.env`
-
-### OpenAI API Key
-- **Why**: For AI service (tagging suggestions, deduplication)
-- **Cost**: Pay-as-you-go (optional feature)
-- **How to get**: https://platform.openai.com/api-keys
-- **When needed**: Set `OPENAI_API_KEY` if deploying `ai-service`
+- **When needed**: Set `GOOGLE_BOOKS_API_KEY` in the catalog-service `.env`
 
 ## Cloud Accounts (Production Only)
 
@@ -164,21 +158,18 @@ Create a workspace folder and clone all Jinbocho repositories from the GitHub or
 ```bash
 mkdir -p ~/workspace/jinbocho && cd ~/workspace/jinbocho
 
-# Clone all Jinbocho repositories
-git clone https://github.com/jinbocho/jinbocho-infrastructure-v1.git
+# Clone the public Jinbocho repositories
 git clone https://github.com/jinbocho/jinbocho-auth-v1.git
 git clone https://github.com/jinbocho/jinbocho-catalog-v1.git
 git clone https://github.com/jinbocho/jinbocho-api-gateway-v1.git
-git clone https://github.com/jinbocho/jinbocho-ai-v1.git
 git clone https://github.com/jinbocho/jinbocho-fe.git
 
 # Verify all services are present
 ls | grep jinbocho
-# Expected: jinbocho-auth-v1  jinbocho-catalog-v1  jinbocho-api-gateway-v1
-#           jinbocho-ai-v1  jinbocho-fe  jinbocho-infrastructure-v1
+# Expected: jinbocho-auth-v1  jinbocho-catalog-v1  jinbocho-api-gateway-v1  jinbocho-fe
 ```
 
-All repositories live under the `jinbocho` GitHub organization: https://github.com/jinbocho
+All public repositories live under the `jinbocho` GitHub organization: https://github.com/jinbocho
 
 ## System Check Script
 
