@@ -682,6 +682,32 @@
     }
     .footer-links a:hover { color: var(--ink); }
 
+    /* ── AI PRO SECTION ── */
+    .ai-pro-section {
+      background: var(--red-bg);
+      border-top: 1px solid #f5c5cb;
+      border-bottom: 1px solid #f5c5cb;
+    }
+    .ai-pro-label { color: var(--red); }
+    .ai-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 40px;
+      margin-bottom: 36px;
+    }
+    .ai-card {
+      background: var(--white);
+      border: 1px solid #f5c5cb;
+      border-radius: 12px;
+      padding: 28px;
+    }
+    .ai-card h3 { font-size: 17px; font-weight: 600; color: var(--ink); margin-bottom: 10px; }
+    .ai-card p { font-size: 15px; color: var(--ink-mid); line-height: 1.65; }
+    .ai-cta { text-align: center; }
+    .ai-future { margin-top: 14px; font-size: 13px; color: var(--ink-soft); font-style: italic; }
+    .ai-card .feature-icon { background: #fce4e9; }
+
     /* ── HAMBURGER ── */
     .nav-hamburger {
       display: none;
@@ -777,6 +803,9 @@
     @media (max-width: 400px) {
       .container { padding: 0 12px; }
       body { font-size: 15px; }
+      .ai-card { padding: 20px; }
+      .ai-card h3 { font-size: 15px; }
+      .ai-card p { font-size: 13px; }
       .nav-inner { height: 52px; gap: 8px; }
       .nav-logo { font-size: 14px; gap: 8px; }
       .nav-logo svg { width: 24px; height: 24px; }
@@ -921,7 +950,6 @@
       <a href="https://jinbocho.github.io/jinbocho-demo/" class="btn btn-primary btn-lg" target="_blank" rel="noopener" data-i18n="hero-cta-demo">Prova la demo interattiva</a>
       <a href="./pricing/" class="btn btn-outline btn-lg" data-i18n="hero-cta-pricing">Vedi i prezzi</a>
       <a href="https://github.com/jinbocho" class="btn btn-outline btn-lg" target="_blank" rel="noopener" data-i18n="hero-cta-code">Vedi il codice</a>
-      <a href="manuals/managed-install/" class="btn btn-outline btn-lg">Get a managed install &rarr;</a>
     </div>
     <p class="hero-meta" data-i18n-html="hero-meta">Source-available · Licenza Proprietaria – Uso Community Consentito · <a href="https://github.com/jinbocho" target="_blank" rel="noopener">github.com/jinbocho</a></p>
   </div>
@@ -996,6 +1024,38 @@
         <p data-i18n="feat6-p">Interfaccia disponibile in italiano, inglese, spagnolo e francese. La lingua si sincronizza sul profilo utente, così l'app parla la stessa lingua su qualsiasi dispositivo.</p>
       </div>
 
+    </div>
+  </div>
+</section>
+
+<!-- ── AI PRO ── -->
+<section class="ai-pro-section">
+  <div class="container">
+    <p class="section-label ai-pro-label" data-i18n="ai-label">Modulo AI Pro</p>
+    <h2 class="section-title" data-i18n="ai-title">Intelligenza artificiale per il catalogo</h2>
+    <p class="section-sub" data-i18n="ai-sub">Funzionalità avanzate che completano il flusso di catalogazione, disponibili nella versione Pro. Altre ne arriveranno nel tempo.</p>
+    <div class="ai-grid">
+
+      <div class="ai-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2l1.68 5.17L19 9l-5.32 1.83L12 16l-1.68-5.17L5 9l5.32-1.83z"/><path d="M5 17l.84 2.59L8 20.5l-2.16.91L5 24l-.84-2.59L2 20.5l2.16-.91z"/></svg>
+        </div>
+        <h3 data-i18n="ai1-title">Descrizione AI automatica</h3>
+        <p data-i18n="ai1-p">Quando la scansione ISBN non trova una sinossi nei database bibliografici (Open Library, Google Books), il modulo AI genera automaticamente una descrizione per il libro. Compatibile con OpenAI, Gemini, Groq, Ollama e qualsiasi provider API-compatibile.</p>
+      </div>
+
+      <div class="ai-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/><line x1="11" y1="8" x2="11" y2="14"/></svg>
+        </div>
+        <h3 data-i18n="ai2-title">Riconoscimento titolo e autore via AI</h3>
+        <p data-i18n="ai2-p">Se l'ISBN non è leggibile o il libro non è nei database online, algoritmi di machine learning identificano automaticamente titolo e autore, permettendo di completare la catalogazione senza inserimento manuale.</p>
+      </div>
+
+    </div>
+    <div class="ai-cta">
+      <a href="./pricing/" class="btn btn-primary btn-lg" data-i18n="ai-cta">Scopri il piano Pro</a>
+      <p class="ai-future" data-i18n="ai-future">Altre funzionalità AI verranno aggiunte alla versione Pro nel tempo.</p>
     </div>
   </div>
 </section>
@@ -1363,6 +1423,15 @@
       'badge-multiuser': 'Multiutente e multi-ruolo',
       'badge-lang': 'Italiano, inglese, spagnolo e francese',
       'badge-export': 'Esportazione CSV e JSON',
+      'ai-label': 'Modulo AI Pro',
+      'ai-title': 'Intelligenza artificiale per il catalogo',
+      'ai-sub': 'Funzionalità avanzate che completano il flusso di catalogazione, disponibili nella versione Pro. Altre ne arriveranno nel tempo.',
+      'ai1-title': 'Descrizione AI automatica',
+      'ai1-p': 'Quando la scansione ISBN non trova una sinossi nei database bibliografici (Open Library, Google Books), il modulo AI genera automaticamente una descrizione per il libro. Compatibile con OpenAI, Gemini, Groq, Ollama e qualsiasi provider API-compatibile.',
+      'ai2-title': 'Riconoscimento titolo e autore via AI',
+      'ai2-p': 'Se l\'ISBN non è leggibile o il libro non è nei database online, algoritmi di machine learning identificano automaticamente titolo e autore, permettendo di completare la catalogazione senza inserimento manuale.',
+      'ai-cta': 'Scopri il piano Pro',
+      'ai-future': 'Altre funzionalità AI verranno aggiunte alla versione Pro nel tempo.',
       'feat-label': 'Perché Jinbocho',
       'feat-title': 'Tutto quello che serve, niente di superfluo',
       'feat-sub': 'Progettato per chi ha molti libri e vuole smettere di dire "ce l\'ho già questo?"',
@@ -1461,6 +1530,15 @@
       'footer-license': 'Licenza'
     },
     en: {
+      'ai-label': 'AI Pro Module',
+      'ai-title': 'Artificial intelligence for your catalogue',
+      'ai-sub': 'Advanced features that complete the cataloguing workflow, available in the Pro plan. More will follow over time.',
+      'ai1-title': 'Automatic AI description',
+      'ai1-p': 'When an ISBN scan finds no synopsis in the bibliographic databases (Open Library, Google Books), the AI module automatically generates a description for the book. Compatible with OpenAI, Gemini, Groq, Ollama and any API-compatible provider.',
+      'ai2-title': 'AI-based title and author recognition',
+      'ai2-p': 'If the ISBN is unreadable or the book is not in any online database, machine-learning algorithms automatically identify the title and author, letting you complete cataloguing without any manual input.',
+      'ai-cta': 'Discover the Pro plan',
+      'ai-future': 'More AI features will be added to the Pro plan over time.',
       'nav-features': 'Features',
       'nav-how': 'How it works',
       'nav-opensource': 'Open source',

@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Prezzi — Jinbocho</title>
-  <meta name="description" content="Jinbocho è gratuito per uso personale. Il modulo AI Pro è disponibile su richiesta. Scopri i piani." />
+  <meta name="description" content="Jinbocho Community è gratuito per sempre. Il modulo AI Pro aggiunge descrizione automatica dei libri e riconoscimento titolo/autore via ML. Disponibile su richiesta." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
@@ -334,7 +334,7 @@
 
 <section class="pricing-hero">
   <h1>Semplice e trasparente</h1>
-  <p>Jinbocho è gratuito per uso personale. Il modulo AI Pro è disponibile su richiesta per chi vuole di più.</p>
+  <p>Jinbocho Community è gratuito per sempre. Il modulo AI Pro aggiunge funzionalità di intelligenza artificiale per completare e arricchire il flusso di catalogazione.</p>
 </section>
 
 <section class="pricing-section">
@@ -353,7 +353,7 @@
         <li><span class="check">✓</span> Account famiglia + ruoli</li>
         <li><span class="check">✓</span> Export CSV / JSON</li>
         <li><span class="check">✓</span> Multilingua (EN, IT, ES, FR)</li>
-        <li><span class="cross">–</span> Modulo AI (presentazione libri)</li>
+        <li><span class="cross">–</span> Modulo AI Pro</li>
       </ul>
       <a href="https://github.com/jinbocho/jinbocho-infrastructure-v1" target="_blank" rel="noopener" class="plan-cta outline">
         Scarica e installa →
@@ -364,15 +364,17 @@
     <div class="pricing-card featured">
       <div class="badge">Pro</div>
       <div class="plan-name">Pro</div>
-      <div class="plan-tagline">Community + modulo AI</div>
+      <div class="plan-tagline">Community + modulo AI Pro</div>
       <div class="plan-price" style="font-size:28px; margin-top:8px;">Su richiesta</div>
       <div class="plan-price-note">Licenza commerciale · Self-hosted</div>
       <ul class="plan-features">
         <li><span class="check">✓</span> Tutto di Community</li>
-        <li><span class="check">✓</span> <strong>Presentazione AI dei libri</strong></li>
+        <li><span class="check">✓</span> <strong>Descrizione AI automatica</strong><br><small style="color:var(--ink-soft)">Generata via LLM quando non trovata online durante la scansione</small></li>
+        <li><span class="check">✓</span> <strong>Riconoscimento titolo e autore via AI</strong><br><small style="color:var(--ink-soft)">Algoritmi ML per identificare titolo e autore quando l'ISBN non è leggibile o il libro non è in nessun database</small></li>
         <li><span class="check">✓</span> Compatibile con qualsiasi LLM<br><small style="color:var(--ink-soft)">OpenAI, Gemini, Groq, Ollama…</small></li>
         <li><span class="check">✓</span> Licenza commerciale inclusa</li>
         <li><span class="check">✓</span> Supporto via email</li>
+        <li style="color:var(--ink-soft); font-style:italic; border-bottom:none; padding-top:4px;"><small>+ altre funzionalità AI in arrivo</small></li>
       </ul>
       <a href="mailto:jinbochoapp@gmail.com?subject=Jinbocho%20Pro%20-%20Richiesta%20licenza" class="plan-cta solid">
         Richiedi licenza Pro →
@@ -436,12 +438,17 @@
           <td><span class="t-check">✓</span></td>
         </tr>
         <tr>
-          <td>Presentazione AI dei libri</td>
+          <td>Descrizione AI automatica<br><small style="color:var(--ink-soft); font-weight:400;">Generata via LLM quando non trovata online durante la scansione</small></td>
           <td><span class="t-cross">–</span></td>
           <td><span class="t-check">✓</span></td>
         </tr>
         <tr>
-          <td>Compatibilità LLM (OpenAI, Groq, Ollama…)</td>
+          <td>Riconoscimento titolo e autore via AI<br><small style="color:var(--ink-soft); font-weight:400;">ML per identificare titolo/autore quando l'ISBN non è leggibile</small></td>
+          <td><span class="t-cross">–</span></td>
+          <td><span class="t-check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Compatibilità LLM (OpenAI, Gemini, Groq, Ollama…)</td>
           <td><span class="t-cross">–</span></td>
           <td><span class="t-check">✓</span></td>
         </tr>
@@ -475,8 +482,8 @@
   </div>
 
   <div class="faq-item">
-    <div class="faq-q">Cos'è il modulo AI?</div>
-    <div class="faq-a">Il modulo AI genera una presentazione calorosamente scritta per ogni libro — simile a una quarta di copertina, senza spoiler. Funziona con qualsiasi provider compatibile con l'API OpenAI: OpenAI, Gemini, Groq, OpenRouter, o un LLM locale con Ollama.</div>
+    <div class="faq-q">Cos'è il modulo AI Pro?</div>
+    <div class="faq-a">Il modulo AI Pro aggiunge due funzionalità alla piattaforma: <strong>descrizione automatica dei libri</strong> — quando la scansione ISBN non trova una sinossi nei database bibliografici (Open Library, Google Books), un LLM genera automaticamente la descrizione; e <strong>riconoscimento di titolo e autore via machine learning</strong> — per catalogare libri il cui ISBN non è leggibile o non è presente online, identificando titolo e autore in automatico. La generazione della descrizione è compatibile con qualsiasi provider LLM (OpenAI, Gemini, Groq, OpenRouter, Ollama). Altre funzionalità AI verranno aggiunte alla versione Pro nel tempo.</div>
   </div>
 
   <div class="faq-item">
