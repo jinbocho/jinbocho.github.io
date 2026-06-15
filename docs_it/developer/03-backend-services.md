@@ -1,6 +1,6 @@
 # Servizi backend
 
-Il backend di Jinbocho è composto da quattro microservizi FastAPI. Tre sono **Servizi Privati** (solo uso interno); uno è l'**API Gateway** pubblico.
+Il backend di Jinbocho è composto da tre microservizi FastAPI. Due sono **Servizi Privati** (solo uso interno); uno è l'**API Gateway** pubblico.
 
 ## Architettura in sintesi
 
@@ -10,18 +10,18 @@ Client (Browser)    │   API Gateway  :8000  (PUBBLICO)   │
 ──────────────────► │  Validazione JWT · CORS · Proxy   │
                     └───────────┬─────────────────┘
                                 │ HTTP interno
-              ┌─────────────────┬──────────────────┐
-              ↓                 ↓                  ↓
-     ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
-     │ auth-service │  │catalog-service│  │  ai-service  │
-     │    :8001     │  │    :8002      │  │    :8003     │
-     │  (Privato)   │  │  (Privato)   │  │  (Privato)   │
-     └──────┬───────┘  └──────┬───────┘  └──────────────┘
-            │                 │
-     ┌──────┴───────┐  ┌──────┴──────┐
-     │  auth_db     │  │  catalog_db  │
-     │ (PostgreSQL) │  │ (PostgreSQL) │
-     └──────────────┘  └─────────────┘
+                    ┌───────────┴───────────┐
+                    ↓                       ↓
+         ┌──────────────┐        ┌──────────────────┐
+         │ auth-service │        │ catalog-service   │
+         │    :8001     │        │    :8002          │
+         │  (Privato)   │        │  (Privato)        │
+         └──────┬───────┘        └──────┬────────────┘
+                │                       │
+         ┌──────┴───────┐       ┌───────┴──────┐
+         │  auth_db     │       │  catalog_db  │
+         │ (PostgreSQL) │       │ (PostgreSQL) │
+         └──────────────┘       └──────────────┘
 ```
 
 Ogni servizio ha il proprio database. I servizi non condividono mai un database e comunicano solo via HTTP attraverso le regole di routing del gateway.
@@ -269,7 +269,6 @@ Tutti gli endpoint sono montati sotto `/v1` e replicati dai servizi interni.
 | `JWT_ALGORITHM` | — | `HS256` | Algoritmo di firma |
 | `AUTH_SERVICE_URL` | ✅ | — | URL interno di auth-service |
 | `CATALOG_SERVICE_URL` | ✅ | — | URL interno di catalog-service |
-| `AI_SERVICE_URL` | — | — | URL interno di ai-service (ometti se non distribuito) |
 | `CORS_ORIGINS` | ✅ | — | Array JSON delle origini consentite, es. `["https://jinbocho-fe.onrender.com"]` |
 | `DEBUG` | — | `false` | Modalità debug FastAPI + logging dettagliato |
 
@@ -288,74 +287,6 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 Swagger UI: [http://localhost:8000/docs](http://localhost:8000/docs)
-
----
-
-## ai-service (porta 8003) — Opzionale
-
-**Repository**: `jinbocho-ai-v1`
-
-### Responsabilità
-
-- **Presentazione del libro (incipit)** — genera una breve presentazione senza spoiler di un libro a partire da titolo, autore e genere, così i lettori possono decidere cosa leggere dopo.
-- Suggerimenti di tag automatici (scaffold)
-- Suggerimenti di deduplicazione (scaffold)
-- Raccomandazioni di lettura (futuro)
-
-### LLM collegabile — disabilitato per default
-
-Il layer AI è **opzionale e disabilitato per default**. Con `LLM_ENABLED=false` (il default) il servizio è comunque attivo e ogni endpoint AI restituisce un risultato vuoto (`{"text": null}`) — non genera mai errori e non richiede **nessuna chiave API**. La funzione di presentazione del libro degrada in modo graceful: il catalog serve comunque la descrizione editoriale gratuita, e solo il pulsante "Genera con AI" è inattivo.
-
-Il client è **compatibile con OpenAI**, quindi puoi puntarlo a qualsiasi provider tramite `LLM_BASE_URL` / `LLM_MODEL` / `LLM_API_KEY`:
-
-| Provider | `LLM_BASE_URL` | Note |
-|----------|----------------|-----|
-| Groq | `https://api.groq.com/openai/v1` | Livello gratuito — es. `llama-3.3-70b-versatile` |
-| OpenAI | `https://api.openai.com/v1` | Pay-as-you-go — es. `gpt-4o-mini` |
-| Google Gemini | `https://generativelanguage.googleapis.com/v1beta/openai` | Endpoint compatibile OpenAI |
-| Ollama (locale) | `http://localhost:11434/v1` | Self-hosted, nessuna chiave |
-
-### Endpoint principali
-
-| Metodo | Percorso | Auth | Descrizione |
-|--------|---------|------|------------|
-| `POST` | `/v1/suggestions/incipit` | (interno) | Genera una presentazione; restituisce `{"text": null}` quando l'LLM è disabilitato |
-| `POST` | `/v1/suggestions/tags` | (interno) | Suggerimenti di tag (scaffold) |
-| `GET` | `/health` | — | Health check |
-
-Il gateway fa il proxy di `/v1/ai/{path}` → ai-service `/v1/suggestions/{path}`, quindi il frontend chiama `POST /v1/ai/incipit`.
-
-!!! info "Dove viene salvata la presentazione"
-    Le presentazioni generate o modificate manualmente vengono salvate dal **catalog-service** sul
-    record bibliografico (`incipit`, `incipit_source`, `incipit_generated_at`) tramite
-    `PUT /v1/bibliographic-records/{id}/incipit`. Per questa funzione l'ai-service è **stateless** —
-    il catalog non lo chiama mai nel percorso di scrittura (i servizi rimangono disaccoppiati).
-
-### Quando distribuirlo
-
-Il servizio AI è **opzionale**. Puoi saltarlo completamente: le presentazioni dei libri funzionano ancora dalla descrizione editoriale gratuita del catalog. Distribuiscilo solo quando vuoi presentazioni generate dall'AI — e anche in quel caso non costa nulla se lo punti a un livello gratuito (Groq) o a un Ollama locale.
-
-### Variabili d'ambiente
-
-| Variabile | Obbligatoria | Default | Descrizione |
-|-----------|-------------|---------|------------|
-| `DATABASE_URL` | ✅ | — | `postgresql+asyncpg://...` punta a `ai_db` |
-| `CATALOG_SERVICE_URL` | ✅ | — | URL interno di catalog-service |
-| `LLM_ENABLED` | — | `false` | Interruttore principale. `false` → nessuna chiamata AI, nessuna chiave necessaria |
-| `LLM_BASE_URL` | — | `https://api.openai.com/v1` | Endpoint compatibile OpenAI |
-| `LLM_MODEL` | — | `gpt-4o-mini` | Nome del modello |
-| `LLM_API_KEY` | — | — | Chiave API del provider (richiesta solo quando `LLM_ENABLED=true`) |
-| `DEBUG` | — | `false` | Logging delle query SQL |
-
-### Avvio in locale (senza Docker)
-
-```bash
-cd jinbocho-ai-v1
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env   # lascia LLM_ENABLED=false, o configura Groq / OpenAI / Ollama
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8003
-```
 
 ---
 

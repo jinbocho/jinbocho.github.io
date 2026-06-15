@@ -8,13 +8,12 @@ Jinbocho uses **PostgreSQL 16** with one database per service. Migrations are ma
 |----------|---------|------------|
 | `auth_db` | auth-service | `5432` |
 | `catalog_db` | catalog-service | `5433` |
-| `ai_db` | ai-service (optional) | `5434` |
 
 In Docker Compose these ports are bound to `127.0.0.1` only — they are not accessible from outside the machine.
 
 ## Automatic Migrations on Startup
 
-Both auth-service and catalog-service run `alembic upgrade head` automatically before starting uvicorn (configured in their `Dockerfile` CMD). You do not need to run migrations manually in local development or production.
+Both `auth-service` and `catalog-service` run `alembic upgrade head` automatically before starting uvicorn (configured in their `Dockerfile` CMD). You do not need to run migrations manually in local development or production.
 
 This means: when you run `docker compose up`, the databases are always up to date with the latest schema.
 
@@ -28,9 +27,6 @@ psql -U postgres -h 127.0.0.1 -p 5432 -d auth_db
 
 # catalog_db
 psql -U postgres -h 127.0.0.1 -p 5433 -d catalog_db
-
-# ai_db (if running)
-psql -U postgres -h 127.0.0.1 -p 5434 -d ai_db
 ```
 
 Password: `postgres` (local dev only).
@@ -220,9 +216,9 @@ CREATE TABLE audit_log (
 To wipe all local data and start fresh:
 
 ```bash
-cd jinbocho-infrastructure-v1
-docker compose down -v   # removes containers AND volumes
-docker compose up --build -d   # recreates everything from scratch
+cd ~/workspace/jinbocho
+docker compose down -v          # removes containers AND volumes
+docker compose up --build -d    # recreates everything from scratch
 # Migrations run automatically on startup
 ```
 

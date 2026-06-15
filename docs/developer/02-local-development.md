@@ -1,210 +1,242 @@
 # Local Development Setup
 
-Get your local development environment running with Docker Compose in 5 minutes.
+Get your local development environment running with Docker Compose in a few minutes.
 
-## Quick Start
+## Overview
+
+The Community edition consists of three backend services, two PostgreSQL databases, and one React frontend. Because there is no shared infrastructure repository, you create a minimal `docker-compose.yml` yourself — it lives in your local workspace and is never committed to any service repo.
+
+## 1. Set Up the Workspace
+
+If you haven't cloned the repositories yet, follow [Repositories Checkout](01-prerequisites.md#repositories-checkout).
+
+Your workspace should look like this:
+
+```
+~/workspace/jinbocho/
+├── jinbocho-auth-v1/
+├── jinbocho-catalog-v1/
+├── jinbocho-api-gateway-v1/
+├── jinbocho-fe/
+└── docker-compose.yml        ← you will create this now
+```
+
+## 2. Create docker-compose.yml
+
+In `~/workspace/jinbocho/`, create `docker-compose.yml` with the following content:
+
+```yaml
+version: "3.9"
+
+services:
+
+  postgres_auth:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: auth_db
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - auth_data:/var/lib/postgresql/data
+
+  postgres_catalog:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: catalog_db
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - catalog_data:/var/lib/postgresql/data
+
+  auth-service:
+    build:
+      context: ./jinbocho-auth-v1
+    env_file: ./jinbocho-auth-v1/.env
+    ports:
+      - "8001:8000"
+    depends_on:
+      - postgres_auth
+
+  catalog-service:
+    build:
+      context: ./jinbocho-catalog-v1
+    env_file: ./jinbocho-catalog-v1/.env
+    ports:
+      - "8002:8000"
+    depends_on:
+      - postgres_catalog
+      - auth-service
+
+  api-gateway:
+    build:
+      context: ./jinbocho-api-gateway-v1
+    env_file: ./jinbocho-api-gateway-v1/.env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - auth-service
+      - catalog-service
+
+volumes:
+  auth_data:
+  catalog_data:
+```
+
+## 3. Configure Environment Variables
+
+Each service needs a `.env` file. Copy the provided templates:
 
 ```bash
-cd ~/workspace/jinbocho/jinbocho-infrastructure-v1
-docker compose up --build -d
+cp jinbocho-auth-v1/.env.example    jinbocho-auth-v1/.env
+cp jinbocho-catalog-v1/.env.example jinbocho-catalog-v1/.env
+cp jinbocho-api-gateway-v1/.env.example jinbocho-api-gateway-v1/.env
+cp jinbocho-fe/.env.example          jinbocho-fe/.env
 ```
 
-That's it. All backend services and databases are now running. Move to **[Verification](#verification)** to test.
+Then set the following values. **`JWT_SECRET_KEY` must be the same string in all three backend services.**
 
-## Full Setup Guide
+**`jinbocho-auth-v1/.env`:**
 
-### 1. Set Up the Workspace
-
-If you haven't cloned the repositories yet, follow the [Repositories Checkout](01-prerequisites.md#repositories-checkout) instructions in Prerequisites. Each repository is hosted under the [jinbocho](https://github.com/jinbocho) GitHub organization.
-
-Once cloned, navigate to the infrastructure directory:
-
-```bash
-cd ~/workspace/jinbocho/jinbocho-infrastructure-v1
+```env
+DATABASE_URL=postgresql+asyncpg://postgres:postgres@postgres_auth:5432/auth_db
+JWT_SECRET_KEY=dev-secret-key-change-in-prod
+JWT_ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+REFRESH_TOKEN_EXPIRE_DAYS=30
+DEBUG=true
 ```
 
-### 2. Configure Environment Variables
+**`jinbocho-catalog-v1/.env`:**
 
-Each service needs a `.env` file. Use the provided templates:
-
-```bash
-# Auth Service
-cp ../jinbocho-auth-v1/.env.example ../jinbocho-auth-v1/.env
-
-# Catalog Service
-cp ../jinbocho-catalog-v1/.env.example ../jinbocho-catalog-v1/.env
-
-# API Gateway
-cp ../jinbocho-api-gateway-v1/.env.example ../jinbocho-api-gateway-v1/.env
-
-# Frontend (if needed)
-cp ../jinbocho-fe/.env.example ../jinbocho-fe/.env
+```env
+DATABASE_URL=postgresql+asyncpg://postgres:postgres@postgres_catalog:5432/catalog_db
+AUTH_SERVICE_URL=http://auth-service:8001
+JWT_SECRET_KEY=dev-secret-key-change-in-prod
+JWT_ALGORITHM=HS256
+GOOGLE_BOOKS_API_KEY=        # optional — leave empty to rely on Open Library only
+DEBUG=true
 ```
 
-**Key environment variables for local development**:
+**`jinbocho-api-gateway-v1/.env`:**
 
-| Variable | Value | Purpose |
-|----------|-------|--------|
-| `DEBUG` | `true` | Enable SQL logging to see all database queries |
-| `DATABASE_URL` | `postgresql+asyncpg://postgres:password@postgres:5432/auth_db` | Local DB connection (Docker Compose provides this) |
-| `JWT_SECRET_KEY` | `dev-secret-key-change-in-prod` | **Shared** across all services for JWT validation |
-| `CORS_ORIGINS` | `["http://localhost:5173", "http://localhost:3000"]` | Allow frontend requests |
-| `AUTH_SERVICE_URL` | `http://auth-service:8001` | Internal service address (Docker network) |
-| `CATALOG_SERVICE_URL` | `http://catalog-service:8002` | Internal service address |
-
-**Note**: All `.env` files are in `.gitignore`. Never commit them.
-
-### 3. Start Docker Compose
-
-```bash
-cd ~/workspace/jinbocho/jinbocho-infrastructure-v1
-docker compose up --build -d
+```env
+JWT_SECRET_KEY=dev-secret-key-change-in-prod
+JWT_ALGORITHM=HS256
+AUTH_SERVICE_URL=http://auth-service:8001
+CATALOG_SERVICE_URL=http://catalog-service:8002
+CORS_ORIGINS=["http://localhost:5173","http://localhost:3000"]
+DEBUG=true
 ```
 
-**Flags explained**:
-- `--build`: Rebuild images if Dockerfile changed
-- `-d`: Run in background (detached mode)
-
-**Check status**:
-```bash
-docker compose ps
-```
-
-Expected output:
-```
-NAME               COMMAND               STATUS           PORTS
-auth-service       uvicorn app.main...   Up 5 seconds     0.0.0.0:8001->8000/tcp
-catalog-service    uvicorn app.main...   Up 5 seconds     0.0.0.0:8002->8000/tcp
-api-gateway        uvicorn app.main...   Up 5 seconds     0.0.0.0:8000->8000/tcp
-ai-service         uvicorn app.main...   Up 5 seconds     0.0.0.0:8003->8000/tcp
-postgres_auth      postgres -c ...       Up 10 seconds    127.0.0.1:5432->5432/tcp
-postgres_catalog   postgres -c ...       Up 10 seconds    127.0.0.1:5433->5432/tcp
-postgres_ai        postgres -c ...       Up 10 seconds    127.0.0.1:5434->5432/tcp
-```
-
-### 4. View Logs
-
-**Tail all services**:
-```bash
-docker compose logs -f
-```
-
-**Tail a specific service**:
-```bash
-docker compose logs -f auth-service
-```
-
-**View only recent logs** (no tail):
-```bash
-docker compose logs auth-service
-```
-
-Press `Ctrl+C` to stop tailing.
-
-## Port Mapping
-
-| Service | Port | Type | Purpose |
-|---------|------|------|--------|
-| **api-gateway** | `8000` | Public | Entry point for frontend requests |
-| **auth-service** | `8001` | Internal | User/family/JWT management |
-| **catalog-service** | `8002` | Internal | Books, locations, ISBN lookup |
-| **ai-service** | `8003` | Internal | Tagging, dedup, recommendations |
-| **postgres (auth)** | `5432` | Internal | Auth database |
-| **postgres (catalog)** | `5433` | Internal | Catalog database |
-| **postgres (ai)** | `5434` | Internal | AI database |
-
-**Accessing services from your machine**:
-- Frontend → Backend: `http://localhost:8000`
-- Swagger docs (auth): `http://localhost:8001/docs`
-- Swagger docs (catalog): `http://localhost:8002/docs`
-- Swagger docs (gateway): `http://localhost:8000/docs`
-
-## Frontend Development Server
-
-In a new terminal:
-
-```bash
-cd ~/workspace/jinbocho/jinbocho-fe
-npm ci              # Install dependencies (first time only)
-npm run dev
-```
-
-The frontend will start on `http://localhost:5173` with hot reload enabled.
-
-### Environment Variables for Frontend
-
-Edit `jinbocho-fe/.env`:
+**`jinbocho-fe/.env`:**
 
 ```env
 VITE_API_BASE_URL=http://localhost:8000
 ```
 
-This tells the frontend where to find the backend API. In production, this points to your Render URL.
+!!! note "Container hostnames"
+    Inside Docker Compose, services communicate using their service names as hostnames
+    (`auth-service`, `catalog-service`, `postgres_auth`, `postgres_catalog`).
+    The port numbers in `DATABASE_URL` are the **internal** container ports (`5432`),
+    not the host-mapped ports (`5432`/`5433`).
 
-## Convenience Script
+!!! warning "Never commit .env files"
+    All `.env` files are (and must remain) in each repo's `.gitignore`.
 
-Start both backend and frontend in one command:
+## 4. Start Docker Compose
 
 ```bash
-cd ~/workspace/jinbocho/jinbocho-infrastructure-v1
-bash dev.sh
+cd ~/workspace/jinbocho
+docker compose up --build -d
 ```
 
-This script:
-1. Starts Docker Compose in background
-2. Waits for services to be healthy
-3. Launches the Vite dev server in a new terminal
+**Flags explained**:
+
+- `--build`: Rebuild images if any Dockerfile changed
+- `-d`: Run in background (detached mode)
+
+**Check status**:
+
+```bash
+docker compose ps
+```
+
+Expected output:
+
+```
+NAME               COMMAND               STATUS           PORTS
+auth-service       uvicorn app.main...   Up               0.0.0.0:8001->8000/tcp
+catalog-service    uvicorn app.main...   Up               0.0.0.0:8002->8000/tcp
+api-gateway        uvicorn app.main...   Up               0.0.0.0:8000->8000/tcp
+postgres_auth      postgres -c ...       Up               127.0.0.1:5432->5432/tcp
+postgres_catalog   postgres -c ...       Up               127.0.0.1:5433->5432/tcp
+```
+
+**Tail logs**:
+
+```bash
+docker compose logs -f              # all services
+docker compose logs -f auth-service # one service only
+```
+
+## Port Mapping
+
+| Service | Host Port | Type | Purpose |
+|---------|-----------|------|--------|
+| **api-gateway** | `8000` | Public | Entry point for frontend requests |
+| **auth-service** | `8001` | Internal | User / family / JWT management |
+| **catalog-service** | `8002` | Internal | Books, locations, ISBN lookup |
+| **postgres (auth)** | `5432` | Internal | Auth database |
+| **postgres (catalog)** | `5433` | Internal | Catalog database |
+
+Swagger UI is available at:
+
+- Gateway: `http://localhost:8000/docs`
+- Auth: `http://localhost:8001/docs`
+- Catalog: `http://localhost:8002/docs`
+
+## 5. Start the Frontend Dev Server
+
+In a new terminal:
+
+```bash
+cd ~/workspace/jinbocho/jinbocho-fe
+npm ci          # Install dependencies (first time only)
+npm run dev
+```
+
+The frontend starts on `http://localhost:5173` with hot reload.
 
 ## Database Inspection
 
-### Connect to a Service Database
-
 ```bash
-# Auth service database
-psql -U postgres -h localhost -p 5432 -d auth_db
+# Auth database
+psql -U postgres -h 127.0.0.1 -p 5432 -d auth_db
 
-# Catalog service database
-psql -U postgres -h localhost -p 5433 -d catalog_db
-
-# AI service database
-psql -U postgres -h localhost -p 5434 -d ai_db
+# Catalog database
+psql -U postgres -h 127.0.0.1 -p 5433 -d catalog_db
 ```
 
-### Useful psql Commands
-
-```sql
--- List all tables
-\dt
-
--- Show table structure
-\d users
-
--- Run a query
-SELECT * FROM users LIMIT 5;
-
--- Exit
-\q
-```
+Password: `postgres` (local dev only).
 
 ## Verification
 
 ### Health Checks
 
 ```bash
-curl http://localhost:8000/health
-# Expected: {"status":"ok"}
-
-curl http://localhost:8001/health
-# Expected: {"status":"ok"}
-
-curl http://localhost:8002/health
-# Expected: {"status":"ok"}
+curl http://localhost:8000/health   # {"status":"ok"}
+curl http://localhost:8001/health   # {"status":"ok"}
+curl http://localhost:8002/health   # {"status":"ok"}
 ```
 
 ### Test a Full Flow
 
 ```bash
-# 1. Register a family/user
+# 1. Register a family
 curl -X POST http://localhost:8000/v1/auth/register \
   -H "Content-Type: application/json" \
   -d '{
@@ -217,89 +249,64 @@ curl -X POST http://localhost:8000/v1/auth/register \
 # 2. Login
 curl -X POST http://localhost:8000/v1/auth/login \
   -H "Content-Type: application/json" \
-  -d '{
-    "email": "alice@example.com",
-    "password": "SecurePassword123!"
-  }'
-# Copy the access_token from response
+  -d '{"email":"alice@example.com","password":"SecurePassword123!"}'
+# Copy the access_token from the response
 
-# 3. Create a room (using the token)
+# 3. Create a room
 TOKEN="your-access-token-here"
 curl -X POST http://localhost:8000/v1/locations/rooms \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $TOKEN" \
-  -d '{
-    "name": "Living Room"
-  }'
+  -d '{"name":"Living Room"}'
 ```
 
-## Stopping Development Environment
+## Stopping the Environment
 
-**Stop all services** (but keep data):
 ```bash
-docker compose stop
+docker compose stop        # stop containers, keep data
+docker compose down        # remove containers, keep volumes
+docker compose down -v     # remove everything including databases ⚠️
 ```
 
-**Remove containers** (but keep volumes/data):
-```bash
-docker compose down
-```
-
-**Remove everything** (including databases):
-```bash
-docker compose down -v
-```
-
-⚠️ **Warning**: `docker compose down -v` deletes all local data. Use this to reset the database.
+!!! danger
+    `docker compose down -v` deletes all local data permanently.
 
 ## Troubleshooting
 
 ### Port Already in Use
 
-If port 8000 (or another) is already in use:
+```bash
+lsof -i :8000        # find what is using the port
+kill -9 <PID>        # free the port
+```
+
+Alternatively, change the host-side port in `docker-compose.yml` (e.g. `"8010:8000"`).
+
+### Service Won't Start
 
 ```bash
-# Find what's using the port
-lsof -i :8000
-
-# Kill the process (macOS/Linux)
-kill -9 <PID>
-
-# Or change the port in docker-compose.yml
-# Edit: ports: "8001:8000" (maps 8001 on host to 8000 in container)
+docker compose logs auth-service         # read error messages
+docker compose build --no-cache auth-service
+docker compose up -d auth-service
 ```
 
 ### Database Connection Refused
 
 ```bash
-docker compose ps
-# If postgres containers are not running, restart:
-docker compose restart postgres_auth postgres_catalog postgres_ai
-```
-
-### Service Won't Start
-
-```bash
-# Check logs for error messages
-docker compose logs auth-service
-
-# Rebuild the image
-docker compose build --no-cache auth-service
-docker compose up -d auth-service
+docker compose ps    # check postgres containers are running
+docker compose restart postgres_auth postgres_catalog
 ```
 
 ### Environment Variables Not Applied
 
-`.env` files are read at container startup. If you change an env var:
+`.env` files are read at container startup. After any change:
 
 ```bash
-# Restart the service
 docker compose restart auth-service
 ```
 
 ## Next Steps
 
-- **Run tests**: See **[Database & Migrations](05-database-migrations.md)** for test setup
-- **Deploy frontend**: See **[Frontend](04-frontend.md)** for npm commands
-- **Inspect database**: Use `psql` commands above to connect locally
-- **View API docs**: Visit `http://localhost:8001/docs` (auth-service Swagger UI)
+- **View API docs**: `http://localhost:8001/docs` (auth) / `http://localhost:8002/docs` (catalog)
+- **Run tests**: `cd jinbocho-auth-v1 && pytest tests/ -v`
+- **Deploy to production**: See **[Production Deployment](07-production-deployment.md)**

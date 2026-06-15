@@ -1,6 +1,6 @@
 # Backend Services
 
-Jinbocho's backend is composed of four FastAPI microservices. Three are **Private Services** (internal only); one is the public **API Gateway**.
+Jinbocho's Community backend is composed of three FastAPI microservices. Two are **Private Services** (internal only); one is the public **API Gateway**.
 
 ## Architecture at a Glance
 
@@ -10,18 +10,18 @@ Client (Browser)    │   API Gateway  :8000  (PUBLIC)   │
 ──────────────────► │  JWT validation · CORS · Proxy   │
                     └───────────┬─────────────────────┘
                                 │ internal HTTP
-              ┌─────────────────┼──────────────────┐
-              ▼                 ▼                  ▼
-     ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
-     │ auth-service │  │catalog-service│  │  ai-service  │
-     │    :8001     │  │    :8002      │  │    :8003     │
-     │  (Private)   │  │  (Private)   │  │  (Private)   │
-     └──────┬───────┘  └──────┬───────┘  └──────────────┘
-            │                 │
-     ┌──────▼───────┐  ┌──────▼───────┐
-     │  auth_db     │  │  catalog_db  │
-     │ (PostgreSQL) │  │ (PostgreSQL) │
-     └──────────────┘  └──────────────┘
+                    ┌───────────┴───────────┐
+                    ▼                       ▼
+         ┌──────────────┐        ┌──────────────────┐
+         │ auth-service │        │ catalog-service   │
+         │    :8001     │        │    :8002          │
+         │  (Private)   │        │  (Private)        │
+         └──────┬───────┘        └──────┬────────────┘
+                │                       │
+         ┌──────▼───────┐       ┌───────▼──────┐
+         │  auth_db     │       │  catalog_db  │
+         │ (PostgreSQL) │       │ (PostgreSQL) │
+         └──────────────┘       └──────────────┘
 ```
 
 Each service has its own database. Services never share a database and communicate only via HTTP through the gateway's routing rules.
@@ -269,7 +269,6 @@ All endpoints are mounted under `/v1` and mirrored from internal services.
 | `JWT_ALGORITHM` | — | `HS256` | Signing algorithm |
 | `AUTH_SERVICE_URL` | ✅ | — | Internal URL of auth-service |
 | `CATALOG_SERVICE_URL` | ✅ | — | Internal URL of catalog-service |
-| `AI_SERVICE_URL` | — | — | Internal URL of ai-service (omit if not deployed) |
 | `CORS_ORIGINS` | ✅ | — | JSON array of allowed origins, e.g. `["https://jinbocho-fe.onrender.com"]` |
 | `DEBUG` | — | `false` | FastAPI debug mode + verbose logging |
 
@@ -288,76 +287,6 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 Swagger UI: [http://localhost:8000/docs](http://localhost:8000/docs)
-
----
-
-## ai-service (port 8003) — Optional
-
-**Repository**: `jinbocho-ai-v1`
-
-### Responsibilities
-
-- **Book presentation (incipit)** — generate a short, spoiler-free presentation of a book from its title, author and genre, so readers can decide what to read next.
-- Auto-tagging suggestions (scaffold)
-- Duplicate detection hints (scaffold)
-- Reading recommendations (future)
-
-### Pluggable LLM — disabled by default
-
-The AI layer is **optional and off by default**. With `LLM_ENABLED=false` (the default) the service still runs and every AI endpoint returns an empty result (`{"text": null}`) — it never errors and needs **no API key**. The book-presentation feature degrades gracefully: the catalog still serves the free editorial description, and only the "Generate with AI" button is inert.
-
-The client is **OpenAI-compatible**, so you can point it at any provider via `LLM_BASE_URL` / `LLM_MODEL` / `LLM_API_KEY`:
-
-| Provider | `LLM_BASE_URL` | Notes |
-|----------|----------------|-------|
-| Groq | `https://api.groq.com/openai/v1` | Free tier — e.g. `llama-3.3-70b-versatile` |
-| OpenAI | `https://api.openai.com/v1` | Pay-as-you-go — e.g. `gpt-4o-mini` |
-| Google Gemini | `https://generativelanguage.googleapis.com/v1beta/openai` | OpenAI-compatible endpoint |
-| Ollama (local) | `http://localhost:11434/v1` | Self-hosted, no key |
-
-### Key Endpoints
-
-| Method | Path | Auth | Description |
-|--------|------|------|-------------|
-| `POST` | `/v1/suggestions/incipit` | (internal) | Generate a presentation; returns `{"text": null}` when the LLM is disabled |
-| `POST` | `/v1/suggestions/tags` | (internal) | Tag suggestions (scaffold) |
-| `GET` | `/health` | — | Health check |
-
-The gateway proxies `/v1/ai/{path}` → ai-service `/v1/suggestions/{path}`, so the frontend calls `POST /v1/ai/incipit`.
-
-!!! info "Where the presentation is stored"
-    Generated or manually edited presentations are persisted by the **catalog-service** on the
-    bibliographic record (`incipit`, `incipit_source`, `incipit_generated_at`) via
-    `PUT /v1/bibliographic-records/{id}/incipit`. For this feature the ai-service is **stateless** —
-    the catalog never calls it in the write path (services stay decoupled).
-
-### When to Deploy
-
-The AI service is **optional**. You can skip it entirely: book presentations still work from the
-free editorial description served by the catalog. Deploy it only when you want AI-generated
-presentations — and even then it costs nothing if you point it at a free tier (Groq) or a local Ollama.
-
-### Environment Variables
-
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `DATABASE_URL` | ✅ | — | `postgresql+asyncpg://...` pointing to `ai_db` |
-| `CATALOG_SERVICE_URL` | ✅ | — | Internal URL of catalog-service |
-| `LLM_ENABLED` | — | `false` | Master switch. `false` → no AI calls, no key required |
-| `LLM_BASE_URL` | — | `https://api.openai.com/v1` | OpenAI-compatible endpoint |
-| `LLM_MODEL` | — | `gpt-4o-mini` | Model name |
-| `LLM_API_KEY` | — | — | Provider API key (required only when `LLM_ENABLED=true`) |
-| `DEBUG` | — | `false` | SQL query logging |
-
-### Run Locally (without Docker)
-
-```bash
-cd jinbocho-ai-v1
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env   # leave LLM_ENABLED=false, or configure Groq / OpenAI / Ollama
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8003
-```
 
 ---
 

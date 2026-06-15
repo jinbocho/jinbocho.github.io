@@ -135,12 +135,6 @@ Per la ricerca ISBN avanzata, considera di ottenere:
 - **Come ottenerla**: https://developers.google.com/books/docs/v1/using#APIKey
 - **Quando serve**: imposta `GOOGLE_BOOKS_API_KEY` nel file `.env`
 
-### OpenAI API Key
-- **Perché**: per il servizio AI (suggerimenti di tag, deduplicazione)
-- **Costo**: pay-as-you-go (funzione opzionale)
-- **Come ottenerla**: https://platform.openai.com/api-keys
-- **Quando serve**: imposta `OPENAI_API_KEY` se distribuisci `ai-service`
-
 ## Account cloud (solo produzione)
 
 Per il deploy su Render + Neon:
@@ -164,18 +158,15 @@ Crea una cartella di lavoro e clona tutti i repository Jinbocho dall'organizzazi
 ```bash
 mkdir -p ~/workspace/jinbocho && cd ~/workspace/jinbocho
 
-# Clona tutti i repository Jinbocho
-git clone https://github.com/jinbocho/jinbocho-infrastructure-v1.git
+# Clona i repository pubblici Jinbocho
 git clone https://github.com/jinbocho/jinbocho-auth-v1.git
 git clone https://github.com/jinbocho/jinbocho-catalog-v1.git
 git clone https://github.com/jinbocho/jinbocho-api-gateway-v1.git
-git clone https://github.com/jinbocho/jinbocho-ai-v1.git
 git clone https://github.com/jinbocho/jinbocho-fe.git
 
 # Verifica che tutti i servizi siano presenti
 ls | grep jinbocho
-# Atteso: jinbocho-auth-v1  jinbocho-catalog-v1  jinbocho-api-gateway-v1
-#         jinbocho-ai-v1  jinbocho-fe  jinbocho-infrastructure-v1
+# Atteso: jinbocho-auth-v1  jinbocho-catalog-v1  jinbocho-api-gateway-v1  jinbocho-fe
 ```
 
 Tutti i repository si trovano nell'organizzazione GitHub `jinbocho`: https://github.com/jinbocho

@@ -42,7 +42,6 @@ curl https://jinbocho-api-gateway.onrender.com/health
 curl http://localhost:8000/health   # gateway
 curl http://localhost:8001/health   # auth
 curl http://localhost:8002/health   # catalog
-curl http://localhost:8003/health   # ai (if running)
 ```
 
 Expected response: `{"status": "ok"}`
