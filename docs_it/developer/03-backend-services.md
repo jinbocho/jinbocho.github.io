@@ -8,17 +8,17 @@ Il backend di Jinbocho è composto da tre microservizi FastAPI. Due sono **Servi
                     ┌─────────────────────────────────┐
 Client (Browser)    │   API Gateway  :8000  (PUBBLICO)   │
 ──────────────────► │  Validazione JWT · CORS · Proxy   │
-                    └───────────┬─────────────────┘
+                    └───────────┼───────────────┘
                                 │ HTTP interno
-                    ┌───────────┴───────────┐
+                    ┌───────────┼───────────┐
                     ↓                       ↓
          ┌──────────────┐        ┌──────────────────┐
          │ auth-service │        │ catalog-service   │
          │    :8001     │        │    :8002          │
          │  (Privato)   │        │  (Privato)        │
-         └──────┬───────┘        └──────┬────────────┘
+         └──────┼───────┘        └──────┼────────────┘
                 │                       │
-         ┌──────┴───────┐       ┌───────┴──────┐
+         ┌──────┴──────┐       ┌───────┴──────┐
          │  auth_db     │       │  catalog_db  │
          │ (PostgreSQL) │       │ (PostgreSQL) │
          └──────────────┘       └──────────────┘
@@ -269,7 +269,9 @@ Tutti gli endpoint sono montati sotto `/v1` e replicati dai servizi interni.
 | `JWT_ALGORITHM` | — | `HS256` | Algoritmo di firma |
 | `AUTH_SERVICE_URL` | ✅ | — | URL interno di auth-service |
 | `CATALOG_SERVICE_URL` | ✅ | — | URL interno di catalog-service |
+| `AI_SERVICE_URL` | — | `http://ai-service:8003` | URL interno di ai-service (obbligatoria se `ai` è in `JINBOCHO_FEATURES`) |
 | `CORS_ORIGINS` | ✅ | — | Array JSON delle origini consentite, es. `["https://jinbocho-fe.onrender.com"]` |
+| `JINBOCHO_FEATURES` | — | `catalog,auth` | Lista di moduli abilitati separata da virgole. Aggiungi `ai` per abilitare gli endpoint Pro (`/v1/ai/*`). |
 | `DEBUG` | — | `false` | Modalità debug FastAPI + logging dettagliato |
 
 !!! danger "CORS in produzione"
