@@ -3,6 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Google tag (gtag.js) -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      'ad_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied',
+      'analytics_storage': 'denied'
+    });
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TF0Z5E1TLK"></script>
+  <script>
+    gtag('js', new Date());
+    gtag('config', 'G-TF0Z5E1TLK');
+  </script>
   <title>Prezzi — Jinbocho</title>
   <meta name="description" content="Jinbocho Community è gratuito per sempre. Il modulo AI Pro aggiunge descrizione automatica dei libri e riconoscimento titolo/autore via ML. Disponibile su richiesta." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -347,6 +363,61 @@
     .footer-links { display: flex; gap: 20px; list-style: none; }
     .footer-links a { font-size: 13px; color: #aaa; transition: color .15s; }
     .footer-links a:hover { color: var(--white); }
+    .footer-links button { all: unset; cursor: pointer; font-size: 13px; color: #aaa; transition: color .15s; }
+    .footer-links button:hover { color: var(--white); }
+
+    /* ── COOKIE BANNER ── */
+    .cookie-banner {
+      display: none;
+      position: fixed;
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+      z-index: 200;
+      max-width: 480px;
+      margin: 0 auto;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.14);
+      padding: 22px 24px;
+    }
+    .cookie-banner.show { display: block; }
+    .cookie-banner-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .cookie-banner-text {
+      font-size: 13px;
+      color: var(--ink-mid);
+      line-height: 1.55;
+      margin-bottom: 16px;
+    }
+    .cookie-banner-text a { color: var(--red); text-decoration: underline; text-underline-offset: 2px; }
+    .cookie-banner-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .cookie-btn {
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 9px 16px;
+      border-radius: 7px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: background .15s, border-color .15s;
+      white-space: nowrap;
+    }
+    .cookie-btn-accept { background: var(--red); color: var(--white); border-color: var(--red); }
+    .cookie-btn-accept:hover { background: var(--red-dim); border-color: var(--red-dim); }
+    .cookie-btn-reject { background: transparent; color: var(--ink); border-color: var(--line); }
+    .cookie-btn-reject:hover { border-color: #aaa; }
+    @media (max-width: 400px) {
+      .cookie-banner { left: 10px; right: 10px; bottom: 10px; padding: 16px 18px; }
+    }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 640px) {
@@ -604,9 +675,22 @@
       <li><a href="https://github.com/jinbocho" target="_blank" rel="noopener">GitHub</a></li>
       <li><a href="../manuals/" data-i18n="p-footer-docs" data-href-it="../manuals/it/" data-href-en="../manuals/">Documentazione</a></li>
       <li><a href="https://github.com/jinbocho/jinbocho.github.io/blob/main/LICENSE" target="_blank" rel="noopener" data-i18n="p-footer-license">Licenza</a></li>
+      <li><button type="button" id="cookie-settings-link" data-i18n="p-footer-cookie">Preferenze cookie</button></li>
     </ul>
   </div>
 </footer>
+
+<!-- ── COOKIE BANNER ── -->
+<div class="cookie-banner" id="cookie-banner" role="dialog" aria-live="polite" aria-label="Cookie consent">
+  <p class="cookie-banner-title" data-i18n="p-cookie-title">Rispettiamo la tua privacy</p>
+  <p class="cookie-banner-text" data-i18n-html="p-cookie-text">
+    Usiamo Google Analytics solo per capire come viene usato il sito e migliorarlo. Si attiva soltanto con il tuo consenso. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Scopri di più</a>.
+  </p>
+  <div class="cookie-banner-actions">
+    <button type="button" class="cookie-btn cookie-btn-reject" id="cookie-reject" data-i18n="p-cookie-reject">Rifiuta</button>
+    <button type="button" class="cookie-btn cookie-btn-accept" id="cookie-accept" data-i18n="p-cookie-accept">Accetta</button>
+  </div>
+</div>
 
 <script>
 (function () {
@@ -692,7 +776,12 @@
       'p-faq6-q': 'Il costo del server è incluso?',
       'p-faq6-a': 'No. In tutti i piani il software è self-hosted: il costo dell\'infrastruttura (server, VPS, NAS o cloud provider) è interamente a carico dell\'utente. Per un deploy su Render + Neon il costo di partenza può essere zero (free tier) o pochi euro al mese a seconda del traffico. Scrivi a <a href="mailto:jinbochoapp@gmail.com">jinbochoapp@gmail.com</a> per una stima personalizzata.',
       'p-footer-docs': 'Documentazione',
-      'p-footer-license': 'Licenza'
+      'p-footer-license': 'Licenza',
+      'p-footer-cookie': 'Preferenze cookie',
+      'p-cookie-title': 'Rispettiamo la tua privacy',
+      'p-cookie-text': 'Usiamo Google Analytics solo per capire come viene usato il sito e migliorarlo. Si attiva soltanto con il tuo consenso. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Scopri di più</a>.',
+      'p-cookie-accept': 'Accetta',
+      'p-cookie-reject': 'Rifiuta'
     },
     en: {
       'p-nav-home': 'Home',
@@ -775,7 +864,12 @@
       'p-faq6-q': 'Is the server cost included?',
       'p-faq6-a': 'No. In all plans the software is self-hosted: the infrastructure cost (server, VPS, NAS or cloud provider) is entirely at the user\'s expense. For a deploy on Render + Neon the starting cost can be zero (free tier) or a few euros per month depending on traffic. Write to <a href="mailto:jinbochoapp@gmail.com">jinbochoapp@gmail.com</a> for a personalised estimate.',
       'p-footer-docs': 'Documentation',
-      'p-footer-license': 'Licence'
+      'p-footer-license': 'Licence',
+      'p-footer-cookie': 'Cookie preferences',
+      'p-cookie-title': 'We respect your privacy',
+      'p-cookie-text': 'We use Google Analytics only to understand how the site is used and to improve it. It is activated only with your consent. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Learn more</a>.',
+      'p-cookie-accept': 'Accept',
+      'p-cookie-reject': 'Reject'
     }
   };
 
@@ -812,6 +906,38 @@
   var saved = localStorage.getItem('jinbocho-lang');
   var browser = (navigator.language || navigator.userLanguage || 'it').toLowerCase();
   setLang(saved || (browser.startsWith('it') ? 'it' : 'en'));
+
+  function applyConsent(value) {
+    if (typeof gtag === 'function') {
+      gtag('consent', 'update', { 'analytics_storage': value === 'granted' ? 'granted' : 'denied' });
+    }
+  }
+
+  var cookieBanner = document.getElementById('cookie-banner');
+  if (cookieBanner) {
+    var storedConsent = localStorage.getItem('jinbocho-cookie-consent');
+    if (storedConsent === 'granted' || storedConsent === 'denied') {
+      applyConsent(storedConsent);
+    } else {
+      cookieBanner.classList.add('show');
+    }
+    var acceptBtn = document.getElementById('cookie-accept');
+    var rejectBtn = document.getElementById('cookie-reject');
+    var settingsLink = document.getElementById('cookie-settings-link');
+    if (acceptBtn) acceptBtn.addEventListener('click', function () {
+      localStorage.setItem('jinbocho-cookie-consent', 'granted');
+      applyConsent('granted');
+      cookieBanner.classList.remove('show');
+    });
+    if (rejectBtn) rejectBtn.addEventListener('click', function () {
+      localStorage.setItem('jinbocho-cookie-consent', 'denied');
+      applyConsent('denied');
+      cookieBanner.classList.remove('show');
+    });
+    if (settingsLink) settingsLink.addEventListener('click', function () {
+      cookieBanner.classList.add('show');
+    });
+  }
 })();
 </script>
 
