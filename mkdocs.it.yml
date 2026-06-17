@@ -105,6 +105,19 @@ extra_javascript:
   - https://unpkg.com/mermaid@10/dist/mermaid.min.js
 
 extra:
+  analytics:
+    provider: google
+    property: G-TF0Z5E1TLK
+  consent:
+    title: Consenso ai cookie
+    description: >-
+      Usiamo i cookie per riconoscere le tue visite e le tue preferenze, e per
+      misurare l'efficacia della documentazione e se gli utenti trovano ciò
+      che cercano. Con il tuo consenso ci aiuti a migliorare la documentazione.
+    actions:
+      - accept
+      - reject
+      - manage
   homepage: https://jinbocho.github.io/
   alternate:
     - name: English

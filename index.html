@@ -3,6 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Google tag (gtag.js) -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      'ad_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied',
+      'analytics_storage': 'denied'
+    });
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TF0Z5E1TLK"></script>
+  <script>
+    gtag('js', new Date());
+    gtag('config', 'G-TF0Z5E1TLK');
+  </script>
   <title>Jinbocho — La biblioteca di casa, finalmente in ordine</title>
   <meta name="description" content="Jinbocho è il sistema open source per catalogare, organizzare e ritrovare i libri della tua famiglia. Scansiona ISBN, mappa le librerie, condividi con i tuoi cari." />
   <meta property="og:title" content="Jinbocho — La biblioteca di casa, finalmente in ordine" />
@@ -681,6 +697,44 @@
       color: var(--ink-soft);
     }
     .footer-links a:hover { color: var(--ink); }
+    .footer-links button { all: unset; cursor: pointer; }
+    .footer-links button:hover { color: var(--ink); }
+
+    /* ── COOKIE BANNER ── */
+    .cookie-banner {
+      display: none;
+      position: fixed;
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+      z-index: 200;
+      max-width: 480px;
+      margin: 0 auto;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.14);
+      padding: 22px 24px;
+    }
+    .cookie-banner.show { display: block; }
+    .cookie-banner-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .cookie-banner-text {
+      font-size: 13px;
+      color: var(--ink-mid);
+      line-height: 1.55;
+      margin-bottom: 16px;
+    }
+    .cookie-banner-text a { color: var(--red); text-decoration: underline; text-underline-offset: 2px; }
+    .cookie-banner-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .cookie-banner-actions .btn { flex: 1; justify-content: center; white-space: nowrap; }
+    @media (max-width: 400px) {
+      .cookie-banner { left: 10px; right: 10px; bottom: 10px; padding: 16px 18px; }
+    }
 
     /* ── AI PRO SECTION ── */
     .ai-pro-section {
@@ -1395,10 +1449,23 @@
         <li><a href="https://jinbocho.github.io/jinbocho-demo/" target="_blank" rel="noopener" data-i18n="footer-demo">Demo</a></li>
         <li><a href="./manuals/" data-i18n="footer-docs" data-href-it="./manuals/it/" data-href-en="./manuals/">Documentazione</a></li>
         <li><a href="https://github.com/jinbocho/jinbocho.github.io/blob/main/LICENSE" target="_blank" rel="noopener" data-i18n="footer-license">Licenza</a></li>
+        <li><button type="button" id="cookie-settings-link" data-i18n="footer-cookie">Preferenze cookie</button></li>
       </ul>
     </div>
   </div>
 </footer>
+
+<!-- ── COOKIE BANNER ── -->
+<div class="cookie-banner" id="cookie-banner" role="dialog" aria-live="polite" aria-label="Cookie consent">
+  <p class="cookie-banner-title" data-i18n="cookie-title">Rispettiamo la tua privacy</p>
+  <p class="cookie-banner-text" data-i18n-html="cookie-text">
+    Usiamo Google Analytics solo per capire come viene usato il sito e migliorarlo. Si attiva soltanto con il tuo consenso. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Scopri di più</a>.
+  </p>
+  <div class="cookie-banner-actions">
+    <button type="button" class="btn btn-outline" id="cookie-reject" data-i18n="cookie-reject">Rifiuta</button>
+    <button type="button" class="btn btn-primary" id="cookie-accept" data-i18n="cookie-accept">Accetta</button>
+  </div>
+</div>
 
 <script>
 (function () {
@@ -1527,7 +1594,12 @@
       'footer-text': 'Gestionale per biblioteche domestiche · Licenza Proprietaria',
       'footer-demo': 'Demo',
       'footer-docs': 'Documentazione',
-      'footer-license': 'Licenza'
+      'footer-license': 'Licenza',
+      'footer-cookie': 'Preferenze cookie',
+      'cookie-title': 'Rispettiamo la tua privacy',
+      'cookie-text': 'Usiamo Google Analytics solo per capire come viene usato il sito e migliorarlo. Si attiva soltanto con il tuo consenso. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Scopri di più</a>.',
+      'cookie-accept': 'Accetta',
+      'cookie-reject': 'Rifiuta'
     },
     en: {
       'ai-label': 'AI Pro Module',
@@ -1653,7 +1725,12 @@
       'footer-text': 'Home library management system · Proprietary – Community Use Allowed',
       'footer-demo': 'Demo',
       'footer-docs': 'Documentation',
-      'footer-license': 'Licence'
+      'footer-license': 'Licence',
+      'footer-cookie': 'Cookie preferences',
+      'cookie-title': 'We respect your privacy',
+      'cookie-text': 'We use Google Analytics only to understand how the site is used and to improve it. It is activated only with your consent. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Learn more</a>.',
+      'cookie-accept': 'Accept',
+      'cookie-reject': 'Reject'
     }
   };
 
@@ -1705,6 +1782,38 @@
   var browser = (navigator.language || navigator.userLanguage || 'it').toLowerCase();
   var detected = browser.startsWith('it') ? 'it' : 'en';
   setLang(saved || detected);
+
+  function applyConsent(value) {
+    if (typeof gtag === 'function') {
+      gtag('consent', 'update', { 'analytics_storage': value === 'granted' ? 'granted' : 'denied' });
+    }
+  }
+
+  var cookieBanner = document.getElementById('cookie-banner');
+  if (cookieBanner) {
+    var storedConsent = localStorage.getItem('jinbocho-cookie-consent');
+    if (storedConsent === 'granted' || storedConsent === 'denied') {
+      applyConsent(storedConsent);
+    } else {
+      cookieBanner.classList.add('show');
+    }
+    var acceptBtn = document.getElementById('cookie-accept');
+    var rejectBtn = document.getElementById('cookie-reject');
+    var settingsLink = document.getElementById('cookie-settings-link');
+    if (acceptBtn) acceptBtn.addEventListener('click', function () {
+      localStorage.setItem('jinbocho-cookie-consent', 'granted');
+      applyConsent('granted');
+      cookieBanner.classList.remove('show');
+    });
+    if (rejectBtn) rejectBtn.addEventListener('click', function () {
+      localStorage.setItem('jinbocho-cookie-consent', 'denied');
+      applyConsent('denied');
+      cookieBanner.classList.remove('show');
+    });
+    if (settingsLink) settingsLink.addEventListener('click', function () {
+      cookieBanner.classList.add('show');
+    });
+  }
 })();
 </script>
 
