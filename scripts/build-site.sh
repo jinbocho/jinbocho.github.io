@@ -30,23 +30,31 @@ cp assets/jinbocho-logo.png site/manuals/it/assets/jinbocho-logo.png 2>/dev/null
 echo "✅ Assets synced to EN and IT manuals"
 echo ""
 
-# Step 4: Copy landing page to site root
-echo "🎨 Step 4: Deploying landing page..."
+# Step 4: Copy shared CSS/JS assets used by the landing and pricing pages
+echo "🎨 Step 4: Deploying site assets (css/js)..."
+mkdir -p site/assets
+cp -R assets/css site/assets/css
+cp -R assets/js  site/assets/js
+echo "✅ Assets deployed → site/assets/"
+echo ""
+
+# Step 5: Copy landing page to site root
+echo "🎨 Step 5: Deploying landing page..."
 cp index.html site/index.html
 echo "✅ Landing page deployed"
 echo ""
 
-# Step 5: Copy pricing page
-echo "💰 Step 5: Deploying pricing page..."
+# Step 6: Copy pricing page
+echo "💰 Step 6: Deploying pricing page..."
 mkdir -p site/pricing
 cp pricing/index.html site/pricing/index.html
 echo "✅ Pricing page deployed → site/pricing/"
 echo ""
 
-# Step 6: Verify structure
-echo "🔍 Step 6: Verifying site structure..."
+# Step 7: Verify structure
+echo "🔍 Step 7: Verifying site structure..."
 ERRORS=0
-for path in "site/index.html" "site/manuals/index.html" "site/manuals/it/index.html" "site/pricing/index.html"; do
+for path in "site/index.html" "site/manuals/index.html" "site/manuals/it/index.html" "site/pricing/index.html" "site/assets/css/base.css" "site/assets/js/site.js"; do
   if [ -f "$path" ]; then
     echo "   ✅ $path"
   else
@@ -62,7 +70,7 @@ if [ $ERRORS -gt 0 ]; then
 fi
 echo ""
 
-# Step 7: Display summary
+# Step 8: Display summary
 echo "╔════════════════════════════════════════════════════════╗"
 echo "║  ✅ Site Build Complete!                              ║"
 echo "╚════════════════════════════════════════════════════════╝"

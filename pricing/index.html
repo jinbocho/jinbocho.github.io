@@ -4,443 +4,56 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- Google tag (gtag.js) -->
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('consent', 'default', {
-      'ad_storage': 'denied',
-      'ad_user_data': 'denied',
-      'ad_personalization': 'denied',
-      'analytics_storage': 'denied'
-    });
-  </script>
+  <script src="../assets/js/ga-consent-default.js"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-TF0Z5E1TLK"></script>
-  <script>
-    gtag('js', new Date());
-    gtag('config', 'G-TF0Z5E1TLK');
-  </script>
+  <script src="../assets/js/ga-init.js"></script>
   <title>Prezzi — Jinbocho</title>
   <meta name="description" content="Jinbocho Community è gratuito per sempre. Il modulo AI Pro aggiunge descrizione automatica dei libri e riconoscimento titolo/autore via ML. Disponibile su richiesta." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --red:     #BC002D;
-      --red-dim: #8a0020;
-      --red-bg:  #fdf4f5;
-      --ink:     #111111;
-      --ink-mid: #444444;
-      --ink-soft:#777777;
-      --line:    #e5e3de;
-      --bg:      #f8f7f4;
-      --white:   #ffffff;
-      --radius:  10px;
-      --max:     1120px;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Inter', system-ui, sans-serif;
-      font-size: 16px;
-      line-height: 1.65;
-      color: var(--ink);
-      background: var(--white);
-      -webkit-font-smoothing: antialiased;
-    }
-
-    a { color: inherit; text-decoration: none; }
-
-    /* ── NAV ── */
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(255,255,255,0.95);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid var(--line);
-    }
-    .nav-inner {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 0 24px;
-      height: 60px;
-      display: flex;
-      align-items: center;
-      gap: 32px;
-    }
-    .nav-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--ink);
-      flex-shrink: 0;
-    }
-    .nav-logo span { color: var(--red); }
-    .nav-links {
-      display: flex;
-      gap: 24px;
-      list-style: none;
-      margin-left: auto;
-    }
-    .nav-links a {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--ink-mid);
-      transition: color .15s;
-    }
-    .nav-links a:hover,
-    .nav-links a.active { color: var(--red); }
-    .nav-end {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-shrink: 0;
-    }
-    .nav-cta {
-      padding: 7px 18px;
-      background: var(--red);
-      color: var(--white);
-      border-radius: 6px;
-      font-size: 14px;
-      font-weight: 600;
-      transition: background .15s;
-      white-space: nowrap;
-    }
-    .nav-cta:hover { background: var(--red-dim); }
-
-    /* ── LANG TOGGLE ── */
-    .lang-toggle {
-      display: flex;
-      align-items: center;
-      background: var(--bg);
-      border: 1px solid var(--line);
-      border-radius: 100px;
-      padding: 2px;
-      gap: 2px;
-    }
-    .lang-btn {
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      padding: 4px 10px;
-      border-radius: 100px;
-      border: none;
-      background: transparent;
-      color: var(--ink-soft);
-      cursor: pointer;
-      transition: background 0.15s, color 0.15s;
-      line-height: 1.4;
-    }
-    .lang-btn.active {
-      background: var(--red);
-      color: var(--white);
-    }
-    .lang-btn:hover:not(.active) {
-      background: var(--line);
-      color: var(--ink);
-    }
-
-    /* ── HERO ── */
-    .pricing-hero {
-      background: var(--bg);
-      border-bottom: 1px solid var(--line);
-      padding: 72px 24px 56px;
-      text-align: center;
-    }
-    .pricing-hero h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(32px, 5vw, 52px);
-      font-weight: 700;
-      color: var(--ink);
-      margin-bottom: 16px;
-    }
-    .pricing-hero p {
-      font-size: 18px;
-      color: var(--ink-mid);
-      max-width: 580px;
-      margin: 0 auto;
-    }
-
-    /* ── CARDS ── */
-    .pricing-section {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 64px 24px;
-    }
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 24px;
-      max-width: 1040px;
-      margin: 0 auto;
-    }
-    .pricing-card {
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 36px 32px;
-      background: var(--white);
-      position: relative;
-    }
-    .pricing-card.featured {
-      border-color: var(--red);
-      box-shadow: 0 0 0 1px var(--red);
-    }
-    .badge {
-      position: absolute;
-      top: -13px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--red);
-      color: var(--white);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      padding: 3px 14px;
-      border-radius: 20px;
-    }
-    .badge-neutral { background: var(--ink-soft); }
-    .plan-name {
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--ink);
-      margin-bottom: 6px;
-    }
-    .plan-tagline {
-      font-size: 14px;
-      color: var(--ink-soft);
-      margin-bottom: 24px;
-    }
-    .plan-price {
-      font-size: 40px;
-      font-weight: 700;
-      color: var(--ink);
-      margin-bottom: 4px;
-      font-family: 'Playfair Display', serif;
-    }
-    .plan-price-note {
-      font-size: 13px;
-      color: var(--ink-soft);
-      margin-bottom: 28px;
-    }
-    .plan-features {
-      list-style: none;
-      margin-bottom: 32px;
-    }
-    .plan-features li {
-      font-size: 14px;
-      color: var(--ink-mid);
-      padding: 7px 0;
-      border-bottom: 1px solid var(--line);
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-    }
-    .plan-features li:last-child { border-bottom: none; }
-    .check { color: #2e7d32; font-size: 15px; flex-shrink: 0; margin-top: 1px; }
-    .cross { color: #b0b0b0; font-size: 15px; flex-shrink: 0; margin-top: 1px; }
-    .plan-cta {
-      display: block;
-      width: 100%;
-      padding: 13px;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 600;
-      text-align: center;
-      transition: background .15s, border-color .15s;
-    }
-    .plan-cta.outline {
-      border: 2px solid var(--line);
-      color: var(--ink);
-      background: transparent;
-    }
-    .plan-cta.outline:hover { border-color: var(--ink-mid); }
-    .plan-cta.solid {
-      background: var(--red);
-      color: var(--white);
-      border: 2px solid var(--red);
-    }
-    .plan-cta.solid:hover { background: var(--red-dim); border-color: var(--red-dim); }
-
-    /* ── COMPARISON TABLE ── */
-    .compare-section {
-      background: var(--bg);
-      border-top: 1px solid var(--line);
-      border-bottom: 1px solid var(--line);
-      padding: 64px 24px;
-    }
-    .compare-inner {
-      max-width: 900px;
-      margin: 0 auto;
-    }
-    .compare-inner h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 28px;
-      font-weight: 700;
-      margin-bottom: 32px;
-      text-align: center;
-    }
-    .compare-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 14px;
-    }
-    .compare-table th {
-      padding: 12px 16px;
-      text-align: center;
-      font-weight: 600;
-      font-size: 13px;
-      letter-spacing: .04em;
-      text-transform: uppercase;
-      color: var(--ink-soft);
-      border-bottom: 2px solid var(--line);
-    }
-    .compare-table th:first-child { text-align: left; }
-    .compare-table td {
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--line);
-      color: var(--ink-mid);
-    }
-    .compare-table td:first-child { font-weight: 500; color: var(--ink); }
-    .compare-table td:not(:first-child) { text-align: center; }
-    .compare-table tr:last-child td { border-bottom: none; }
-    .t-check { color: #2e7d32; font-size: 16px; }
-    .t-cross { color: #ccc; font-size: 16px; }
-    .t-pro { color: var(--red); font-weight: 600; font-size: 12px; }
-
-    /* ── FAQ ── */
-    .faq-section {
-      max-width: 680px;
-      margin: 0 auto;
-      padding: 64px 24px;
-    }
-    .faq-section h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 28px;
-      font-weight: 700;
-      margin-bottom: 36px;
-      text-align: center;
-    }
-    .faq-item { margin-bottom: 28px; }
-    .faq-q {
-      font-weight: 600;
-      color: var(--ink);
-      margin-bottom: 8px;
-    }
-    .faq-a {
-      font-size: 14px;
-      color: var(--ink-mid);
-      line-height: 1.7;
-    }
-    .faq-a a { color: var(--red); text-decoration: underline; text-underline-offset: 3px; }
-
-    /* ── FOOTER ── */
-    footer {
-      background: var(--ink);
-      color: var(--white);
-      padding: 40px 24px;
-    }
-    .footer-inner {
-      max-width: var(--max);
-      margin: 0 auto;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 24px;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .footer-brand {
-      font-family: 'Playfair Display', serif;
-      font-size: 18px;
-      font-weight: 700;
-    }
-    .footer-brand span { color: var(--red); }
-    .footer-copy { font-size: 13px; color: #aaa; }
-    .footer-links { display: flex; gap: 20px; list-style: none; }
-    .footer-links a { font-size: 13px; color: #aaa; transition: color .15s; }
-    .footer-links a:hover { color: var(--white); }
-    .footer-links button { all: unset; cursor: pointer; font-size: 13px; color: #aaa; transition: color .15s; }
-    .footer-links button:hover { color: var(--white); }
-
-    /* ── COOKIE BANNER ── */
-    .cookie-banner {
-      display: none;
-      position: fixed;
-      left: 16px;
-      right: 16px;
-      bottom: 16px;
-      z-index: 200;
-      max-width: 480px;
-      margin: 0 auto;
-      background: var(--white);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.14);
-      padding: 22px 24px;
-    }
-    .cookie-banner.show { display: block; }
-    .cookie-banner-title {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--ink);
-      margin-bottom: 6px;
-    }
-    .cookie-banner-text {
-      font-size: 13px;
-      color: var(--ink-mid);
-      line-height: 1.55;
-      margin-bottom: 16px;
-    }
-    .cookie-banner-text a { color: var(--red); text-decoration: underline; text-underline-offset: 2px; }
-    .cookie-banner-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-    .cookie-btn {
-      flex: 1;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      font-weight: 600;
-      padding: 9px 16px;
-      border-radius: 7px;
-      cursor: pointer;
-      border: 1px solid transparent;
-      transition: background .15s, border-color .15s;
-      white-space: nowrap;
-    }
-    .cookie-btn-accept { background: var(--red); color: var(--white); border-color: var(--red); }
-    .cookie-btn-accept:hover { background: var(--red-dim); border-color: var(--red-dim); }
-    .cookie-btn-reject { background: transparent; color: var(--ink); border-color: var(--line); }
-    .cookie-btn-reject:hover { border-color: #aaa; }
-    @media (max-width: 400px) {
-      .cookie-banner { left: 10px; right: 10px; bottom: 10px; padding: 16px 18px; }
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 640px) {
-      .nav-links { display: none; }
-      .pricing-hero { padding: 48px 20px 40px; }
-      .pricing-hero h1 { font-size: 28px; }
-      .pricing-section, .compare-section, .faq-section { padding: 48px 20px; }
-      .pricing-card { padding: 28px 20px; }
-      .compare-table th, .compare-table td { padding: 10px 8px; font-size: 13px; }
-    }
-  </style>
+  <link rel="stylesheet" href="../assets/css/base.css" />
+  <link rel="stylesheet" href="../assets/css/pricing.css" />
 </head>
 <body>
 
 <nav>
   <div class="nav-inner">
-    <a href="../" class="nav-logo">Jinbo<span>cho</span></a>
+    <a href="../" class="nav-logo">
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="16" cy="16" r="15" fill="#BC002D"/>
+        <path d="M8 10 L12 8 L12 22 L8 21 Z" fill="white"/>
+        <path d="M12 8 L16 9.5 L16 23.5 L12 22 Z" fill="rgba(255,255,255,0.85)"/>
+        <path d="M16 9.5 L20 8 L20 21 L16 23.5 Z" fill="rgba(255,255,255,0.7)"/>
+        <path d="M20 8 L24 10 L24 21 L20 21 Z" fill="white"/>
+      </svg>
+      Jinbocho
+    </a>
     <ul class="nav-links">
       <li><a href="../" data-i18n="p-nav-home">Home</a></li>
       <li><a href="../manuals/" data-i18n="p-nav-docs" data-href-it="../manuals/it/" data-href-en="../manuals/">Documentazione</a></li>
       <li><a href="../pricing/" class="active" data-i18n="p-nav-pricing">Prezzi</a></li>
     </ul>
     <div class="nav-end">
+      <div class="lang-toggle" aria-label="Scegli lingua / Choose language">
+        <button class="lang-btn" data-lang="it" onclick="setLang('it')">IT</button>
+        <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+      </div>
+      <a href="mailto:jinbochoapp@gmail.com" class="nav-cta" data-i18n="p-nav-contact">Contattaci</a>
+    </div>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+    <ul class="mobile-nav-links">
+      <li><a href="../" data-i18n="p-nav-home">Home</a></li>
+      <li><a href="../manuals/" data-i18n="p-nav-docs" data-href-it="../manuals/it/" data-href-en="../manuals/">Documentazione</a></li>
+      <li><a href="../pricing/" class="active" data-i18n="p-nav-pricing">Prezzi</a></li>
+    </ul>
+    <div class="mobile-menu-cta">
       <div class="lang-toggle" aria-label="Scegli lingua / Choose language">
         <button class="lang-btn" data-lang="it" onclick="setLang('it')">IT</button>
         <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
@@ -480,28 +93,28 @@
 
     <!-- ASSISTITO -->
     <div class="pricing-card">
-      <div class="badge badge-neutral" data-i18n="p-a-badge">Servizio</div>
+      <div class="badge badge-neutral badge-soon" data-i18n="p-a-badge">Presto disponibile</div>
       <div class="plan-name" data-i18n="p-a-name">Assistito</div>
-      <div class="plan-tagline" data-i18n="p-a-tagline">Per chi vuole Jinbocho senza pensieri tecnici</div>
-      <div class="plan-price">€ 99</div>
-      <div class="plan-price-note" data-i18n="p-a-price-note">Una tantum · Prima installazione · Infrastruttura a carico dell'utente</div>
+      <div class="plan-tagline" data-i18n="p-a-tagline">Avere Jinbocho senza pensieri tecnici</div>
+      <div class="plan-price" style="font-size:28px; margin-top:8px;" data-i18n="p-p-price">Presto disponibile</div>
+      <div class="plan-price-note" data-i18n="p-a-price-note">Prima installazione guidata · Infrastruttura a carico dell'utente</div>
       <ul class="plan-features">
         <li><span class="check">✓</span><span data-i18n="p-a-f1">Tutto di Community</span></li>
         <li><span class="check">✓</span><span data-i18n-html="p-a-f2"><strong>Prima installazione in produzione</strong><br><small style="color:var(--ink-soft)">Configurazione Docker Compose o deploy cloud (Render + Neon) a cura mia</small></span></li>
         <li><span class="check">✓</span><span data-i18n="p-a-f3">Verifica funzionamento e test post-deploy</span></li>
         <li><span class="cross">–</span><span data-i18n="p-a-f4">Modulo AI Pro</span></li>
       </ul>
-      <a href="mailto:jinbochoapp@gmail.com?subject=Jinbocho%20-%20Richiesta%20installazione%20guidata" class="plan-cta outline" data-i18n="p-a-cta">
-        Richiedi installazione guidata →
-      </a>
+      <span class="plan-cta outline disabled" role="button" aria-disabled="true" tabindex="-1" data-i18n="p-a-cta">
+        Presto disponibile
+      </span>
     </div>
 
     <!-- PRO -->
     <div class="pricing-card featured">
-      <div class="badge" data-i18n="p-p-badge">Pro</div>
+      <div class="badge badge-soon" data-i18n="p-p-badge">Presto disponibile</div>
       <div class="plan-name" data-i18n="p-p-name">Pro</div>
       <div class="plan-tagline" data-i18n="p-p-tagline">Community + modulo AI Pro</div>
-      <div class="plan-price" style="font-size:28px; margin-top:8px;" data-i18n="p-p-price">Su richiesta</div>
+      <div class="plan-price" style="font-size:28px; margin-top:8px;" data-i18n="p-p-price">Presto disponibile</div>
       <div class="plan-price-note" data-i18n="p-p-price-note">Licenza commerciale · Self-hosted · Infrastruttura a carico dell'utente</div>
       <ul class="plan-features">
         <li><span class="check">✓</span><span data-i18n="p-p-f1">Tutto di Community</span></li>
@@ -513,9 +126,9 @@
         <li><span class="check">✓</span><span data-i18n="p-p-f7">Supporto via email</span></li>
         <li style="color:var(--ink-soft); font-style:italic; border-bottom:none; padding-top:4px;"><small data-i18n="p-p-f8">+ altre funzionalità AI in arrivo</small></li>
       </ul>
-      <a href="mailto:jinbochoapp@gmail.com?subject=Jinbocho%20Pro%20-%20Richiesta%20licenza" class="plan-cta solid" data-i18n="p-p-cta">
-        Richiedi licenza Pro →
-      </a>
+      <span class="plan-cta solid disabled" role="button" aria-disabled="true" tabindex="-1" data-i18n="p-p-cta">
+        Presto disponibile
+      </span>
     </div>
 
   </div>
@@ -530,8 +143,8 @@
         <tr>
           <th data-i18n="p-t-h1">Funzionalità</th>
           <th data-i18n="p-t-h2">Community</th>
-          <th data-i18n="p-t-h3">Assistito</th>
-          <th data-i18n="p-t-h4">Pro</th>
+          <th><span data-i18n="p-t-h3">Assistito</span><br><small style="font-weight:400; text-transform:none; letter-spacing:0; color:var(--ink-soft); font-size:11px;" data-i18n="p-t-h3-soon">Presto disponibile</small></th>
+          <th><span data-i18n="p-t-h4">Pro</span><br><small style="font-weight:400; text-transform:none; letter-spacing:0; color:var(--ink-soft); font-size:11px;" data-i18n="p-t-h4-soon">Presto disponibile</small></th>
         </tr>
       </thead>
       <tbody>
@@ -622,8 +235,8 @@
         <tr>
           <td data-i18n="p-t-r15">Prezzo</td>
           <td><strong data-i18n="p-t-v-free">Gratis</strong></td>
-          <td><span style="font-weight:600;" data-i18n="p-t-v-assistito">€ 99 una tantum</span></td>
-          <td><span class="t-pro" data-i18n="p-t-v-pro">Su richiesta</span></td>
+          <td><span class="t-pro" data-i18n="p-t-v-assistito">Presto disponibile</span></td>
+          <td><span class="t-pro" data-i18n="p-t-v-pro">Presto disponibile</span></td>
         </tr>
       </tbody>
     </table>
@@ -656,7 +269,7 @@
 
   <div class="faq-item">
     <div class="faq-q" data-i18n="p-faq5-q">Cos'è il piano Assistito?</div>
-    <div class="faq-a" data-i18n="p-faq5-a">Il piano Assistito include le stesse funzionalità di Community, più la prima installazione in produzione a cura mia: configurazione Docker Compose oppure deploy cloud su Render + Neon, verifica del funzionamento e test post-deploy. Il costo è di €99 una tantum. L'infrastruttura cloud o il server è a carico dell'utente.</div>
+    <div class="faq-a" data-i18n="p-faq5-a">Il piano Assistito include le stesse funzionalità di Community, più la prima installazione in produzione a cura mia: configurazione Docker Compose oppure deploy cloud su Render + Neon, verifica del funzionamento e test post-deploy. Il piano è presto disponibile. L'infrastruttura cloud o il server è a carico dell'utente.</div>
   </div>
 
   <div class="faq-item">
@@ -668,278 +281,45 @@
 <footer>
   <div class="footer-inner">
     <div>
-      <div class="footer-brand">Jinbo<span>cho</span></div>
+      <div class="footer-brand">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="16" cy="16" r="15" fill="#BC002D"/>
+          <path d="M8 10 L12 8 L12 22 L8 21 Z" fill="white"/>
+          <path d="M12 8 L16 9.5 L16 23.5 L12 22 Z" fill="rgba(255,255,255,0.85)"/>
+          <path d="M16 9.5 L20 8 L20 21 L16 23.5 Z" fill="rgba(255,255,255,0.7)"/>
+          <path d="M20 8 L24 10 L24 21 L20 21 Z" fill="white"/>
+        </svg>
+        Jinbocho
+      </div>
       <div class="footer-copy">© 2026 Carmelo La Gamba · Jinbocho Source-Available License</div>
     </div>
     <ul class="footer-links">
       <li><a href="https://github.com/jinbocho" target="_blank" rel="noopener">GitHub</a></li>
       <li><a href="../manuals/" data-i18n="p-footer-docs" data-href-it="../manuals/it/" data-href-en="../manuals/">Documentazione</a></li>
       <li><a href="https://github.com/jinbocho/jinbocho.github.io/blob/main/LICENSE" target="_blank" rel="noopener" data-i18n="p-footer-license">Licenza</a></li>
-      <li><button type="button" id="cookie-settings-link" data-i18n="p-footer-cookie">Preferenze cookie</button></li>
+      <li><button type="button" id="privacy-settings-link" data-i18n="p-footer-cookie">Preferenze cookie</button></li>
     </ul>
   </div>
 </footer>
 
-<!-- ── COOKIE BANNER ── -->
-<div class="cookie-banner" id="cookie-banner" role="dialog" aria-live="polite" aria-label="Cookie consent">
-  <p class="cookie-banner-title" data-i18n="p-cookie-title">Rispettiamo la tua privacy</p>
-  <p class="cookie-banner-text" data-i18n-html="p-cookie-text">
+<!-- ── PRIVACY / COOKIE PREFERENCES PANEL ──
+     Deliberately not named "cookie-banner" etc.: generic cookie-consent
+     class/id names are pattern-matched and force-hidden by some ad-blocker
+     "annoyances" filter lists (e.g. uBlock Origin's cookie-notice lists),
+     which silently breaks the reopen button even though the JS runs fine. -->
+<div class="privacy-banner" id="privacy-banner" role="dialog" aria-live="polite" aria-label="Cookie consent">
+  <p class="privacy-banner-title" data-i18n="p-cookie-title">Rispettiamo la tua privacy</p>
+  <p class="privacy-banner-text" data-i18n-html="p-cookie-text">
     Usiamo Google Analytics solo per capire come viene usato il sito e migliorarlo. Si attiva soltanto con il tuo consenso. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Scopri di più</a>.
   </p>
-  <div class="cookie-banner-actions">
-    <button type="button" class="cookie-btn cookie-btn-reject" id="cookie-reject" data-i18n="p-cookie-reject">Rifiuta</button>
-    <button type="button" class="cookie-btn cookie-btn-accept" id="cookie-accept" data-i18n="p-cookie-accept">Accetta</button>
+  <div class="privacy-banner-actions">
+    <button type="button" class="privacy-btn privacy-btn-reject" id="privacy-reject" data-i18n="p-cookie-reject">Rifiuta</button>
+    <button type="button" class="privacy-btn privacy-btn-accept" id="privacy-accept" data-i18n="p-cookie-accept">Accetta</button>
   </div>
 </div>
 
-<script>
-(function () {
-  var dict = {
-    it: {
-      'p-nav-home': 'Home',
-      'p-nav-docs': 'Documentazione',
-      'p-nav-pricing': 'Prezzi',
-      'p-nav-contact': 'Contattaci',
-      'p-hero-h1': 'Semplice e trasparente',
-      'p-hero-sub': 'Jinbocho Community è gratuito per sempre. Il modulo AI Pro aggiunge funzionalità di intelligenza artificiale per completare e arricchire il flusso di catalogazione.',
-      'p-c-name': 'Community',
-      'p-c-tagline': 'Per uso personale e familiare',
-      'p-c-price': 'Gratis',
-      'p-c-price-note': 'Per sempre · Self-hosted · Infrastruttura a carico dell\'utente',
-      'p-c-f1': 'Catalogo libri completo',
-      'p-c-f2': 'Mappa fisica degli scaffali',
-      'p-c-f3': 'Scansione ISBN',
-      'p-c-f4': 'Account famiglia + ruoli',
-      'p-c-f5': 'Export CSV / JSON',
-      'p-c-f6': 'Multilingua (EN, IT, ES, FR)',
-      'p-c-f7': 'Modulo AI Pro',
-      'p-c-cta': 'Leggi il manuale →',
-      'p-a-badge': 'Servizio',
-      'p-a-name': 'Assistito',
-      'p-a-tagline': 'Per chi vuole Jinbocho senza pensieri tecnici',
-      'p-a-price-note': 'Una tantum · Prima installazione · Infrastruttura a carico dell\'utente',
-      'p-a-f1': 'Tutto di Community',
-      'p-a-f2': '<strong>Prima installazione in produzione</strong><br><small style="color:var(--ink-soft)">Configurazione Docker Compose o deploy cloud (Render + Neon) a cura mia</small>',
-      'p-a-f3': 'Verifica funzionamento e test post-deploy',
-      'p-a-f4': 'Modulo AI Pro',
-      'p-a-cta': 'Richiedi installazione guidata →',
-      'p-p-badge': 'Pro',
-      'p-p-name': 'Pro',
-      'p-p-tagline': 'Community + modulo AI Pro',
-      'p-p-price': 'Su richiesta',
-      'p-p-price-note': 'Licenza commerciale · Self-hosted · Infrastruttura a carico dell\'utente',
-      'p-p-f1': 'Tutto di Community',
-      'p-p-f2': 'Prima installazione guidata',
-      'p-p-f3': '<strong>Descrizione AI automatica</strong><br><small style="color:var(--ink-soft)">Generata via LLM quando non trovata online durante la scansione</small>',
-      'p-p-f4': '<strong>Riconoscimento titolo e autore via AI</strong><br><small style="color:var(--ink-soft)">Algoritmi ML per identificare titolo e autore quando l\'ISBN non è leggibile o il libro non è in nessun database</small>',
-      'p-p-f5': 'Compatibile con qualsiasi LLM<br><small style="color:var(--ink-soft)">OpenAI, Gemini, Groq, Ollama…</small>',
-      'p-p-f6': 'Licenza commerciale inclusa',
-      'p-p-f7': 'Supporto via email',
-      'p-p-f8': '+ altre funzionalità AI in arrivo',
-      'p-p-cta': 'Richiedi licenza Pro →',
-      'p-t-title': 'Confronto completo',
-      'p-t-h1': 'Funzionalità',
-      'p-t-h2': 'Community',
-      'p-t-h3': 'Assistito',
-      'p-t-h4': 'Pro',
-      'p-t-r1': 'Catalogo libri',
-      'p-t-r2': 'Mappa scaffali (Room → Bookcase → Shelf)',
-      'p-t-r3': 'Scansione ISBN (camera mobile)',
-      'p-t-r4': 'Account famiglia + ruoli + JWT',
-      'p-t-r5': 'Stato lettura e posizione sullo scaffale',
-      'p-t-r6': 'Export CSV / JSON',
-      'p-t-r7': 'Multilingua (EN, IT, ES, FR)',
-      'p-t-r8': 'Self-hosted (Docker)',
-      'p-t-r9': 'Prima installazione guidata in produzione',
-      'p-t-r10': 'Descrizione AI automatica',
-      'p-t-r10s': 'Generata via LLM quando non trovata online',
-      'p-t-r11': 'Riconoscimento titolo e autore via AI',
-      'p-t-r11s': 'ML per identificare titolo/autore senza ISBN',
-      'p-t-r12': 'Compatibilità LLM (OpenAI, Gemini, Groq, Ollama…)',
-      'p-t-r13': 'Licenza commerciale',
-      'p-t-r14': 'Supporto via email',
-      'p-t-r15': 'Prezzo',
-      'p-t-v-free': 'Gratis',
-      'p-t-v-assistito': '€ 99 una tantum',
-      'p-t-v-pro': 'Su richiesta',
-      'p-faq-title': 'Domande frequenti',
-      'p-faq1-q': 'Jinbocho Community è davvero gratuito?',
-      'p-faq1-a': 'Sì. La Community Edition è completamente gratuita per uso personale e familiare, senza limiti di libri o utenti. Basta un server Docker.',
-      'p-faq2-q': 'Cos\'è il modulo AI Pro?',
-      'p-faq2-a': 'Il modulo AI Pro aggiunge due funzionalità alla piattaforma: <strong>descrizione automatica dei libri</strong> — quando la scansione ISBN non trova una sinossi nei database bibliografici (Open Library, Google Books), un LLM genera automaticamente la descrizione; e <strong>riconoscimento di titolo e autore via machine learning</strong> — per catalogare libri il cui ISBN non è leggibile o non è presente online. La generazione della descrizione è compatibile con qualsiasi provider LLM (OpenAI, Gemini, Groq, OpenRouter, Ollama). Altre funzionalità AI verranno aggiunte nel tempo.',
-      'p-faq3-q': 'I miei dati rimangono miei?',
-      'p-faq3-a': 'Sempre. Jinbocho gira sulla tua infrastruttura, su un tuo database PostgreSQL. Nessun dato viene inviato a server esterni, a meno che tu non configuri un provider LLM (solo per la funzione AI Pro).',
-      'p-faq4-q': 'Posso provare l\'AI prima di acquistare la licenza Pro?',
-      'p-faq4-a': 'Scrivi a <a href="mailto:jinbochoapp@gmail.com">jinbochoapp@gmail.com</a> per concordare una demo o un periodo di valutazione.',
-      'p-faq5-q': 'Cos\'è il piano Assistito?',
-      'p-faq5-a': 'Il piano Assistito include le stesse funzionalità di Community, più la prima installazione in produzione a cura mia: configurazione Docker Compose oppure deploy cloud su Render + Neon, verifica del funzionamento e test post-deploy. Il costo è di €99 una tantum. L\'infrastruttura cloud o il server è a carico dell\'utente.',
-      'p-faq6-q': 'Il costo del server è incluso?',
-      'p-faq6-a': 'No. In tutti i piani il software è self-hosted: il costo dell\'infrastruttura (server, VPS, NAS o cloud provider) è interamente a carico dell\'utente. Per un deploy su Render + Neon il costo di partenza può essere zero (free tier) o pochi euro al mese a seconda del traffico. Scrivi a <a href="mailto:jinbochoapp@gmail.com">jinbochoapp@gmail.com</a> per una stima personalizzata.',
-      'p-footer-docs': 'Documentazione',
-      'p-footer-license': 'Licenza',
-      'p-footer-cookie': 'Preferenze cookie',
-      'p-cookie-title': 'Rispettiamo la tua privacy',
-      'p-cookie-text': 'Usiamo Google Analytics solo per capire come viene usato il sito e migliorarlo. Si attiva soltanto con il tuo consenso. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Scopri di più</a>.',
-      'p-cookie-accept': 'Accetta',
-      'p-cookie-reject': 'Rifiuta'
-    },
-    en: {
-      'p-nav-home': 'Home',
-      'p-nav-docs': 'Documentation',
-      'p-nav-pricing': 'Pricing',
-      'p-nav-contact': 'Contact us',
-      'p-hero-h1': 'Simple and transparent',
-      'p-hero-sub': 'Jinbocho Community is free forever. The AI Pro module adds artificial intelligence features to complete and enrich the cataloguing workflow.',
-      'p-c-name': 'Community',
-      'p-c-tagline': 'For personal and family use',
-      'p-c-price': 'Free',
-      'p-c-price-note': 'Forever · Self-hosted · Infrastructure at user\'s expense',
-      'p-c-f1': 'Full book catalogue',
-      'p-c-f2': 'Physical shelf map',
-      'p-c-f3': 'ISBN scanning',
-      'p-c-f4': 'Family accounts + roles',
-      'p-c-f5': 'CSV / JSON export',
-      'p-c-f6': 'Multilingual (EN, IT, ES, FR)',
-      'p-c-f7': 'AI Pro module',
-      'p-c-cta': 'Read the manual →',
-      'p-a-badge': 'Service',
-      'p-a-name': 'Assisted',
-      'p-a-tagline': 'For those who want Jinbocho without technical hassle',
-      'p-a-price-note': 'One-time · First installation · Infrastructure at user\'s expense',
-      'p-a-f1': 'Everything in Community',
-      'p-a-f2': '<strong>First production installation</strong><br><small style="color:var(--ink-soft)">Docker Compose setup or cloud deploy (Render + Neon) handled by me</small>',
-      'p-a-f3': 'Functionality check and post-deploy testing',
-      'p-a-f4': 'AI Pro module',
-      'p-a-cta': 'Request guided installation →',
-      'p-p-badge': 'Pro',
-      'p-p-name': 'Pro',
-      'p-p-tagline': 'Community + AI Pro module',
-      'p-p-price': 'On request',
-      'p-p-price-note': 'Commercial licence · Self-hosted · Infrastructure at user\'s expense',
-      'p-p-f1': 'Everything in Community',
-      'p-p-f2': 'Guided first installation',
-      'p-p-f3': '<strong>Automatic AI description</strong><br><small style="color:var(--ink-soft)">Generated via LLM when not found online during scanning</small>',
-      'p-p-f4': '<strong>AI-based title and author recognition</strong><br><small style="color:var(--ink-soft)">ML algorithms to identify title and author when the ISBN is unreadable or the book is not in any database</small>',
-      'p-p-f5': 'Compatible with any LLM<br><small style="color:var(--ink-soft)">OpenAI, Gemini, Groq, Ollama…</small>',
-      'p-p-f6': 'Commercial licence included',
-      'p-p-f7': 'Email support',
-      'p-p-f8': '+ more AI features coming',
-      'p-p-cta': 'Request Pro licence →',
-      'p-t-title': 'Full comparison',
-      'p-t-h1': 'Feature',
-      'p-t-h2': 'Community',
-      'p-t-h3': 'Assisted',
-      'p-t-h4': 'Pro',
-      'p-t-r1': 'Book catalogue',
-      'p-t-r2': 'Shelf map (Room → Bookcase → Shelf)',
-      'p-t-r3': 'ISBN scanning (mobile camera)',
-      'p-t-r4': 'Family accounts + roles + JWT',
-      'p-t-r5': 'Reading status and shelf position',
-      'p-t-r6': 'CSV / JSON export',
-      'p-t-r7': 'Multilingual (EN, IT, ES, FR)',
-      'p-t-r8': 'Self-hosted (Docker)',
-      'p-t-r9': 'Guided first production installation',
-      'p-t-r10': 'Automatic AI description',
-      'p-t-r10s': 'Generated via LLM when not found online',
-      'p-t-r11': 'AI-based title and author recognition',
-      'p-t-r11s': 'ML to identify title/author without ISBN',
-      'p-t-r12': 'LLM compatibility (OpenAI, Gemini, Groq, Ollama…)',
-      'p-t-r13': 'Commercial licence',
-      'p-t-r14': 'Email support',
-      'p-t-r15': 'Price',
-      'p-t-v-free': 'Free',
-      'p-t-v-assistito': '€ 99 one-time',
-      'p-t-v-pro': 'On request',
-      'p-faq-title': 'Frequently asked questions',
-      'p-faq1-q': 'Is Jinbocho Community really free?',
-      'p-faq1-a': 'Yes. The Community Edition is completely free for personal and family use, with no limits on books or users. All you need is a Docker server.',
-      'p-faq2-q': 'What is the AI Pro module?',
-      'p-faq2-a': 'The AI Pro module adds two features to the platform: <strong>automatic book descriptions</strong> — when an ISBN scan finds no synopsis in the bibliographic databases (Open Library, Google Books), an LLM generates a description automatically; and <strong>AI-based title and author recognition</strong> — to catalogue books whose ISBN is unreadable or not in any online database. Description generation is compatible with any LLM provider (OpenAI, Gemini, Groq, OpenRouter, Ollama). More AI features will be added over time.',
-      'p-faq3-q': 'Do my data stay mine?',
-      'p-faq3-a': 'Always. Jinbocho runs on your own infrastructure, on your own PostgreSQL database. No data is sent to external servers unless you configure an LLM provider (only for the AI Pro feature).',
-      'p-faq4-q': 'Can I try the AI before buying a Pro licence?',
-      'p-faq4-a': 'Write to <a href="mailto:jinbochoapp@gmail.com">jinbochoapp@gmail.com</a> to arrange a demo or an evaluation period.',
-      'p-faq5-q': 'What is the Assisted plan?',
-      'p-faq5-a': 'The Assisted plan includes the same features as Community, plus the first production installation carried out by me: Docker Compose setup or cloud deploy on Render + Neon, functionality check and post-deploy testing. The cost is €99 one-time. The cloud infrastructure or server is at the user\'s expense.',
-      'p-faq6-q': 'Is the server cost included?',
-      'p-faq6-a': 'No. In all plans the software is self-hosted: the infrastructure cost (server, VPS, NAS or cloud provider) is entirely at the user\'s expense. For a deploy on Render + Neon the starting cost can be zero (free tier) or a few euros per month depending on traffic. Write to <a href="mailto:jinbochoapp@gmail.com">jinbochoapp@gmail.com</a> for a personalised estimate.',
-      'p-footer-docs': 'Documentation',
-      'p-footer-license': 'Licence',
-      'p-footer-cookie': 'Cookie preferences',
-      'p-cookie-title': 'We respect your privacy',
-      'p-cookie-text': 'We use Google Analytics only to understand how the site is used and to improve it. It is activated only with your consent. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Learn more</a>.',
-      'p-cookie-accept': 'Accept',
-      'p-cookie-reject': 'Reject'
-    }
-  };
-
-  function setLang(lang) {
-    if (lang !== 'it' && lang !== 'en') lang = 'it';
-    document.documentElement.lang = lang;
-    localStorage.setItem('jinbocho-lang', lang);
-
-    var t = dict[lang];
-
-    document.querySelectorAll('[data-i18n]').forEach(function (el) {
-      var key = el.getAttribute('data-i18n');
-      if (t[key] !== undefined) el.textContent = t[key];
-    });
-
-    document.querySelectorAll('[data-i18n-html]').forEach(function (el) {
-      var key = el.getAttribute('data-i18n-html');
-      if (t[key] !== undefined) el.innerHTML = t[key];
-    });
-
-    document.querySelectorAll('[data-href-it]').forEach(function (el) {
-      el.href = lang === 'it'
-        ? el.getAttribute('data-href-it')
-        : el.getAttribute('data-href-en');
-    });
-
-    document.querySelectorAll('.lang-btn').forEach(function (btn) {
-      btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
-    });
-  }
-
-  window.setLang = setLang;
-
-  var saved = localStorage.getItem('jinbocho-lang');
-  var browser = (navigator.language || navigator.userLanguage || 'it').toLowerCase();
-  setLang(saved || (browser.startsWith('it') ? 'it' : 'en'));
-
-  function applyConsent(value) {
-    if (typeof gtag === 'function') {
-      gtag('consent', 'update', { 'analytics_storage': value === 'granted' ? 'granted' : 'denied' });
-    }
-  }
-
-  var cookieBanner = document.getElementById('cookie-banner');
-  if (cookieBanner) {
-    var storedConsent = localStorage.getItem('jinbocho-cookie-consent');
-    if (storedConsent === 'granted' || storedConsent === 'denied') {
-      applyConsent(storedConsent);
-    } else {
-      cookieBanner.classList.add('show');
-    }
-    var acceptBtn = document.getElementById('cookie-accept');
-    var rejectBtn = document.getElementById('cookie-reject');
-    var settingsLink = document.getElementById('cookie-settings-link');
-    if (acceptBtn) acceptBtn.addEventListener('click', function () {
-      localStorage.setItem('jinbocho-cookie-consent', 'granted');
-      applyConsent('granted');
-      cookieBanner.classList.remove('show');
-    });
-    if (rejectBtn) rejectBtn.addEventListener('click', function () {
-      localStorage.setItem('jinbocho-cookie-consent', 'denied');
-      applyConsent('denied');
-      cookieBanner.classList.remove('show');
-    });
-    if (settingsLink) settingsLink.addEventListener('click', function () {
-      cookieBanner.classList.add('show');
-    });
-  }
-})();
-</script>
+<script src="../assets/js/pricing-i18n.js"></script>
+<script src="../assets/js/site.js"></script>
 
 </body>
 </html>
