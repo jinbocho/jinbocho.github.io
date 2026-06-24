@@ -15,12 +15,12 @@ Every service (Web Service, Private Service, Static Site) has a **Logs** tab in 
 After a deploy, check the logs for these lines confirming a healthy startup:
 
 ```
-# auth-service and catalog-service:
+# auth-service, catalog-service and ai-service (each has its own database):
 INFO  [alembic] Running upgrade -> <revision>, <description>
 INFO  [alembic] Done.
 INFO:     Application startup complete.
 
-# api-gateway:
+# api-gateway (no database):
 INFO:     Application startup complete.
 
 # Any service — bad sign:
@@ -42,6 +42,7 @@ curl https://jinbocho-api-gateway.onrender.com/health
 curl http://localhost:8000/health   # gateway
 curl http://localhost:8001/health   # auth
 curl http://localhost:8002/health   # catalog
+curl http://localhost:8003/health   # ai (optional service)
 ```
 
 Expected response: `{"status": "ok"}`

@@ -21,7 +21,7 @@ sequenceDiagram
     participant Cat as Catalog Service
 
     U->>FE: Types "Calvino"
-    FE->>API: GET /v1/records/search?q=Calvino
+    FE->>API: GET /v1/catalog/bibliographic-records?q=Calvino
     API->>Cat: Proxies request
     Cat->>Cat: Full-text search on title + author + description
     Cat-->>FE: Returns matching BibliographicRecords

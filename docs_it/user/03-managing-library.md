@@ -88,6 +88,26 @@ Per libri senza ISBN (edizioni antiche, manoscritti) o quando vuoi avere pieno c
 
 ---
 
+## Se un libro è già presente nella biblioteca della famiglia
+
+Qualunque metodo usi, Jinbocho controlla l'intera biblioteca della famiglia prima
+di aggiungere un nuovo libro — non solo i tuoi libri. Se trova una corrispondenza
+per **ISBN** o per **titolo e autore**, vedrai una finestra che ti indica:
+
+- A quale libro esistente corrisponde
+- Chi in famiglia possiede già una copia
+- Dove è collocata quella copia
+
+Questo è solo un avviso, non un blocco. Possedere due copie dello stesso libro
+tra membri diversi della famiglia è comune ed è completamente supportato — ad
+esempio, tu e il tuo partner potreste aver acquistato ciascuno la propria copia.
+Puoi:
+
+- **Confermare** — aggiungi comunque la tua copia, come libro separato nella biblioteca
+- **Annullare** — torna indietro senza aggiungerlo, ad esempio se ti accorgi che è già tuo
+
+---
+
 ## Modificare un libro
 
 Per cambiare i metadati o spostare un libro su un altro scaffale:

@@ -58,6 +58,37 @@ Da qualsiasi lista o risultato di ricerca, clicca sulla scheda del libro. Il det
 
 ---
 
+## Gli attributi della tua copia
+
+Oltre alla posizione e allo stato di lettura, ogni copia posseduta ha dettagli
+propri — separati dal record bibliografico, quindi non influenzano le altre
+copie dello stesso libro possedute da altri membri della famiglia:
+
+| Campo | A cosa serve |
+|-------|----------------|
+| **Tag** | Etichette libere a tua scelta (es. "autografato", "da prestare", "preferito") — mostrate come badge nella pagina di dettaglio |
+| **Condizione** | Nuovo, Buono, Discreto o Scadente |
+| **Provenienza** | Acquistato, Regalo, Prestato o Altro |
+| **Data d'acquisto** e **prezzo** | Opzionali, solo per i tuoi appunti |
+| **Proprietario** | A quale membro della famiglia appartiene questa copia fisica |
+| **Note** | Note libere su questa copia specifica |
+
+Per modificarli: apri la pagina di dettaglio libro → **Modifica** → vedi la
+sezione **"Questa copia"** nel form di modifica (i campi sopra i dettagli
+condivisi del libro).
+
+### Chi la sta leggendo in questo momento
+
+Se lo stato di una copia è **In lettura**, la pagina di dettaglio mostra un
+badge 📖 vicino allo stato con il nome del membro della famiglia che la sta
+leggendo attualmente. Questo è diverso dallo storico letture per membro —
+vedi **[Progressi di lettura → Chi ha letto questo libro](10-reading-progress.md#chi-ha-letto-questo-libro-letture-di-famiglia)**.
+
+Se la copia è in prestito a qualcuno fuori dalla famiglia, un badge 📤 mostra
+chi la ha in prestito — vedi **[Prestiti](16-loans.md)**.
+
+---
+
 ## Stato di lettura
 
 Ogni copia ha uno dei tre stati:

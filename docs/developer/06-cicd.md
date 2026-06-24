@@ -1,9 +1,7 @@
 # CI/CD — GitHub Actions
 
-!!! warning "Planned feature — not yet active"
-    GitHub Actions CI/CD pipelines are a **planned feature** and are not yet configured in the Jinbocho repositories. This page documents the target architecture as a reference for future implementation.
-
-    **In the meantime, run all quality checks locally before every commit:**
+!!! warning "Image publishing is active — quality gates are not"
+    Every backend service already has a working GitHub Actions pipeline that builds and publishes a Docker image to GHCR on every push to `main`. **None of these pipelines run lint, type-check, or tests** — there is currently no CI quality gate. You must run the checks below locally before pushing.
 
     ```bash
     # Backend (in each changed service directory)
@@ -18,162 +16,118 @@
 
 ---
 
-## Target Workflow Structure
+## Image Publishing (all backend services)
 
-When implemented, each service will have its own workflow file in `.github/workflows/`. The pipeline will be identical for all backend services; the frontend will have a separate workflow.
+Each backend service repository — `jinbocho-auth-v1`, `jinbocho-catalog-v1`, `jinbocho-api-gateway-v1`, `jinbocho-ai-v1` — has an identical `.github/workflows/publish-image.yml`. It builds the service's Docker image and pushes it to the **GitHub Container Registry (GHCR)**, so the infrastructure repo's `docker-compose.ghcr.yml` can pull pre-built images instead of building from source (1-command self-host).
 
-### Backend Services (auth, catalog, gateway, ai)
-
-**Triggers**: push to `main`, pull requests targeting `main`
+**Triggers**: push to `main`, push of a tag matching `v*`, or manual `workflow_dispatch`.
 
 ```yaml
-# .github/workflows/ci-auth.yml  (replicate for catalog, gateway, ai)
-name: CI — auth-service
+# .github/workflows/publish-image.yml (identical in auth-v1, catalog-v1, api-gateway-v1, ai-v1)
+name: Publish image
 
 on:
   push:
     branches: [main]
-    paths:
-      - "jinbocho-auth-v1/**"
-      - ".github/workflows/ci-auth.yml"
-  pull_request:
-    branches: [main]
-    paths:
-      - "jinbocho-auth-v1/**"
+    tags: ["v*"]
+  workflow_dispatch:
 
 jobs:
-  quality:
+  build-and-push:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: jinbocho-auth-v1
-
-    services:
-      postgres:
-        image: postgres:16-alpine
-        env:
-          POSTGRES_DB: auth_db_test
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
+    permissions:
+      contents: read
+      packages: write
     steps:
       - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
 
-      - uses: actions/setup-python@v5
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
         with:
-          python-version: "3.12"
-          cache: "pip"
-          cache-dependency-path: jinbocho-auth-v1/requirements.txt
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=ref,event=tag
+            type=sha,format=short
 
-      - name: Lint (ruff)
-        run: ruff check app tests
-
-      - name: Type check (mypy)
-        run: python -m mypy app --strict
-
-      - name: Unit tests
-        run: pytest tests/unit/ -v
-
-      - name: Integration tests
-        env:
-          DATABASE_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/auth_db_test
-          JWT_SECRET_KEY: test-secret-key-for-ci
-          DEBUG: "false"
-        run: pytest tests/integration/ -v
-
-      - name: Docker build check
-        run: docker build -t jinbocho-auth:ci .
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 ```
 
-### Frontend
+This job has **no lint, type-check, or test step** — it only builds and pushes the image. A broken or untested commit on `main` will be published to GHCR as `latest`.
 
-**Triggers**: push to `main`, pull requests targeting `main`, changes in `jinbocho-fe/`
+**Resulting images**: `ghcr.io/<org>/<repo>:latest`, `ghcr.io/<org>/<repo>:<tag>` (when pushing a `v*` tag), and `ghcr.io/<org>/<repo>:sha-<short-sha>` on every build.
 
-```yaml
-# .github/workflows/ci-frontend.yml
-name: CI — frontend
+## Database Backups (infrastructure repo)
 
-on:
-  push:
-    branches: [main]
-    paths:
-      - "jinbocho-fe/**"
-      - ".github/workflows/ci-frontend.yml"
-  pull_request:
-    branches: [main]
-    paths:
-      - "jinbocho-fe/**"
+`jinbocho-infrastructure-v1/.github/workflows/db-backup.yml` runs daily (`cron: "0 2 * * *"`, 02:00 UTC) or on manual `workflow_dispatch`. It dumps the Neon-hosted `auth_db` and `catalog_db` with `pg_dump`, gzips each dump, and uploads them as build artifacts with a **90-day retention**.
 
-jobs:
-  quality:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: jinbocho-fe
+**Required repository secrets**:
 
-    steps:
-      - uses: actions/checkout@v4
+| Secret | Format |
+|--------|--------|
+| `NEON_AUTH_DB_URL` | `postgresql://user:pass@ep-xxx.neon.tech/auth_db?sslmode=require` |
+| `NEON_CATALOG_DB_URL` | `postgresql://user:pass@ep-xxx.neon.tech/catalog_db?sslmode=require` |
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "18"
-          cache: "npm"
-          cache-dependency-path: jinbocho-fe/package-lock.json
+Use the original Neon connection string (`postgresql://`), **not** the asyncpg-transformed one used by the services at runtime.
 
-      - name: Install dependencies
-        run: npm ci
+!!! note "ai_db is not backed up yet"
+    The workflow only dumps `auth_db` and `catalog_db`. If you provision a separate database for `jinbocho-ai-v1`, add an equivalent dump step for it.
 
-      - name: Type check
-        run: npm run typecheck
-
-      - name: Lint
-        run: npm run lint
-
-      - name: Tests
-        run: npm run test
-
-      - name: Build
-        env:
-          VITE_API_BASE_URL: https://jinbocho-api-gateway.onrender.com
-        run: npm run build
-```
-
-## Target Branch Protection Rules
-
-When CI is active, configure these in GitHub → Repository Settings → Branches → Add branch protection rule for `main`:
-
-| Rule | Setting |
-|------|--------|
-| **Require status checks to pass** | ✅ Enable |
-| Required checks | `quality` (for each service workflow) |
-| **Require branches to be up to date** | ✅ Enable |
-| **Restrict force pushes** | ✅ Enable |
-| **Require pull request reviews** | ✅ Enable (at least 1 review) |
-| **Allow deletions** | ✅ Disable |
-
-## Target Release Tagging
-
-Releases will follow the pattern `<service>/v<semver>`:
+**Restore a backup**:
 
 ```bash
-git tag auth-service/v0.2.0
-git tag catalog-service/v0.2.0
+# 1. Download the artifact from GitHub → Actions → the run → Artifacts
+gunzip auth_db_YYYYMMDD_HHMM.sql.gz
+psql "$NEON_AUTH_DB_URL" < auth_db_YYYYMMDD_HHMM.sql
+# (same for catalog_db)
+```
+
+## Waking Render Services
+
+`jinbocho-infrastructure-v1/.github/workflows/wake-render.yml` pings all Render-hosted services (frontend, api-gateway, auth-service, catalog-service, ai-service `/health`) in parallel and waits up to 90 seconds for each to return HTTP 200 — useful to warm up free-tier Render services after a cold start.
+
+This workflow only has a `workflow_dispatch` trigger — **it does not run on a schedule by itself**. To wake services automatically before they're needed, trigger it externally (e.g. an external cron service calling the GitHub Actions "dispatch workflow" API) — see [Troubleshooting](09-troubleshooting.md) for the recommended setup.
+
+## Recommended Practices (Not Yet Enforced)
+
+The following are sensible defaults for this repository, but **nothing in CI currently enforces them** — there is no required status check today, since `publish-image.yml` has no quality job.
+
+**Branch protection** (GitHub → Repository Settings → Branches → rule for `main`):
+
+| Rule | Setting |
+|------|---------|
+| **Require pull request reviews** | ✅ Enable (at least 1 review) |
+| **Restrict force pushes** | ✅ Enable |
+| **Allow deletions** | ✅ Disable |
+
+If you later add a quality workflow (lint/type-check/test), make its job a required status check here.
+
+**Tagging**: `publish-image.yml` triggers on any tag matching `v*` (e.g. `v0.2.0`) and publishes that tag as a GHCR image tag — it does not use a `<service>/v<semver>` namespaced pattern, since each service already lives in its own repository.
+
+```bash
+git tag v0.2.0
 git push --tags
 ```
 
-## Running Quality Checks Locally (Current Process)
+## Running Quality Checks Locally
 
-Until CI is in place, run the full quality suite before every push:
+Since CI does not gate merges on lint/type-check/tests, run the full quality suite before every push:
 
 **Backend service:**
 ```bash

@@ -17,7 +17,7 @@ sequenceDiagram
 
     C->>FE: Stream video (frame continui)
     FE->>FE: @zxing/browser decodifica il codice a barre
-    FE->>API: GET /v1/records/isbn-lookup?isbn=9788845292613
+    FE->>API: GET /v1/catalog/ingestion/isbn/9788845292613
     API->>Cat: Proxy della richiesta
     Cat->>Cat: Controlla la cache isbn
     alt Cache presente

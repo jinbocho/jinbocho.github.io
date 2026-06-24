@@ -121,14 +121,14 @@ When filtering by "language", you filter by the **book's** language
 
 If you find an incorrect or missing translation:
 
-1. Open a GitHub issue at `https://github.com/carmelolagamba/workspace-jinbocho/issues`
+1. Open a GitHub issue
 2. Include: the screen where you found it, your language setting, what you expected
-3. Translations are in `jinbocho-fe/src/locales/` — contributions welcome!
+3. Translations are in `jinbocho-fe/src/features/i18n/locales/` — contributions welcome!
 
 ### Translation files location
 
 ```
-jinbocho-fe/src/locales/
+jinbocho-fe/src/features/i18n/locales/
 ├── en.json   ← English (reference)
 ├── it.json   ← Italian
 ├── es.json   ← Spanish

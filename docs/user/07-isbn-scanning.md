@@ -19,7 +19,7 @@ sequenceDiagram
 
     C->>FE: Video stream (continuous frames)
     FE->>FE: @zxing/browser decodes barcode
-    FE->>API: GET /v1/records/isbn-lookup?isbn=9788845292613
+    FE->>API: GET /v1/catalog/ingestion/isbn/9788845292613
     API->>Cat: Proxies request
     Cat->>Cat: Check isbn_cache table
     alt Cache hit

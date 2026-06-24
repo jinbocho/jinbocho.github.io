@@ -176,6 +176,8 @@ postgresql+asyncpg://...?ssl=require
 # Schedule: */10 * * * *
 ```
 
+4. **Wake everything on demand** — `jinbocho-infrastructure-v1` ships a `wake-render.yml` GitHub Action (`workflow_dispatch`, manual trigger only — it does **not** run on a schedule) that pings frontend, gateway, auth, catalog and ai-service in sequence and waits for all of them to respond with `200`. Run it from the **Actions** tab right before a demo or a manual test session instead of waiting through 4-5 separate cold starts one request at a time. It is a convenience tool, not a substitute for option 3 if you want the services to never sleep.
+
 ---
 
 ## Local Development Issues

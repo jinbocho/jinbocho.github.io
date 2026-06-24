@@ -14,23 +14,29 @@ and navigate to your Jinbocho URL:
 - **Android** — Chrome, Firefox, or Samsung Internet
 
 !!! tip "Add to Home Screen"
-    For a near-app experience, add Jinbocho to your home screen:
+    Jinbocho is a regular web app — there is no installable PWA (no app
+    manifest, no offline support). You can still add a shortcut to your
+    home screen for quick access:
 
     **iOS (Safari)**: Tap the Share icon → **Add to Home Screen** → **Add**
 
     **Android (Chrome)**: Tap the menu → **Add to Home screen** → **Add**
 
-    The shortcut opens Jinbocho in full-screen mode without browser chrome.
+    This creates a bookmark-style shortcut. Whether it opens full-screen
+    or with the browser's address bar visible depends on your browser and
+    OS — it is not guaranteed to be chrome-free like a real installed app.
 
 ---
 
 ## Mobile Layout
 
-On small screens, Jinbocho switches to a **mobile layout**:
+Below the desktop breakpoint (768px), Jinbocho switches to a **mobile layout**:
+a slim top bar replaces the full sidebar, and navigation moves into a
+slide-in drawer.
 
 ```
 ┌─────────────────────────────┐
-│  ☰  Jinbocho          🔍 + │  ← Top bar (menu, search, add)
+│  ☰   Jinbocho          ⏻   │  ← Top bar (menu, logout)
 ├─────────────────────────────┤
 │                             │
 │  [Book card]                │
@@ -44,12 +50,12 @@ On small screens, Jinbocho switches to a **mobile layout**:
 │  [Book card]                │
 │  …                          │
 │                             │
-├─────────────────────────────┤
-│  🏠    📚    🔍    ⚙️       │  ← Bottom navigation bar
 └─────────────────────────────┘
 ```
 
-The sidebar (visible on desktop) becomes a **hamburger menu** (`☰`) on mobile.
+Tapping `☰` slides in a drawer with the full navigation: Home, Books,
+On Loan, Locations, Stats, Users (admins only), and Settings — the same
+items shown in the sidebar on desktop.
 
 ---
 
@@ -94,20 +100,20 @@ See **[ISBN Scanning](07-isbn-scanning.md)** for complete guidance.
 |---------|--------|
 | Tap a book card | Open book detail |
 | Tap the status badge | Change reading status |
-| Pull to refresh | Reload the current list |
+| Tap `☰` | Open the navigation drawer |
 
 ---
 
 ## Location Picker on Mobile
 
-The location picker (room → bookcase → shelf) is optimised for touch:
+The location picker is a set of four cascading dropdowns — Room, Bookcase,
+Section, Shelf — that stack into a single column on narrow screens:
 
 1. Tap **Add Book** → **Scan** or **Manual**
-2. In the form, tap **Choose location**
-3. A bottom sheet slides up with the location tree
-4. Tap to expand: Room → Bookcase → Section → Shelf
-5. Tap the shelf you want
-6. The bottom sheet closes and the location is filled in
+2. In the form, tap the **Room** dropdown and pick one
+3. The **Bookcase** dropdown unlocks and fills with that room's bookcases
+4. Repeat for **Section** and **Shelf** — each unlocks once its parent is chosen
+5. Leave any level unselected if you don't want to be that specific
 
 ---
 
@@ -144,8 +150,11 @@ If you lose connectivity while scanning:
 
 ## Responsive Breakpoints
 
-| Screen width | Layout used |
-|-------------|-------------|
-| < 640 px | Mobile: bottom nav, stacked cards |
-| 640 – 1024 px | Tablet: sidebar (collapsible), 2-column grid |
-| > 1024 px | Desktop: full sidebar, 3-column grid |
+Navigation and the book grid switch independently, at different widths:
+
+| Screen width | Navigation | Book grid columns |
+|-------------|------------|--------------------|
+| < 640 px | Top bar + drawer (`☰`) | 1 column |
+| 640 – 767 px | Top bar + drawer (`☰`) | 2 columns |
+| 768 – 1023 px | Full sidebar | 2 columns |
+| ≥ 1024 px | Full sidebar | 4 columns |

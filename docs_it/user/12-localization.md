@@ -83,4 +83,4 @@ Jinbocho usa i formati locali automaticamente in base alla lingua selezionata:
 
 Jinbocho è open source (licenza CC BY-NC-ND 4.0). Se vuoi migliorare la traduzione in una lingua esistente o aggiungerne una nuova, consulta le istruzioni nel repository GitHub.
 
-Le traduzioni si trovano nei file JSON nella cartella `jinbocho-fe/src/locales/`.
+Le traduzioni si trovano nei file JSON nella cartella `jinbocho-fe/src/features/i18n/locales/`.

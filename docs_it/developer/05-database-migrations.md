@@ -8,12 +8,15 @@ Jinbocho usa **PostgreSQL 16** con un database per servizio. Le migrazioni sono 
 |----------|---------|-------------|
 | `auth_db` | auth-service | `5432` |
 | `catalog_db` | catalog-service | `5433` |
+| `ai_db` | ai-service (**solo Pro edition**) | `5434` |
+
+`ai_db` viene creato solo eseguendo i file compose della Pro edition (`docker-compose.pro.yml` / `docker-compose.pro.local.yml` in `jinbocho-infrastructure-v1`); la Community edition non ha `ai-service` né `ai_db`.
 
 In Docker Compose queste porte sono legate solo a `127.0.0.1` — non sono accessibili dall'esterno della macchina.
 
 ## Migrazioni automatiche all'avvio
 
-Sia auth-service che catalog-service eseguono `alembic upgrade head` automaticamente prima di avviare uvicorn (configurato nel CMD del loro `Dockerfile`). Non è necessario eseguire le migrazioni manualmente in sviluppo locale o in produzione.
+auth-service, catalog-service e ai-service (Pro edition) eseguono tutti `alembic upgrade head` automaticamente prima di avviare uvicorn (configurato nel CMD del loro `Dockerfile`). Non è necessario eseguire le migrazioni manualmente in sviluppo locale o in produzione.
 
 Cioè: quando esegui `docker compose up`, i database sono sempre aggiornati all'ultimo schema.
 
@@ -27,6 +30,9 @@ psql -U postgres -h 127.0.0.1 -p 5432 -d auth_db
 
 # catalog_db
 psql -U postgres -h 127.0.0.1 -p 5433 -d catalog_db
+
+# ai_db (solo Pro edition)
+psql -U postgres -h 127.0.0.1 -p 5434 -d ai_db
 ```
 
 Password: `postgres` (solo sviluppo locale).
@@ -53,7 +59,7 @@ SELECT id, email, role FROM users LIMIT 10;
 ### Controlla lo stato corrente della migrazione
 
 ```bash
-cd jinbocho-auth-v1   # o jinbocho-catalog-v1
+cd jinbocho-auth-v1   # o jinbocho-catalog-v1, o jinbocho-ai-v1 (Pro)
 source .venv/bin/activate
 alembic current       # mostra la revisione corrente
 alembic history       # mostra la cronologia completa delle migrazioni

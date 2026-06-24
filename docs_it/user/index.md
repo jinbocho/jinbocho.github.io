@@ -20,6 +20,8 @@ Tutto quello che ti serve per usare Jinbocho — dall'aggiunta del primo libro a
 | 12 | [Lingua e localizzazione](12-localization.md) | Passa tra italiano, inglese, spagnolo e francese |
 | 13 | [Domande frequenti](13-faq.md) | 20+ risposte alle domande più comuni |
 | 14 | [Risoluzione problemi](14-troubleshooting.md) | Login, scansione, performance |
+| 15 | [Presentazione del libro](15-book-presentation.md) | Riassunti e presentazioni generati dall'AI |
+| 16 | [Prestiti](16-loans.md) | Prestare libri a famiglia o amici, scadenze, pagina In prestito |
 
 ---
 
@@ -44,6 +46,10 @@ Tutto quello che ti serve per usare Jinbocho — dall'aggiunta del primo libro a
 ### Voglio invitare un familiare
 
 → [Gestione utenti](09-user-management.md) — ruoli, inviti e permessi
+
+### Voglio prestare un libro a qualcuno
+
+→ [Prestiti](16-loans.md) — traccia chi lo ha, da quando, e quando deve tornare
 
 ### Qualcosa non funziona
 

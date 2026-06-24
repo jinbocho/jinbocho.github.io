@@ -4,207 +4,150 @@ Avvia il tuo ambiente di sviluppo locale con Docker Compose in pochi minuti.
 
 ## Panoramica
 
-L'edizione Community è composta da tre servizi backend, due database PostgreSQL e un frontend React. Poiché non esiste un repository di infrastruttura condiviso, crei tu stesso un `docker-compose.yml` minimo — risiede nella tua workspace locale e non viene mai committato in nessun repository dei servizi.
+Il backend di Jinbocho viene distribuito tramite un repository di orchestrazione separato,
+[`jinbocho-infrastructure-v1`](https://github.com/jinbocho/jinbocho-infrastructure-v1). Non
+contiene codice applicativo — solo i file Docker Compose, i template delle
+variabili d'ambiente e gli strumenti di deploy per VPS/Render per i servizi
+`auth`, `catalog`, `api-gateway` e il servizio opzionale `ai`.
+
+Sono disponibili cinque file Compose, da scegliere in base alle immagini che
+vuoi eseguire e se il modulo AI (edizione Pro) è abilitato:
+
+| File | Immagini | Edizione | Caso d'uso |
+|---|---|---|---|
+| `docker/docker-compose.community.yml` | GHCR (pre-build) | Community | Self-hosting, senza checkout del codice sorgente |
+| `docker/docker-compose.pro.yml` | GHCR (pre-build) | Pro | Self-hosting con modulo AI |
+| `docker/docker-compose.community.local.yml` | Build da `../jinbocho-*-v1` | Community | Sviluppo locale dal codice sorgente |
+| `docker/docker-compose.pro.local.yml` | Build da `../jinbocho-*-v1` | Pro | Sviluppo locale dal codice sorgente — usato da `./scripts/dev.sh` |
+| `docker/docker-compose.all.yml` | Backend da GHCR + frontend buildato localmente | Entrambe (`COMPOSE_PROFILES=pro`) | Deploy su VPS singolo, include Caddy + TLS |
+
+Questo capitolo descrive lo **sviluppo locale dal codice sorgente** (`*.local.yml`).
+Per il self-hosting con immagini pre-build o un'installazione VPS in un unico
+passaggio, vedi [Deploy in Produzione](07-production-deployment.md).
 
 ## 1. Preparare la workspace
 
 Se non hai ancora clonato i repository, segui le istruzioni di [Checkout dei repository](01-prerequisites.md#checkout-dei-repository).
 
-La tua workspace dovrebbe avere questa struttura:
+`jinbocho-infrastructure-v1` si aspetta che i repository dei servizi siano
+clonati come cartelle "fratelle":
 
 ```
 ~/workspace/jinbocho/
+├── jinbocho-infrastructure-v1/
 ├── jinbocho-auth-v1/
 ├── jinbocho-catalog-v1/
 ├── jinbocho-api-gateway-v1/
-├── jinbocho-fe/
-└── docker-compose.yml        ← lo creerai ora
+├── jinbocho-ai-v1/            ← necessario solo per l'edizione Pro
+└── jinbocho-fe/
 ```
 
-## 2. Creare docker-compose.yml
+## 2. Configurare le variabili d'ambiente
 
-In `~/workspace/jinbocho/`, crea `docker-compose.yml` con il seguente contenuto:
-
-```yaml
-version: "3.9"
-
-services:
-
-  postgres_auth:
-    image: postgres:16
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: auth_db
-    ports:
-      - "127.0.0.1:5432:5432"
-    volumes:
-      - auth_data:/var/lib/postgresql/data
-
-  postgres_catalog:
-    image: postgres:16
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: catalog_db
-    ports:
-      - "127.0.0.1:5433:5432"
-    volumes:
-      - catalog_data:/var/lib/postgresql/data
-
-  auth-service:
-    build:
-      context: ./jinbocho-auth-v1
-    env_file: ./jinbocho-auth-v1/.env
-    ports:
-      - "8001:8000"
-    depends_on:
-      - postgres_auth
-
-  catalog-service:
-    build:
-      context: ./jinbocho-catalog-v1
-    env_file: ./jinbocho-catalog-v1/.env
-    ports:
-      - "8002:8000"
-    depends_on:
-      - postgres_catalog
-      - auth-service
-
-  api-gateway:
-    build:
-      context: ./jinbocho-api-gateway-v1
-    env_file: ./jinbocho-api-gateway-v1/.env
-    ports:
-      - "8000:8000"
-    depends_on:
-      - auth-service
-      - catalog-service
-
-volumes:
-  auth_data:
-  catalog_data:
-```
-
-## 3. Configurare le variabili d'ambiente
-
-Ogni servizio ha bisogno di un file `.env`. Copia i template forniti:
+Da `jinbocho-infrastructure-v1/`, copia il file `.env` di root e i template
+per ciascun servizio da `envs/`:
 
 ```bash
-cp jinbocho-auth-v1/.env.example    jinbocho-auth-v1/.env
-cp jinbocho-catalog-v1/.env.example jinbocho-catalog-v1/.env
-cp jinbocho-api-gateway-v1/.env.example jinbocho-api-gateway-v1/.env
-cp jinbocho-fe/.env.example          jinbocho-fe/.env
+cd jinbocho-infrastructure-v1
+
+cp .env.example .env
+cp envs/auth-service.env.example    envs/auth-service.env
+cp envs/catalog-service.env.example envs/catalog-service.env
+cp envs/api-gateway.env.example     envs/api-gateway.env
 ```
 
-Imposta i seguenti valori. **`JWT_SECRET_KEY` deve essere la stessa stringa in tutti e tre i servizi backend.**
+Le variabili non elencate qui sotto hanno già un valore di default funzionante
+nel relativo file `*.example` — non serve modificarle per lo sviluppo locale.
 
-**`jinbocho-auth-v1/.env`:**
+**`.env`** (root del repository — letto da Docker Compose stesso):
 
-```env
-DATABASE_URL=postgresql+asyncpg://postgres:postgres@postgres_auth:5432/auth_db
-JWT_SECRET_KEY=dev-secret-key-change-in-prod
-JWT_ALGORITHM=HS256
-ACCESS_TOKEN_EXPIRE_MINUTES=30
-REFRESH_TOKEN_EXPIRE_DAYS=30
-DEBUG=true
-```
+| Variabile | Default | Obbligatoria | Descrizione |
+|---|---|---|---|
+| `POSTGRES_PASSWORD` | `change_me_local_dev` | Sempre | Password per i container Postgres locali |
+| `JINBOCHO_VERSION` | `latest` | No | Tag dell'immagine GHCR (usato solo dai file compose non `.local`) |
+| `COMPOSE_PROFILES` | non impostata | No | Imposta `pro` su `docker-compose.all.yml` per avviare anche `postgres-ai` + `ai-service` |
 
-**`jinbocho-catalog-v1/.env`:**
+**`envs/auth-service.env`** — variabili principali:
 
-```env
-DATABASE_URL=postgresql+asyncpg://postgres:postgres@postgres_catalog:5432/catalog_db
-AUTH_SERVICE_URL=http://auth-service:8001
-JWT_SECRET_KEY=dev-secret-key-change-in-prod
-JWT_ALGORITHM=HS256
-GOOGLE_BOOKS_API_KEY=        # facoltativo — lascia vuoto per usare solo Open Library
-DEBUG=true
-```
+| Variabile | Default | Obbligatoria | Descrizione |
+|---|---|---|---|
+| `DATABASE_URL` | punta a `jinbocho-postgres-auth:5432/auth_db` | Sì | Deve corrispondere a `POSTGRES_PASSWORD` del `.env` di root |
+| `JWT_SECRET_KEY` | — | **Sì** | Deve essere **identica** tra `auth-service`, `catalog-service` e `api-gateway`. Generala con `openssl rand -hex 32` |
+| `FRONTEND_BASE_URL` | `http://localhost:5173` | No | Usata per costruire i link nelle email di invito/reset password |
+| `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_PASSWORD` / `EMAIL_FROM` | — | No | Lascia `SMTP_USER` vuoto per stampare i link di reset/invito nei log invece di inviare email reali |
 
-**`jinbocho-api-gateway-v1/.env`:**
+**`envs/catalog-service.env`** — variabili principali:
 
-```env
-JWT_SECRET_KEY=dev-secret-key-change-in-prod
-JWT_ALGORITHM=HS256
-AUTH_SERVICE_URL=http://auth-service:8001
-CATALOG_SERVICE_URL=http://catalog-service:8002
-CORS_ORIGINS=["http://localhost:5173","http://localhost:3000"]
-DEBUG=true
-```
+| Variabile | Default | Obbligatoria | Descrizione |
+|---|---|---|---|
+| `DATABASE_URL` | punta a `jinbocho-postgres-catalog:5432/catalog_db` | Sì | Deve corrispondere a `POSTGRES_PASSWORD` del `.env` di root |
+| `JWT_SECRET_KEY` | — | **Sì** | Deve corrispondere al valore di `auth-service` |
+| `GOOGLE_BOOKS_API_KEY` | — | Consigliata | Chiave gratuita dell'API Google Books; senza di essa la quota condivisa (1000 richieste/giorno) si esaurisce rapidamente |
 
-**`jinbocho-fe/.env`:**
+**`envs/api-gateway.env`** — variabili principali:
 
-```env
-VITE_API_BASE_URL=http://localhost:8000
-```
+| Variabile | Default | Obbligatoria | Descrizione |
+|---|---|---|---|
+| `JWT_SECRET_KEY` | — | **Sì** | Deve corrispondere al valore di `auth-service` |
+| `AUTH_SERVICE_URL` / `CATALOG_SERVICE_URL` / `AI_SERVICE_URL` | hostname Docker interni | No | Lasciali invariati per lo sviluppo locale |
+| `CORS_ORIGINS` | `["*"]` | No | Imposta l'URL del tuo frontend in produzione |
+| `JINBOCHO_FEATURES` | `catalog,auth` | No | Moduli abilitati, separati da virgola. Aggiungi `ai` solo per l'edizione Pro |
 
-!!! note "Hostname dei container"
-    All'interno di Docker Compose, i servizi comunicano usando i nomi dei servizi come hostname
-    (`auth-service`, `catalog-service`, `postgres_auth`, `postgres_catalog`).
-    I numeri di porta in `DATABASE_URL` sono le porte **interne** del container (`5432`),
-    non le porte mappate sull'host (`5432`/`5433`).
+Per l'edizione Pro, copia anche `envs/ai-service.env.example` e consulta
+[Servizi Backend](03-backend-services.md#ai-service-porta-8003-solo-edizione-pro) per le sue variabili.
 
 !!! warning "Non committare mai i file .env"
-    Tutti i file `.env` sono (e devono rimanere) nel `.gitignore` di ogni repository.
+    Tutti i file `.env` sotto `jinbocho-infrastructure-v1/` sono (e devono rimanere) nel `.gitignore`.
 
-## 4. Avviare Docker Compose
+## 3. Avviare lo stack
+
+Da `jinbocho-infrastructure-v1/`:
 
 ```bash
-cd ~/workspace/jinbocho
-docker compose up --build -d
+# Edizione Community (senza modulo AI):
+docker compose -f docker/docker-compose.community.local.yml up --build -d
+
+# Edizione Pro (con modulo AI):
+docker compose -f docker/docker-compose.pro.local.yml up --build -d
 ```
-
-**Spiegazione dei flag**:
-
-- `--build`: ricostruisce le immagini se il Dockerfile è cambiato
-- `-d`: esecuzione in background (modalità detached)
 
 **Controlla lo stato**:
 
 ```bash
-docker compose ps
-```
-
-Output atteso:
-
-```
-NAME               COMMAND               STATUS           PORTS
-auth-service       uvicorn app.main...   Up               0.0.0.0:8001->8000/tcp
-catalog-service    uvicorn app.main...   Up               0.0.0.0:8002->8000/tcp
-api-gateway        uvicorn app.main...   Up               0.0.0.0:8000->8000/tcp
-postgres_auth      postgres -c ...       Up               127.0.0.1:5432->5432/tcp
-postgres_catalog   postgres -c ...       Up               127.0.0.1:5433->5432/tcp
+docker compose -f docker/docker-compose.community.local.yml ps
 ```
 
 **Visualizza i log**:
 
 ```bash
-docker compose logs -f              # tutti i servizi
-docker compose logs -f auth-service # un solo servizio
+docker compose -f docker/docker-compose.community.local.yml logs -f              # tutti i servizi
+docker compose -f docker/docker-compose.community.local.yml logs -f auth-service # un solo servizio
 ```
-
-## Mappatura delle porte
-
-| Servizio | Porta host | Tipo | Scopo |
-|---------|-----------|------|------|
-| **api-gateway** | `8000` | Pubblica | Punto di ingresso per le richieste del frontend |
-| **auth-service** | `8001` | Interna | Gestione utenti/famiglie/JWT |
-| **catalog-service** | `8002` | Interna | Libri, posizioni, ricerca ISBN |
-| **postgres (auth)** | `5432` | Interna | Database auth |
-| **postgres (catalog)** | `5433` | Interna | Database catalog |
 
 La Swagger UI è disponibile su:
 
 - Gateway: `http://localhost:8000/docs`
 - Auth: `http://localhost:8001/docs`
 - Catalog: `http://localhost:8002/docs`
+- AI (solo Pro): `http://localhost:8003/docs`
 
-## 5. Avviare il server di sviluppo del frontend
+## 4. Avviare backend e frontend insieme
 
-In un nuovo terminale:
+`./scripts/dev.sh` avvia lo stack Compose Pro locale e poi lancia il server di
+sviluppo del frontend nello stesso terminale:
 
 ```bash
-cd ~/workspace/jinbocho/jinbocho-fe
+cd jinbocho-infrastructure-v1
+./scripts/dev.sh
+```
+
+È equivalente a eseguire `docker compose -f docker/docker-compose.pro.local.yml up --build -d`
+seguito da `npm run dev` in `jinbocho-fe/`.
+
+Per avviare il frontend separatamente, in un nuovo terminale:
+
+```bash
+cd jinbocho-fe
 npm ci          # Installa le dipendenze (solo la prima volta)
 npm run dev
 ```
@@ -219,9 +162,13 @@ psql -U postgres -h 127.0.0.1 -p 5432 -d auth_db
 
 # Database catalog
 psql -U postgres -h 127.0.0.1 -p 5433 -d catalog_db
+
+# Database AI (solo edizione Pro)
+psql -U postgres -h 127.0.0.1 -p 5434 -d ai_db
 ```
 
-Password: `postgres` (solo sviluppo locale).
+Password: il valore di `POSTGRES_PASSWORD` da `jinbocho-infrastructure-v1/.env`
+(`change_me_local_dev` di default).
 
 ## Verifica
 
@@ -231,9 +178,20 @@ Password: `postgres` (solo sviluppo locale).
 curl http://localhost:8000/health   # {"status":"ok"}
 curl http://localhost:8001/health   # {"status":"ok"}
 curl http://localhost:8002/health   # {"status":"ok"}
+curl http://localhost:8003/health   # {"status":"ok"}  — solo edizione Pro
 ```
 
-### Test di un flusso completo
+### Smoke-test dell'intero stack
+
+`jinbocho-infrastructure-v1` include uno script che registra una famiglia di
+test ed esercita i principali endpoint tramite il gateway:
+
+```bash
+cd jinbocho-infrastructure-v1
+./scripts/validate-api.sh
+```
+
+### Test di un flusso completo manuale
 
 ```bash
 # 1. Registra una famiglia
@@ -254,7 +212,7 @@ curl -X POST http://localhost:8000/v1/auth/login \
 
 # 3. Crea una stanza
 TOKEN="il-tuo-access-token"
-curl -X POST http://localhost:8000/v1/locations/rooms \
+curl -X POST http://localhost:8000/v1/location/rooms \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $TOKEN" \
   -d '{"name":"Soggiorno"}'
@@ -263,9 +221,9 @@ curl -X POST http://localhost:8000/v1/locations/rooms \
 ## Arresto dell'ambiente
 
 ```bash
-docker compose stop        # ferma i container, conserva i dati
-docker compose down        # rimuove i container, conserva i volumi
-docker compose down -v     # rimuove tutto, database inclusi ⚠️
+docker compose -f docker/docker-compose.community.local.yml stop        # ferma i container, conserva i dati
+docker compose -f docker/docker-compose.community.local.yml down        # rimuove i container, conserva i volumi
+docker compose -f docker/docker-compose.community.local.yml down -v     # rimuove tutto, database inclusi ⚠️
 ```
 
 !!! danger
@@ -280,33 +238,34 @@ lsof -i :8000        # trova cosa sta usando la porta
 kill -9 <PID>        # libera la porta
 ```
 
-In alternativa, cambia la porta lato host in `docker-compose.yml` (es. `"8010:8000"`).
+In alternativa, cambia la porta lato host nel file compose che stai usando
+(es. `"8010:8000"`).
 
 ### Il servizio non si avvia
 
 ```bash
-docker compose logs auth-service         # leggi i messaggi di errore
-docker compose build --no-cache auth-service
-docker compose up -d auth-service
+docker compose -f docker/docker-compose.community.local.yml logs auth-service         # leggi i messaggi di errore
+docker compose -f docker/docker-compose.community.local.yml build --no-cache auth-service
+docker compose -f docker/docker-compose.community.local.yml up -d auth-service
 ```
 
 ### Connessione al database rifiutata
 
 ```bash
-docker compose ps    # verifica che i container postgres siano in esecuzione
-docker compose restart postgres_auth postgres_catalog
+docker compose -f docker/docker-compose.community.local.yml ps    # verifica che i container postgres siano in esecuzione
+docker compose -f docker/docker-compose.community.local.yml restart jinbocho-postgres-auth jinbocho-postgres-catalog
 ```
 
 ### Variabili d'ambiente non applicate
 
-I file `.env` vengono letti all'avvio del container. Dopo qualsiasi modifica:
+I file `envs/*.env` vengono letti all'avvio del container. Dopo qualsiasi modifica:
 
 ```bash
-docker compose restart auth-service
+docker compose -f docker/docker-compose.community.local.yml restart auth-service
 ```
 
 ## Prossimi passi
 
-- **Documentazione API**: `http://localhost:8001/docs` (auth) / `http://localhost:8002/docs` (catalog)
+- **Documentazione API**: `http://localhost:8001/docs` (auth) / `http://localhost:8002/docs` (catalog) / `http://localhost:8003/docs` (ai, solo Pro)
 - **Esegui i test**: `cd jinbocho-auth-v1 && pytest tests/ -v`
 - **Deploy in produzione**: Vedi **[Deploy in Produzione](07-production-deployment.md)**

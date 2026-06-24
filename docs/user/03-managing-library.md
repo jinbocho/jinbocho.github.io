@@ -94,6 +94,25 @@ For books with no ISBN (very old editions, handwritten notes, manuscripts) or wh
 
 ---
 
+## If a Book Already Exists in Your Family Library
+
+Whichever method you use, Jinbocho checks the whole family's library before
+adding a new book — not just your own books. If it finds a match by **ISBN**
+or by **title and author**, you'll see a dialog telling you:
+
+- Which existing book it matches
+- Who in the family already owns a copy
+- Where that copy is shelved
+
+This is just a heads-up, not a block. Owning two copies of the same book under
+different family members is common and fully supported — for example, you and
+your partner may each have bought your own copy. You can:
+
+- **Confirm** — add your copy anyway, as a separate book in the library
+- **Cancel** — go back without adding it, e.g. if you realise it's already yours
+
+---
+
 ## Editing a Book
 
 To change metadata or move a book to a different shelf:

@@ -21,6 +21,8 @@ to managing a family library.
 | 12 | [Language & Localization](12-localization.md) | Switch between English, Italian, Spanish, French |
 | 13 | [FAQ](13-faq.md) | 20+ common questions answered |
 | 14 | [Troubleshooting](14-troubleshooting.md) | Login issues, scanning problems, performance tips |
+| 15 | [Book Presentation](15-book-presentation.md) | AI-generated book summaries and presentation |
+| 16 | [Loans](16-loans.md) | Lend books to family or friends, due dates, the On Loan page |
 
 ---
 
@@ -45,6 +47,10 @@ to managing a family library.
 ### I want to invite a family member
 
 → [User Management](09-user-management.md) — roles, invites, and permissions
+
+### I want to lend a book to someone
+
+→ [Loans](16-loans.md) — track who has it, since when, and when it's due back
 
 ### Something isn't working
 

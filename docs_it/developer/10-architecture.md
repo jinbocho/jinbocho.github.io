@@ -19,25 +19,31 @@
 │  api-gateway  (FastAPI — Render Web Service, PUBBLICO)            │
 │                                                                  │
 │  Validazione JWT · CORS · Reverse proxy                         │
-└─────────┬─────────────────┬──────────────────────────────┘
-          │ HTTP interno    │ HTTP interno
-          ▼                 ▼
-┌──────────────────┐   ┌──────────────────┐
-│  auth-service    │   │  catalog-service  │
-│  (Privato)       │   │  (Privato)        │
-│                  │   │                   │
-│  famiglie        │   │  stanze           │
-│  utenti          │   │  librerie         │
-│  JWT             │   │  libri            │
-│  refresh token   │   │  ricerca ISBN     │
-└────────┬────────┘   └────────┬──────────┘
-         │                      │
-         ▼                      ▼
-   ┌──────────┐       ┌────────────┐
-   │ auth_db  │       │ catalog_db │
-   │ (Neon)   │       │ (Neon)     │
-   └──────────┘       └────────────┘
+│  route: /v1/auth /v1/users /v1/families /v1/catalog              │
+│         /v1/location /v1/ai                                     │
+└─────────┬─────────────────┬─────────────────┬──────────────────┘
+          │ HTTP interno    │ HTTP interno    │ HTTP interno
+          ▼                 ▼                 ▼
+┌──────────────────┐ ┌──────────────────┐ ┌──────────────────┐
+│  auth-service    │ │  catalog-service  │ │  ai-service       │
+│  (Privato)       │ │  (Privato)        │ │  (Privato, Pro)   │
+│                  │ │                   │ │                   │
+│  famiglie        │ │  stanze           │ │  suggerimenti tag │
+│  utenti          │ │  librerie         │ │  rilevamento dup. │
+│  JWT             │ │  libri / prestiti │ │  raccomandazioni  │
+│  refresh token   │ │  acquisizione ISBN│ │  generazione incipit│
+└────────┬────────┘ └────────┬─────────┘ └────────┬─────────┘
+         │                    │                     │
+         ▼                    ▼                     ▼
+   ┌──────────┐       ┌────────────┐       ┌──────────┐
+   │ auth_db  │       │ catalog_db │       │  ai_db   │
+   │ (Neon)   │       │ (Neon)     │       │ (Neon)   │
+   └──────────┘       └────────────┘       └──────────┘
 ```
+
+`ai-service` è presente solo nella **Pro edition** (vedi [07-production-deployment.md](07-production-deployment.md)); la Community edition funziona senza di esso e il gateway semplicemente non monta nessuna route `/v1/ai`.
+
+**Roadmap:** `jinbocho-auth-v2` (login passwordless con magic-link + MFA TOTP opzionale) esiste solo come scaffold — le entità di dominio e gli stub dei casi d'uso sono completi, ma i livelli infrastructure, API e persistenza non sono ancora implementati, quindi non è distribuito da nessuna parte. Il contratto JWT è progettato per essere identico a v1, quindi nessun altro servizio dovrà essere modificato quando verrà rilasciato.
 
 ## Bounded Context
 
@@ -63,6 +69,16 @@ Gestisce tutto ciò che riguarda **quali libri esistono e dove si trovano**:
 
 Questo servizio fonde intenzionalmente Posizione + Catalog + Acquisizione in un unico servizio per mantenere la creazione di un libro e l'assegnazione allo scaffale in un'unica transazione ACID.
 
+### Contesto AI (`ai-service` + `ai_db`, solo Pro edition)
+
+Gestisce funzionalità di intelligenza opzionali e non critiche, sovrapposte al catalog:
+- Suggerimenti di tag per un libro
+- Indizi di rilevamento di record duplicati
+- Raccomandazioni per famiglia
+- Presentazioni "incipit" del libro generate dall'AI
+
+Questo servizio non detiene mai i dati del catalog come fonte di verità — legge da catalog-service via HTTP e cachea/deriva i propri dati in `ai_db`. Può essere disabilitato completamente (Community edition) senza alcun impatto su auth o catalog.
+
 ### Contesto Gateway (`api-gateway`)
 
 Nessuna logica di dominio, nessun database. Agisce come:
@@ -76,8 +92,9 @@ Nessuna logica di dominio, nessun database. Agisce come:
 ```
 1. L'utente punta la fotocamera al codice a barre → il frontend decodifica l'ISBN tramite @zxing/browser
 
-2. Frontend → POST /v1/records/isbn-lookup?isbn=9788845292613
-   Il gateway valida il JWT, fa il proxy al catalog-service
+2. Frontend → GET /v1/catalog/ingestion/isbn/9788845292613
+   Il gateway valida il JWT, rimuove il prefisso /v1/catalog e fa il
+   proxy a /v1/ingestion/isbn/{isbn} del catalog-service
 
 3. Il catalog controlla la cache locale isbn_cache
    Cache miss → interroga Open Library → dati trovati → salva in cache
@@ -88,7 +105,7 @@ Nessuna logica di dominio, nessun database. Agisce come:
 5. L'utente seleziona la posizione (stanza → libreria → sezione → scaffale → posizione)
    e clicca Salva
 
-6. Frontend → POST /v1/books/
+6. Frontend → POST /v1/catalog/books/
    Body: { bibliographic_record_id, shelf_id, position, reading_status }
 
 7. Il catalog crea OwnedBook + aggiorna audit_log in una singola transazione

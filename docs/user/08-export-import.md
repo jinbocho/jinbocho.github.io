@@ -1,25 +1,38 @@
 # Export & Backup
 
-Back up your library or analyse your collection in a spreadsheet.
+Jinbocho gives you two separate tools, for two different jobs:
+
+| Tool | Where | What it's for |
+|------|-------|----------------|
+| **Export books (CSV/JSON)** | Settings → Export books, or the export menu on the Books page | A lightweight, books-only list for spreadsheets or quick analysis. **Not a restore format.** |
+| **Backup & restore** | Settings → Backup & restore | A complete, restorable snapshot of your whole family library — locations, books, loans, reading history and the member roster. Use it to move to a new database without losing anything. |
+
+This page covers both, plus how to restore from a backup.
 
 ---
 
-## Exporting Your Library
+## Exporting Your Library (CSV/JSON)
 
-Jinbocho supports two export formats:
+Jinbocho supports two lightweight export formats:
 
 | Format | Best for |
 |--------|----------|
 | **CSV** | Spreadsheets, Excel, Google Sheets, plain text editing |
-| **JSON** | Full backup, scripting, technical users |
+| **JSON** | Scripting, technical users, quick structured exports |
 
 ### How to Export
 
 1. Open **Settings** (gear icon in the sidebar)
-2. Under **Export Library**, choose your format: **CSV** or **JSON**
+2. Under **Export books (CSV/JSON)**, choose your format: **CSV** or **JSON**
 3. Click the download button — your browser saves the file immediately
 
 The export button is also available directly on the **Books** page via the export menu in the top-right corner.
+
+!!! note "Not a restore format"
+    This export only contains your owned books and where they're shelved. It does
+    not include loans, per-member reading history, or the family member roster,
+    and there is no matching "import CSV" feature. For anything you might need to
+    restore later, use **Backup & restore** below instead.
 
 ---
 
@@ -103,23 +116,54 @@ nested location objects.
 
 ---
 
-## Backing Up Your Library
+## Backup & Restore
 
-For a full backup, export **JSON** format. JSON preserves all data including
-location structure and timestamps. CSV is convenient for viewing but may
-lose some precision (e.g. timestamps rounded to dates).
+For a complete, restorable backup of your family library, use **Backup &
+restore** in Settings — not the CSV/JSON book export above.
 
-**Recommended backup schedule**: once a month, download a JSON export and
+### What's included
+
+A full backup contains everything:
+
+- The family and its member roster (names, emails, roles)
+- Rooms, bookcases, sections and shelves
+- Every owned book and its bibliographic record
+- Loans (active and past)
+- Per-member reading history ("reads")
+
+### How to back up
+
+1. Open **Settings** (gear icon in the sidebar)
+2. Under **Backup & restore**, click **Download full backup**
+3. Your browser downloads a single JSON file (`jinbocho-backup-YYYY-MM-DD.json`)
+
+**Recommended backup schedule**: once a month, download a full backup and
 keep it in a cloud storage folder (Google Drive, Dropbox, iCloud).
 
----
+### How to restore
 
-## Import (Coming Soon)
+1. Open **Settings** → **Backup & restore**
+2. Click **Restore from backup** and select a previously downloaded backup file
+3. Review the confirmation dialog: it shows the family name, when the backup
+   was exported, and counts of family members, rooms, books and loans it contains
+4. Click **Restore** to confirm
 
-Bulk importing books from a CSV or JSON file is not yet available in the
-current version. It is planned as a future feature.
+!!! tip "Restoring merges, it doesn't overwrite"
+    Restoring a backup merges it into your *current* library rather than
+    replacing it: rooms, bookcases, books and members already present are
+    recognized and reused, so nothing gets duplicated — even if you restore
+    the same file twice. This also makes it safe to use a backup to migrate
+    your library to a new Jinbocho instance.
 
-In the meantime, books can be added individually via:
+If a family member was removed after the backup was taken but is still
+referenced in it (e.g. they used to own or read a book), restoring recreates
+them with their original name and email so that history isn't lost.
+
+If the restore fails partway through, Jinbocho tells you which step failed
+(member roster or library data) so you know whether it's safe to simply try
+again.
+
+For adding individual books instead of restoring a backup, see:
 
 - **[ISBN Scanning](07-isbn-scanning.md)** — the fastest method for physical books
 - **[ISBN manual entry](03-managing-library.md#method-2-enter-an-isbn-manually)** — type or paste an ISBN

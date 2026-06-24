@@ -70,6 +70,38 @@ you're reading different books in different rooms.
 
 ---
 
+## Who Read This Book (Family Reads)
+
+The coloured **status** above is one value per book — it tells you whether
+*the book* is being read. But in a family library, more than one person can
+read the same copy, at different times. Jinbocho tracks that separately.
+
+On the book detail page, the **Read by** card lists every family member with
+a toggle:
+
+1. Open a book → scroll to **Read by**
+2. Click **Mark read** next to your name once you've finished it
+3. Your name now shows the date you marked it (e.g. *Carmelo · 2026-03-15*)
+4. Click **Mark unread** to undo it
+
+Each member's read is independent — two people can both mark the same copy
+as read, each with their own date. The book's overall status updates
+automatically:
+
+- The **first** person to mark a copy as read sets the book's status to
+  **Read** for everyone.
+- If you **unmark** the last remaining read, the status falls back to
+  **Want to Read**.
+
+### The "currently reading" badge
+
+When a book's status is **Reading**, the person who set it shows up as a
+small 📖 badge next to the status badge (e.g. *📖 Carmelo*). This is who is
+actively reading that specific copy right now — handy when several family
+members share one physical book and want to know who has the bookmark.
+
+---
+
 ## Reading History
 
 All status changes are recorded in the **audit log** on each book's detail page.
@@ -104,9 +136,26 @@ pie title My Library (example)
 | Books this year | Books marked "finished" in the current calendar year |
 | Average per month | Finished books / months since account created |
 
-!!! note "Family vs personal stats"
-    Stats are currently family-wide — they aggregate all copies across
-    all family members. Personal per-user stats may be added in a future release.
+### Per-member stats
+
+Below the family totals, a **Family members** card appears for each member,
+showing:
+
+| Field | Description |
+|-------|--------------|
+| Books read | Count of copies that member has marked as read (see [Family Reads](#who-read-this-book-family-reads) above) |
+| Books owned | Count of copies registered as owned by that member |
+| Favorite genre | The genre that appears most often among that member's read books |
+
+Each card links to a filtered list of that member's read or owned books.
+
+### Annual reading goals
+
+In **Settings → Profile**, every member can set an **Annual reading goal**
+(how many books they want to read this calendar year). If a goal is set, the
+Stats page shows a **Reading goals** section with a progress bar:
+`<books read this year> / <goal>` for each member who has one configured.
+Members without a goal don't appear in this section.
 
 ---
 

@@ -1,6 +1,20 @@
 # Production Deployment
 
-Jinbocho runs on **Render** (application services + frontend) and **Neon** (PostgreSQL databases). This combination gives you a fully operational stack at zero cost with the free tiers.
+Jinbocho ships two editions and two deployment paths:
+
+- **Community edition** — `auth` + `catalog` + `api-gateway` + frontend. Free.
+- **Pro edition** — adds the `ai-service` module (AI tagging, dedup, recommendations) and its own database. Requires an LLM provider key (or a local Ollama) and, for the self-hosted path, a Jinbocho Pro license to pull the private `ghcr.io/jinbocho/jinbocho-ai-v1` image.
+
+And two ways to run either edition in production:
+
+1. **Render + Neon** (this chapter, Steps 0-5 below) — managed PaaS, zero servers to maintain, free tier available. Deploy either by hand (click-ops, described below) or in one shot via the **Render Blueprint** (`render.yaml`) — see [Render Blueprint deploy](#render-blueprint-deploy-iac).
+2. **Self-hosted VPS** (Docker Compose + Caddy, automatic TLS) — see [Self-hosted VPS deploy](#self-hosted-vps-deploy). Lower long-term cost, you manage the box.
+
+All deployment tooling (compose files, env templates, scripts) lives in the sibling repo `jinbocho-infrastructure-v1` — this chapter's Render walkthrough and the VPS section both pull from it.
+
+## Render + Neon (manual walkthrough)
+
+This combination gives you a fully operational Community-edition stack at zero cost with the free tiers.
 
 ## Architecture on Render
 
@@ -223,3 +237,66 @@ To eliminate cold starts, upgrade to Render Starter ($7/month per service). The 
 
 !!! tip "Keep services in the same region"
     Render Private Services can only communicate within the same region. Always deploy auth, catalog, and gateway in the same region. Choose the Neon region closest to that Render region to minimize database latency.
+
+## Render Blueprint deploy (IaC)
+
+Instead of clicking through Steps 0-4 above by hand, you can deploy the whole Community stack in one pass with the Render Blueprint at `jinbocho-infrastructure-v1/render.yaml`:
+
+1. Fork/clone `jinbocho-auth-v1`, `jinbocho-catalog-v1`, `jinbocho-api-gateway-v1`, `jinbocho-fe` under your own GitHub account or org, and replace every `CHANGEME` placeholder in `render.yaml` with that account.
+2. Render Dashboard → **New + → Blueprint** → point it at your fork of `jinbocho-infrastructure-v1`.
+3. Render creates all four services in one go: `jinbocho-auth` and `jinbocho-catalog` as Private Services (`type: pserv`, not reachable from the internet — defense in depth), `jinbocho-api-gateway` as the only public Web Service, and `jinbocho-fe` as a static site.
+4. `JWT_SECRET_KEY`, `JWT_ALGORITHM`, `JWT_ISSUER`, `JWT_AUDIENCE` are defined once in the shared `jinbocho-jwt` env var group and injected into auth, catalog, and gateway — you only set `JWT_SECRET_KEY` once.
+5. Every `sync: false` variable (`DATABASE_URL` for auth/catalog, `GOOGLE_BOOKS_API_KEY`, `CORS_ORIGINS`, `VITE_API_BASE_URL`, the auth-service SMTP variables, `FRONTEND_BASE_URL`) is **not stored in git** — Render prompts you for each on first deploy.
+6. The same circular-dependency resolution as Step 4 above still applies: deploy once, then fill in `CORS_ORIGINS` (gateway) and `VITE_API_BASE_URL` (frontend) once you know each other's public URL, and redeploy those two services.
+7. Private Services (`pserv`) require a paid Render plan (~$7/mo each). To stay on the free tier at the cost of exposing auth/catalog publicly, change their `type` from `pserv` to `web` in your fork of `render.yaml` — they remain protected by JWT validation either way.
+
+The AI service block is present in `render.yaml` but commented out — it's Pro-edition scaffolding. To enable it: create an `ai_db` database on Neon, uncomment the block, set `OPENAI_API_KEY` (or point `LLM_BASE_URL`/`LLM_MODEL` at another OpenAI-compatible provider in the service's own env vars), and add `AI_SERVICE_URL=http://jinbocho-ai:8003` to the gateway's env vars.
+
+See `RENDER_DEPLOYMENT.md` in `jinbocho-infrastructure-v1` for the fully worked example with sample values.
+
+## Self-hosted VPS deploy
+
+`jinbocho-infrastructure-v1/scripts/setup-vps-community.sh` and `setup-vps-pro.sh` drive `docker/docker-compose.all.yml` end to end on a fresh Debian/Ubuntu VPS (Hetzner, Scaleway, DigitalOcean, ...): install Docker if missing, generate secrets, write every env file, build the frontend image, and bring up the full stack (Postgres × N + backends + gateway + frontend + Caddy reverse proxy with automatic Let's Encrypt TLS) in one run.
+
+```bash
+# Community edition — auth + catalog + gateway + frontend:
+sudo ./scripts/setup-vps-community.sh \
+  --domain library.example.com \
+  --email you@example.com \
+  --google-books-key AIza...
+
+# Pro edition — adds ai-service + its database; requires GHCR login because
+# ghcr.io/jinbocho/jinbocho-ai-v1 is a private image (Jinbocho Pro license):
+sudo ./scripts/setup-vps-pro.sh \
+  --domain library.example.com \
+  --email you@example.com \
+  --google-books-key AIza... \
+  --ghcr-user you --ghcr-token ghp_xxx
+```
+
+Useful flags on both scripts: `--smtp-user`/`--smtp-password`/`--email-from` to enable real outgoing email for invite/reset links (omit them and the service logs the link instead of sending it), `--frontend-base-url` to override the URL baked into emails, `--version` to pin a GHCR image tag instead of `latest`, `--enable-firewall` to configure `ufw` (22/80/443). Run either script with `--help` for the full list. Re-running is safe — existing secrets, env files, and the Caddyfile are kept unless you delete them first.
+
+For the Pro script, `--ghcr-token` must be a **classic** PAT with the `read:packages` scope (GHCR doesn't support fine-grained tokens for this yet) — mint it from a dedicated machine account, not your personal GitHub account.
+
+Once the stack is up, smoke-test it with:
+
+```bash
+./scripts/validate-api.sh
+```
+
+This registers a test family and exercises the main endpoints through the gateway at `http://localhost:8000` (or your domain).
+
+## Community vs Pro edition
+
+The only difference between editions is the `ai-service` module:
+
+| | Community | Pro |
+|---|---|---|
+| `auth`, `catalog`, `api-gateway`, frontend | ✅ | ✅ |
+| `ai-service` + `ai_db` | ❌ | ✅ |
+| Compose files | `docker-compose.community*.yml` | `docker-compose.pro*.yml` |
+| VPS installer | `setup-vps-community.sh` | `setup-vps-pro.sh` |
+| `ai-service` image | — | private (`ghcr.io/jinbocho/jinbocho-ai-v1`), needs a Pro license + GHCR login |
+| Gateway feature flag | `JINBOCHO_FEATURES=catalog,auth` | `JINBOCHO_FEATURES=catalog,auth,ai` |
+
+To switch a running Community deployment to Pro: add the `ai` module to `JINBOCHO_FEATURES` on the gateway, deploy `ai-service` (Render: uncomment the block in `render.yaml`; VPS: re-run with `setup-vps-pro.sh`, or set `COMPOSE_PROFILES=pro` if you're driving `docker-compose.all.yml` directly), and configure its LLM provider (`LLM_ENABLED=true` + `LLM_BASE_URL`/`LLM_MODEL`/`LLM_API_KEY` — OpenRouter, OpenAI, Gemini, and local Ollama all work as OpenAI-compatible endpoints). With `LLM_ENABLED=false` the AI features degrade gracefully in the UI instead of erroring.

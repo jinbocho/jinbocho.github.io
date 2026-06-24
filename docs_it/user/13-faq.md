@@ -108,8 +108,9 @@ Raccolta delle domande più comuni su Jinbocho.
     La scansione ISBN richiede HTTPS e un browser che supporti l'API `getUserMedia`.
 
 ??? question "C'è un'app nativa per iOS/Android?"
-    No. Jinbocho è una Progressive Web App (PWA) — funziona nel browser ma può essere
-    aggiunta all'homescreen del telefono per un'esperienza simile a un'app nativa.
+    No. Jinbocho è un'applicazione web — si usa nel browser del telefono. Puoi
+    aggiungere una scorciatoia alla schermata home dal menu del browser, ma non
+    è un'installazione vera e propria: il comportamento varia da browser a browser.
     Vedi [Uso su mobile](11-mobile.md) per le istruzioni.
 
 ??? question "Il codice sorgente è disponibile?"

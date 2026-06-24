@@ -1,110 +1,161 @@
 # Uso su mobile
 
-Jinbocho è ottimizzato per smartphone e tablet. La stessa app che usi sul desktop funziona nel browser del telefono — nessuna installazione richiesta.
+Jinbocho è un'applicazione web che funziona su qualsiasi smartphone o tablet moderno
+senza bisogno di installazione. Aprila nel browser del telefono e si adatta automaticamente allo schermo.
+
+---
+
+## Nessuna app da installare
+
+Jinbocho funziona nel browser. Su mobile, apri il browser che preferisci
+e vai all'URL di Jinbocho:
+
+- **iOS** — Safari, Chrome o Firefox
+- **Android** — Chrome, Firefox o Samsung Internet
+
+!!! tip "Aggiungi alla schermata Home"
+    Jinbocho è una normale web app — non esiste una PWA installabile (nessun
+    manifest dell'app, nessun supporto offline). Puoi comunque aggiungere una
+    scorciatoia alla schermata Home per un accesso rapido:
+
+    **iOS (Safari)**: tocca l'icona Condividi → **Aggiungi alla schermata Home** → **Aggiungi**
+
+    **Android (Chrome)**: tocca il menu → **Aggiungi a schermata Home** → **Aggiungi**
+
+    Questo crea una scorciatoia in stile segnalibro. Se si apre a schermo intero
+    o con la barra degli indirizzi del browser visibile dipende dal browser e dal
+    sistema operativo — non è garantito che sia priva di elementi del browser come
+    una vera app installata.
 
 ---
 
 ## Layout mobile
 
-Su schermi piccoli l'interfaccia si adatta automaticamente:
+Sotto il breakpoint desktop (768px), Jinbocho passa a un **layout mobile**:
+una sottile barra superiore sostituisce la sidebar completa, e la navigazione
+si sposta in un drawer scorrevole laterale.
 
 ```
-┌─────────────────────┐
-│  ≡  Jinbocho    🔍  │  ← Top bar con menu hamburger
-├─────────────────────┤
-│                     │
-│   Lista libri       │
-│   ┌───────────────┐ │
-│   │ 📗 Titolo     │ │
-│   │    Autore     │ │
-│   │    [stato ▼]  │ │
-│   └───────────────┘ │
-│                     │
-│   ┌───────────────┐ │
-│   │ 📘 Titolo     │ │
-│   └───────────────┘ │
-│                     │
-├─────────────────────┤
-│  🏠  📚  ⚙️  +     │  ← Tab bar in basso
-└─────────────────────┘
+┌─────────────────────────────┐
+│  ☰   Jinbocho          ⏻   │  ← Barra superiore (menu, logout)
+├─────────────────────────────┤
+│                             │
+│  [Scheda libro]              │
+│  The Name of the Wind       │
+│  Patrick Rothfuss · 🟡      │
+│                             │
+│  [Scheda libro]              │
+│  Il deserto dei Tartari     │
+│  Dino Buzzati · 🟢          │
+│                             │
+│  [Scheda libro]              │
+│  …                          │
+│                             │
+└─────────────────────────────┘
 ```
 
-### Navigazione mobile
-
-- **Hamburger menu** (≡) — apre la barra laterale con le posizioni
-- **Tab bar in basso** — accesso rapido a Home, Biblioteca, Impostazioni, Aggiungi
-- **Icona lente** (🔍) — apre la ricerca a tutto schermo
+Toccando `☰` si apre un drawer con la navigazione completa: Home, Libri,
+In Prestito, Posizioni, Statistiche, Utenti (solo admin) e Impostazioni —
+le stesse voci mostrate nella sidebar su desktop.
 
 ---
 
 ## Scansione ISBN su mobile
 
-La scansione ISBN è la funzionalità più usata su mobile — è letteralmente pensata per stare davanti alla libreria con il telefono in mano.
+Lo scanner di codici a barre funziona meglio su mobile perché le fotocamere
+degli smartphone hanno autofocus e una buona lente macro.
 
-### Come scansionare su mobile
+### Usare la fotocamera posteriore
 
-1. Tocca il pulsante **"+"** in basso a destra
-2. Tocca **"Scansiona ISBN"**
-3. Concedi il permesso fotocamera se richiesto
-4. Punta la **fotocamera posteriore** verso il codice a barre
+1. Tocca **Aggiungi libro** (pulsante `+`)
+2. Seleziona **Scansiona ISBN**
+3. Concedi l'accesso alla fotocamera quando richiesto
+4. Jinbocho usa automaticamente la **fotocamera posteriore** su mobile
+5. Punta la fotocamera verso il codice a barre
 
-!!! tip "Fotocamera posteriore"
-    Jinbocho seleziona automaticamente la fotocamera posteriore su mobile, che è
-    più precisa di quella anteriore per leggere i codici a barre.
+```
+             📱
+         ┌───────┐
+         │ 📷 ←──┼── fotocamera posteriore
+         │       │
+         │       │
+         └───────┘
+              │
+              ↓ (15–25 cm)
+    ══════════════════
+    ▐▌▐▌▐▌▐▌▐▌▐▌▐▌▐▌  ← codice a barre
+    ══════════════════
+```
 
-Vedi la guida completa in **[Scansione ISBN](07-isbn-scanning.md)**.
+- Tieni il telefono **sopra** il libro, non inclinato
+- Mantieni il codice a barre interamente nell'inquadratura
+- Tocca lo schermo per messa a fuoco se l'immagine è sfocata
 
----
-
-## Permessi mobile
-
-| Permesso | Perché serve | Dove dare il permesso |
-|----------|-----------|-----------------------|
-| **Fotocamera** | Scansione ISBN | Impostazioni → App browser → Fotocamera |
-
-Jinbocho non richiede altri permessi. Non accede a contatti, posizione GPS, galleria foto, o altro.
-
----
-
-## Browser supportati su mobile
-
-| Browser | iOS | Android | Note |
-|---------|-----|---------|------|
-| Safari | ✅ | — | Consigliato su iPhone/iPad |
-| Chrome | ✅ | ✅ | Consigliato su Android |
-| Firefox | ✅ | ✅ | Funziona bene |
-| Edge | ✅ | ✅ | Funziona bene |
-| Samsung Internet | — | ✅ | Funziona su Galaxy |
-
-!!! warning "Safari su iOS — permessi fotocamera"
-    Su iPhone/iPad, concedi il permesso fotocamera da:
-    **Impostazioni iPhone → Safari → Fotocamera → Consenti**
+Vedi **[Scansione ISBN](07-isbn-scanning.md)** per la guida completa.
 
 ---
 
-## Aggiungere all'homescreen (PWA)
+## Gesti touch
 
-Jinbocho può essere aggiunto come icona all'homescreen del tuo telefono, così si apre come un'app vera.
-
-=== "iPhone / iPad (Safari)"
-    1. Apri Jinbocho in Safari
-    2. Tocca il pulsante **Condividi** (quadrato con freccia su)
-    3. Scorri verso il basso e tocca **"Aggiungi alla schermata Home"**
-    4. Dai un nome (es. "Jinbocho") e tocca **"Aggiungi"**
-
-=== "Android (Chrome)"
-    1. Apri Jinbocho in Chrome
-    2. Tocca i **tre puntini** in alto a destra
-    3. Tocca **"Aggiungi a schermata Home"** o **"Installa app"**
-    4. Tocca **"Aggiungi"**
-
-Una volta aggiunto, l'icona Jinbocho appare nell'homescreen e l'app si apre a schermo intero.
+| Gesto | Azione |
+|-------|--------|
+| Tocca una scheda libro | Apre il dettaglio del libro |
+| Tocca il badge di stato | Cambia lo stato di lettura |
+| Tocca `☰` | Apre il drawer di navigazione |
 
 ---
 
-## Consigli per l'uso mobile
+## Selettore posizione su mobile
 
-- **Rotazione**: usa il telefono in verticale per la lista libri, in orizzontale per i dettagli e le tabelle
-- **Pinch to zoom**: supportato nelle pagine di dettaglio se il testo è troppo piccolo
-- **Ricerca vocale**: puoi usare la dettatura della tastiera nella barra di ricerca
-- **Tab browser**: puoi tenere Jinbocho aperto in un tab fisso mentre usi altre app
+Il selettore di posizione è un insieme di quattro menu a cascata — Stanza, Libreria,
+Sezione, Scaffale — che su schermi stretti si impilano in un'unica colonna:
+
+1. Tocca **Aggiungi libro** → **Scansiona** o **Manuale**
+2. Nel form, tocca il menu **Stanza** e selezionane una
+3. Il menu **Libreria** si sblocca e si popola con le librerie di quella stanza
+4. Ripeti per **Sezione** e **Scaffale** — ognuno si sblocca quando il livello superiore è scelto
+5. Lascia un livello non selezionato se non vuoi essere così specifico
+
+---
+
+## Suggerimenti per le prestazioni su mobile
+
+### Caricamento lento alla prima visita
+
+Jinbocho usa **TanStack Query** per mettere in cache le risposte API in memoria.
+La prima volta che apri una pagina, viene caricata dal server.
+Le visite successive nella stessa sessione sono istantanee (cache).
+
+Se l'app sembra lenta alla prima apertura, potrebbe dipendere dai
+cold start del piano gratuito di Render. Vedi **[FAQ → Tecnico](13-faq.md#tecnico)**.
+
+### Dispositivi con poca memoria
+
+Se l'app diventa poco reattiva dopo un uso prolungato, chiudi e riapri la scheda del browser.
+Questo pulisce la cache in memoria e libera RAM.
+
+---
+
+## Supporto offline
+
+Jinbocho **richiede attualmente una connessione internet** per funzionare.
+Non esiste una modalità offline — tutti i dati sono memorizzati sul server.
+
+Se perdi la connettività mentre stai scansionando:
+
+- La fotocamera continua a decodificare il codice a barre
+- La ricerca dei metadati tramite ISBN fallisce (nessun internet → nessun metadato)
+- Il libro non può essere salvato finché la connessione non viene ripristinata
+
+---
+
+## Breakpoint responsive
+
+La navigazione e la griglia dei libri cambiano in modo indipendente, a larghezze diverse:
+
+| Larghezza schermo | Navigazione | Colonne griglia libri |
+|-------------|------------|--------------------|
+| < 640 px | Barra superiore + drawer (`☰`) | 1 colonna |
+| 640 – 767 px | Barra superiore + drawer (`☰`) | 2 colonne |
+| 768 – 1023 px | Sidebar completa | 2 colonne |
+| ≥ 1024 px | Sidebar completa | 4 colonne |

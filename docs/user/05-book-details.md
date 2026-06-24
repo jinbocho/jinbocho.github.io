@@ -59,6 +59,36 @@ From any book list or search result, click the book card. The detail page shows:
 
 ---
 
+## Your Copy's Own Attributes
+
+Beyond location and reading status, each owned copy carries its own details —
+separate from the bibliographic record, so they don't affect other family
+members' copies of the same book:
+
+| Field | What it's for |
+|-------|----------------|
+| **Tags** | Free-form labels you choose (e.g. "signed", "to lend", "favourite") — shown as badges on the detail page |
+| **Condition** | New, Good, Fair, or Poor |
+| **Source** | Purchased, Gift, Borrowed, or Other |
+| **Purchase date** and **price** | Optional, for your own records |
+| **Owner** | Which family member this physical copy belongs to |
+| **Notes** | Free-text notes about this specific copy |
+
+To edit them: open the book detail page → **Edit** → see the **"This copy"**
+section of the edit form (the fields above the shared book details).
+
+### Who's Reading It Right Now
+
+If a copy's status is **Reading**, the detail page shows a 📖 badge next to
+the status with the name of the family member currently reading it. This is
+separate from the per-member read history — see
+**[Reading Progress → Who Read This Book](10-reading-progress.md#who-read-this-book-family-reads)**.
+
+If the copy is lent to someone outside the family, a 📤 badge shows who has
+it on loan — see **[Loans](16-loans.md)**.
+
+---
+
 ## Reading Status
 
 Each copy has one of three reading statuses:

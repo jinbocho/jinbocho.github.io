@@ -160,7 +160,7 @@ your family members when editing book metadata.
 
 If none of the above solves your problem:
 
-1. Check if the issue is known: [GitHub Issues](https://github.com/carmelolagamba/workspace-jinbocho/issues)
+1. Check if the issue is known
 2. Open a new issue with:
    - What you tried to do
    - What happened instead

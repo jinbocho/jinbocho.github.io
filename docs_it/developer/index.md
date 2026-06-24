@@ -8,7 +8,7 @@ Guida completa per sviluppatori e ingegneri DevOps che vogliono installare, dist
 |---|---------|----------|
 | 1 | [Prerequisiti](01-prerequisites.md) | Docker, Python 3.12, Node.js 18, chiavi API |
 | 2 | [Sviluppo locale](02-local-development.md) | Docker Compose, porte, variabili d'ambiente, verifica |
-| 3 | [Servizi backend](03-backend-services.md) | auth, catalog, gateway — endpoint, env var, test |
+| 3 | [Servizi backend](03-backend-services.md) | auth, catalog, gateway, ai (opzionale) — endpoint, env var, test |
 | 4 | [Frontend](04-frontend.md) | Setup React, pattern TanStack Query, gotcha critici |
 | 5 | [Database e migrazioni](05-database-migrations.md) | Alembic, schema PostgreSQL, reset locale |
 | 6 | [CI/CD](06-cicd.md) | Workflow GitHub Actions pianificati per tutti i servizi |

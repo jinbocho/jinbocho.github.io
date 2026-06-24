@@ -15,12 +15,12 @@ Ogni servizio (Web Service, Private Service, Static Site) ha una scheda **Logs**
 Dopo un deploy, controlla i log per queste righe che confermano un avvio sano:
 
 ```
-# auth-service e catalog-service:
+# auth-service, catalog-service e ai-service (ognuno ha il proprio database):
 INFO  [alembic] Running upgrade -> <revision>, <description>
 INFO  [alembic] Done.
 INFO:     Application startup complete.
 
-# api-gateway:
+# api-gateway (nessun database):
 INFO:     Application startup complete.
 
 # Qualsiasi servizio — segnale negativo:
@@ -42,6 +42,7 @@ curl https://jinbocho-api-gateway.onrender.com/health
 curl http://localhost:8000/health   # gateway
 curl http://localhost:8001/health   # auth
 curl http://localhost:8002/health   # catalog
+curl http://localhost:8003/health   # ai (servizio opzionale)
 ```
 
 Risposta attesa: `{"status": "ok"}`
