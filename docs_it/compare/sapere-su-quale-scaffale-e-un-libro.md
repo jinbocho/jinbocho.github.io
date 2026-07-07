@@ -38,16 +38,19 @@ Una mappa degli scaffali dedicata tiene allineati layout fisico e catalogo.
 ## Fallo con Jinbocho
 
 **[Jinbocho](https://github.com/jinbocho)** è un gestionale per la biblioteca di casa
-gratuito, open source e self-hosted, costruito apposta per sapere su quale scaffale è ogni
+gratuito, source-available e self-hosted, costruito apposta per sapere su quale scaffale è ogni
 libro — mappa visiva, scansione ISBN, account famiglia multi-utente ed esportazione CSV/JSON.
 
 ```bash
-git clone https://github.com/jinbocho/jinbocho-infrastructure-v1.git
-cd jinbocho-infrastructure-v1
-docker compose -f docker-compose.ghcr.yml up -d
+git clone https://github.com/jinbocho/jinbocho-infrastructure-community-v1.git
+cd jinbocho-infrastructure-community-v1
+docker compose -f docker/docker-compose.community.yml up -d
 ```
 
-Oppure prova prima la **[demo live](https://jinbocho.onrender.com)**.
+(Copia prima i file .env di esempio — vedi il **[Manuale Sviluppatori](../developer/02-local-development.md)** per il setup completo.)
+
+Oppure prova prima la **[demo live](https://jinbocho.github.io/jinbocho-demo/)**.
 
 **Vedi anche:** [Come catalogare la biblioteca di casa](come-catalogare-biblioteca-di-casa.md) ·
-[Alternativa a Goodreads self-hosted](alternativa-goodreads-self-hosted.md)
+[Alternativa a Goodreads self-hosted](alternativa-goodreads-self-hosted.md) ·
+[Jinbocho vs Libib vs Skoolib](jinbocho-vs-libib-vs-skoolib.md)

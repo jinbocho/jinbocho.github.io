@@ -176,7 +176,7 @@ postgresql+asyncpg://...?ssl=require
 # Schedule: */10 * * * *
 ```
 
-4. **Risveglia tutto a richiesta** — `jinbocho-infrastructure-v1` include una GitHub Action `wake-render.yml` (trigger solo `workflow_dispatch`, manuale — **non** è schedulata) che pinga in sequenza frontend, gateway, auth, catalog e ai-service e attende che tutti rispondano `200`. Eseguila dalla scheda **Actions** poco prima di una demo o di una sessione di test manuale, invece di aspettare 4-5 cold start separati uno alla volta. È uno strumento di comodità, non un sostituto dell'opzione 3 se vuoi che i servizi non si addormentino mai.
+4. **Risveglia tutto a richiesta** — `jinbocho-infrastructure-community-v1` include una GitHub Action `wake-render.yml` (trigger solo `workflow_dispatch`, manuale — **non** è schedulata) che pinga in parallelo frontend, gateway, auth e catalog e attende che tutti rispondano `200`. Eseguila dalla scheda **Actions** poco prima di una demo o di una sessione di test manuale, invece di aspettare 3-4 cold start separati uno alla volta. È uno strumento di comodità, non un sostituto dell'opzione 3 se vuoi che i servizi non si addormentino mai.
 
 ---
 

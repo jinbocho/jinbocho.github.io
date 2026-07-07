@@ -1,6 +1,6 @@
-# Lingua e localizzazione
+# Lingua e aspetto
 
-Jinbocho supporta più lingue sia nell'interfaccia che nella gestione della biblioteca.
+Jinbocho supporta più lingue sia nell'interfaccia che nella gestione della biblioteca, e permette a ogni membro di scegliere il proprio tema visivo.
 
 ---
 
@@ -25,12 +25,26 @@ La lingua si cambia dalle impostazioni del profilo:
 4. Seleziona la lingua dal menu
 5. La pagina si aggiorna immediatamente
 
-La preferenza di lingua viene salvata nel tuo profilo e sincronizzata su tutti i dispositivi dove sei connesso.
+La preferenza di lingua viene salvata sia in locale (nel browser, così vale
+anche prima del login) sia nel tuo profilo sul server, e sincronizzata su
+tutti i dispositivi dove accedi.
 
 !!! info "Preferenza personale"
-    La lingua è una preferenza personale — ogni membro della famiglia può usare
-    Jinbocho nella propria lingua. Il contenuto (titoli, descrizioni dei libri) non cambia —
-    solo l'interfaccia.
+    La lingua è una preferenza personale — ogni membro della biblioteca può
+    usare Jinbocho nella propria lingua. Il contenuto (titoli, descrizioni dei
+    libri) non cambia — solo l'interfaccia.
+
+---
+
+## Tema e aspetto
+
+Sotto **Impostazioni → Aspetto**, ogni membro può scegliere in modo
+indipendente:
+
+- **Tema colore** — tre palette: **Pergamena**, **Akabeni** e **Sumi**
+- **Modalità** — **Chiara**, **Scura** o **Sistema** (segue le impostazioni del dispositivo/browser)
+
+Come la lingua, la scelta del tema è personale e ti segue su tutti i dispositivi.
 
 ---
 
@@ -81,6 +95,6 @@ Jinbocho usa i formati locali automaticamente in base alla lingua selezionata:
 
 ## Contribuire a una traduzione
 
-Jinbocho è open source (licenza CC BY-NC-ND 4.0). Se vuoi migliorare la traduzione in una lingua esistente o aggiungerne una nuova, consulta le istruzioni nel repository GitHub.
+Jinbocho è source-available (Jinbocho Source-Available License). Se vuoi migliorare la traduzione in una lingua esistente o aggiungerne una nuova, consulta le istruzioni nel repository GitHub.
 
 Le traduzioni si trovano nei file JSON nella cartella `jinbocho-fe/src/features/i18n/locales/`.

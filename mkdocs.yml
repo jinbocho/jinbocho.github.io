@@ -14,15 +14,13 @@ theme:
     text: Inter
     code: JetBrains Mono
   palette:
-    - media: "(prefers-color-scheme: light)"
-      scheme: default
+    - scheme: default
       primary: custom
       accent: custom
       toggle:
         icon: material/weather-night
         name: Switch to dark mode
-    - media: "(prefers-color-scheme: dark)"
-      scheme: slate
+    - scheme: slate
       primary: custom
       accent: custom
       toggle:
@@ -37,7 +35,6 @@ theme:
     - search.suggest
     - search.highlight
     - content.code.copy
-    - content.action.edit
     - toc.follow
 
 nav:
@@ -46,6 +43,7 @@ nav:
       - Self-hosted Goodreads alternative: compare/goodreads-self-hosted-alternative.md
       - Catalog your home library: compare/catalog-your-home-library.md
       - Track which shelf a book is on: compare/track-which-shelf-a-book-is-on.md
+      - Jinbocho vs Libib vs Skoolib: compare/jinbocho-vs-libib-vs-skoolib.md
   - Developer Manual:
       - Overview: developer/index.md
       - Prerequisites: developer/01-prerequisites.md
@@ -72,8 +70,9 @@ nav:
       - User Management: user/09-user-management.md
       - Reading Progress: user/10-reading-progress.md
       - Loans: user/16-loans.md
+      - Wishlist: user/17-wishlist.md
       - Mobile Experience: user/11-mobile.md
-      - Language & Localization: user/12-localization.md
+      - Language & Appearance: user/12-localization.md
       - FAQ: user/13-faq.md
       - Troubleshooting: user/14-troubleshooting.md
   - Managed Installation: managed-install.md

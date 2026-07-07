@@ -134,6 +134,7 @@
       font-size: 14px;
       color: var(--ink-soft);
       margin-bottom: 24px;
+      min-height: 3.3em; /* reserves 2 lines so cards stay aligned regardless of translation length */
     }
     .plan-price {
       font-size: 40px;

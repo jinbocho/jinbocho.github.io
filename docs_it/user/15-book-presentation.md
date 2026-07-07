@@ -1,7 +1,8 @@
-# Presentazione del libro
+# Presentazione del libro e AI
 
 Ogni libro può mostrare una breve **presentazione** — poche righe senza spoiler che ti aiutano
 a decidere se iniziare a leggerlo. La trovi nella pagina di dettaglio del libro, subito sotto i metadati.
+Questa pagina copre anche i **Consigli AI**, una funzione separata che suggerisce cosa leggere dopo.
 
 ---
 
@@ -35,7 +36,7 @@ presentazione dalla descrizione editoriale gratuita — senza che tu debba fare 
 
 ## Generare con l'AI
 
-Se sei **Amministratore** o **Editor** e l'AI è attiva per la tua biblioteca:
+Se sei **Admin** o **Editor** e l'AI è attiva per la tua biblioteca:
 
 1. Apri la pagina di dettaglio del libro.
 2. Nella scheda **Presentazione**, premi **Genera con AI**.
@@ -62,11 +63,40 @@ Utile quando la descrizione editoriale manca, è troppo lunga o è nella lingua 
 
 ## Chi può fare cosa
 
-| Azione | Lettore | Editor | Amministratore |
+| Azione | Viewer | Editor | Admin |
 |--------|:-------:|:------:|:--------------:|
 | Leggere la presentazione | ✅ | ✅ | ✅ |
 | Generare con l'AI | — | ✅ | ✅ |
 | Modificare a mano | — | ✅ | ✅ |
+
+---
+
+## Consigli AI
+
+Se l'AI è attiva per la tua biblioteca, Jinbocho può suggerire libri da leggere
+dopo, calibrati su di te personalmente invece che sull'intera biblioteca.
+
+### Come vengono costruiti i suggerimenti
+
+I consigli combinano:
+
+- Il tuo **genere preferito** (ricavato dai libri che hai segnato come letti)
+- Le tue **letture recenti**
+- Il resto del **catalogo** che non hai ancora letto
+
+Il modello AI usa questi elementi per proporre titoli già nella tua
+biblioteca (o, a seconda della configurazione, titoli da aggiungere) che si
+adattano ai tuoi gusti di lettura.
+
+### Ottenere i consigli
+
+1. Apri la sezione **Consigli** (barra laterale o dashboard, a seconda della tua istanza)
+2. Jinbocho genera una breve lista di suggerimenti con una motivazione per ciascuno
+3. I consigli si aggiornano man mano che cambia la tua cronologia di lettura
+
+!!! info "Funzione opzionale"
+    Come la Presentazione del libro, richiede che la tua biblioteca abbia un
+    provider AI configurato. Se non lo è, la sezione Consigli semplicemente non offre suggerimenti.
 
 ---
 

@@ -8,15 +8,15 @@ Solutions to the most common issues users encounter.
 
 ### I forgot my password
 
-Currently, Jinbocho does not have an automated password-reset email flow.
-Ask your family **Admin** to:
+Use the self-service reset flow: on the login screen, click **"Forgot
+Password?"**, enter your email, and follow the link sent to you. See
+**[Authentication → Password Reset](02-authentication.md#password-reset)**
+for the full walkthrough.
 
-1. Go to **Settings → Users**
-2. Find your account
-3. Click **Reset Password** and share the temporary password with you
-
-If you are the Admin and have no other admin in the family, contact the person
-who deployed Jinbocho to reset the password directly in the database.
+If the reset email never arrives and you're on a self-hosted instance, it's
+likely that whoever manages it hasn't configured an email provider (SMTP) —
+reset links are written to the auth-service logs instead in that case. Ask
+them to check the logs, or to configure SMTP.
 
 ---
 
@@ -79,7 +79,7 @@ This means the ISBN lookup returned partial metadata. Open the book → **Edit**
 ### A book disappeared from my library
 
 First, check the search bar (someone may have moved it to a different shelf).
-If you cannot find it with search, it may have been deleted by another family member.
+If you cannot find it with search, it may have been deleted by another library member.
 
 Check the audit log on a related book from the same shelf — it may show the deletion.
 Deleted books cannot be recovered.
@@ -102,7 +102,7 @@ To quickly move all books from one location to another:
 
 ### A book is showing in the wrong location
 
-The book's location was probably changed by another family member.
+The book's location was probably changed by another library member.
 Check the audit log on the book detail page to see who moved it and when.
 
 ---
@@ -149,10 +149,10 @@ If it still doesn't appear, log out and back in to force a full data reload.
 
 ---
 
-### Two family members edited the same book at the same time
+### Two library members edited the same book at the same time
 
 The **last save wins**. There is no conflict resolution. Coordinate with
-your family members when editing book metadata.
+other library members when editing book metadata.
 
 ---
 

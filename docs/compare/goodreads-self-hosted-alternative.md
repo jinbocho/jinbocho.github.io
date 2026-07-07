@@ -1,6 +1,6 @@
 ---
 title: A self-hosted Goodreads alternative for your physical library
-description: Jinbocho is a free, open-source, self-hosted alternative to Goodreads and Libib that also maps which shelf each physical book is on.
+description: Jinbocho is a free, source-available, self-hosted alternative to Goodreads and Libib that also maps which shelf each physical book is on.
 ---
 
 # A self-hosted Goodreads alternative
@@ -10,7 +10,7 @@ on someone else's servers, it's built around a social reading feed, and it has n
 idea where your physical books actually are. If you want to **own your data** and
 **catalog the books on your shelves**, you need a self-hosted alternative.
 
-**[Jinbocho](https://github.com/jinbocho)** is a free, open-source (CC BY-NC-ND 4.0) home
+**[Jinbocho](https://github.com/jinbocho)** is a free, source-available (Jinbocho Source-Available License) home
 library manager you run yourself.
 
 ## How Jinbocho compares
@@ -22,7 +22,7 @@ library manager you run yourself.
 | **Which shelf a book is on** | ❌ | ❌ | **✅** |
 | Self-hosted / you own the data | ❌ | ❌ | **✅** |
 | Multi-user family library | ❌ | partial | **✅** |
-| Open source | ❌ | ❌ | **✅** |
+| Source-available | ❌ | ❌ | **✅** |
 | Export your whole catalog (CSV/JSON) | limited | ✅ | ✅ |
 
 ## Why self-host your reading catalog?
@@ -40,12 +40,15 @@ it to its exact spot. Searching a title tells you the room *and* the shelf.
 ## Try it in one command
 
 ```bash
-git clone https://github.com/jinbocho/jinbocho-infrastructure-v1.git
-cd jinbocho-infrastructure-v1
-docker compose -f docker-compose.ghcr.yml up -d
+git clone https://github.com/jinbocho/jinbocho-infrastructure-community-v1.git
+cd jinbocho-infrastructure-community-v1
+docker compose -f docker/docker-compose.community.yml up -d
 ```
 
-Or click around the **[live demo](https://jinbocho.onrender.com)** first.
+(Copy the example env files first — see the **[Developer Manual](../developer/02-local-development.md)** for the full setup.)
+
+Or click around the **[live demo](https://jinbocho.github.io/jinbocho-demo/)** first.
 
 **See also:** [How to catalog your home library](catalog-your-home-library.md) ·
-[Track which shelf a book is on](track-which-shelf-a-book-is-on.md)
+[Track which shelf a book is on](track-which-shelf-a-book-is-on.md) ·
+[Jinbocho vs Libib vs Skoolib](jinbocho-vs-libib-vs-skoolib.md)

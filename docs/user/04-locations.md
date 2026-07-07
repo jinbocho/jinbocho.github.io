@@ -103,6 +103,13 @@ Shelf 2 — Living Room › Billy › Upper section › Shelf 2
     Positions don't have to be consecutive. Leaving position 4 empty means
     there's a physical gap on your shelf (a book lent out, for instance).
 
+!!! tip "Cataloging or checking a whole shelf at once"
+    From the **Bookcase Map**, each shelf has **Scan** and **Audit** buttons:
+    Scan photographs the shelf and bulk-adds every book AI recognises, already
+    positioned; Audit compares a photo against what's already catalogued there
+    and flags anything missing or misfiled. See
+    **[Shelf Scan & Shelf Audit](07-isbn-scanning.md#shelf-scan-photograph-a-whole-shelf)**.
+
 ---
 
 ## Editing and Renaming Locations

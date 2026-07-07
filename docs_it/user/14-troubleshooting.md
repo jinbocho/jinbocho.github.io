@@ -16,7 +16,7 @@ flowchart TD
     D -- No --> E[Riprova con l'email giusta]
     D -- Sì --> F{Account attivato?}
     F -- No --> G[Controlla l'email di conferma]
-    F -- Sì --> H[Contatta l'admin della famiglia]
+    F -- Sì --> H[Contatta l'admin della biblioteca]
 ```
 
 - Verifica che non ci siano spazi prima o dopo l'email/password

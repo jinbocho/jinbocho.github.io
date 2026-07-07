@@ -1,6 +1,6 @@
 ---
 title: Un'alternativa a Goodreads self-hosted per la tua biblioteca fisica
-description: Jinbocho è un'alternativa a Goodreads e Libib gratuita, open source e self-hosted, che in più mappa su quale scaffale si trova ogni libro fisico.
+description: Jinbocho è un'alternativa a Goodreads e Libib gratuita, source-available e self-hosted, che in più mappa su quale scaffale si trova ogni libro fisico.
 ---
 
 # Un'alternativa a Goodreads self-hosted
@@ -11,7 +11,7 @@ siano i tuoi libri fisici. Se vuoi **possedere i tuoi dati** e **catalogare i li
 scaffali**, ti serve un'alternativa self-hosted.
 
 **[Jinbocho](https://github.com/jinbocho)** è un gestionale per la biblioteca di casa
-gratuito e open source (CC BY-NC-ND 4.0) che gestisci tu.
+gratuito e source-available (Jinbocho Source-Available License) che gestisci tu.
 
 ## Come si confronta Jinbocho
 
@@ -22,7 +22,7 @@ gratuito e open source (CC BY-NC-ND 4.0) che gestisci tu.
 | **Su quale scaffale è un libro** | ❌ | ❌ | **✅** |
 | Self-hosted / dati tuoi | ❌ | ❌ | **✅** |
 | Biblioteca di famiglia multi-utente | ❌ | parziale | **✅** |
-| Open source | ❌ | ❌ | **✅** |
+| Source-available | ❌ | ❌ | **✅** |
 | Esporta tutto il catalogo (CSV/JSON) | limitato | ✅ | ✅ |
 
 ## Perché self-hostare il catalogo di lettura?
@@ -41,12 +41,15 @@ lo scaffale.
 ## Provala con un comando
 
 ```bash
-git clone https://github.com/jinbocho/jinbocho-infrastructure-v1.git
-cd jinbocho-infrastructure-v1
-docker compose -f docker-compose.ghcr.yml up -d
+git clone https://github.com/jinbocho/jinbocho-infrastructure-community-v1.git
+cd jinbocho-infrastructure-community-v1
+docker compose -f docker/docker-compose.community.yml up -d
 ```
 
-Oppure dai un'occhiata prima alla **[demo live](https://jinbocho.onrender.com)**.
+(Copia prima i file .env di esempio — vedi il **[Manuale Sviluppatori](../developer/02-local-development.md)** per il setup completo.)
+
+Oppure dai un'occhiata prima alla **[demo live](https://jinbocho.github.io/jinbocho-demo/)**.
 
 **Vedi anche:** [Come catalogare la biblioteca di casa](come-catalogare-biblioteca-di-casa.md) ·
-[Sapere su quale scaffale è un libro](sapere-su-quale-scaffale-e-un-libro.md)
+[Sapere su quale scaffale è un libro](sapere-su-quale-scaffale-e-un-libro.md) ·
+[Jinbocho vs Libib vs Skoolib](jinbocho-vs-libib-vs-skoolib.md)

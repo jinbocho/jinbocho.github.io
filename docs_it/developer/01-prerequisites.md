@@ -135,12 +135,6 @@ Per la ricerca ISBN avanzata, considera di ottenere:
 - **Come ottenerla**: https://developers.google.com/books/docs/v1/using#APIKey
 - **Quando serve**: imposta `GOOGLE_BOOKS_API_KEY` nel file `.env` del catalog-service
 
-### LLM API Key (per ai-service)
-- **Perché**: alimenta l'`ai-service` opzionale (presentazione/incipit dei libri, suggerimenti di tag, indizi di duplicati, raccomandazioni). Il servizio è **disattivato di default** — senza chiave continua a funzionare e gli endpoint AI restituiscono risultati vuoti, quindi il resto della piattaforma funziona invariato.
-- **Costo**: livello gratuito disponibile (es. Groq)
-- **Provider**: qualsiasi endpoint compatibile OpenAI — Groq, OpenAI, Google Gemini, o un'installazione locale di Ollama
-- **Quando serve**: imposta `LLM_ENABLED=true` e `LLM_API_KEY` nel file `.env` dell'ai-service (vedi `jinbocho-ai-v1/README.md`)
-
 ## Account cloud (solo produzione)
 
 Per il deploy su Render + Neon:
@@ -164,16 +158,19 @@ Crea una cartella di lavoro e clona tutti i repository Jinbocho dall'organizzazi
 ```bash
 mkdir -p ~/workspace/jinbocho && cd ~/workspace/jinbocho
 
-# Clona i repository pubblici Jinbocho
+# Repository di orchestrazione (Docker Compose, template env, script di deploy) —
+# clonalo per primo: i repository dei servizi sotto si aspettano di trovarlo allo stesso livello
+git clone https://github.com/jinbocho/jinbocho-infrastructure-community-v1.git
+
+# Clona i repository dei servizi Jinbocho
 git clone https://github.com/jinbocho/jinbocho-auth-v1.git
 git clone https://github.com/jinbocho/jinbocho-catalog-v1.git
 git clone https://github.com/jinbocho/jinbocho-api-gateway-v1.git
-git clone https://github.com/jinbocho/jinbocho-ai-v1.git   # opzionale: funzionalità AI, disattivate di default
 git clone https://github.com/jinbocho/jinbocho-fe.git
 
 # Verifica che tutti i servizi siano presenti
 ls | grep jinbocho
-# Atteso: jinbocho-auth-v1  jinbocho-catalog-v1  jinbocho-api-gateway-v1  jinbocho-ai-v1  jinbocho-fe
+# Atteso: jinbocho-infrastructure-community-v1  jinbocho-auth-v1  jinbocho-catalog-v1  jinbocho-api-gateway-v1  jinbocho-fe
 ```
 
 Tutti i repository si trovano nell'organizzazione GitHub `jinbocho`: https://github.com/jinbocho

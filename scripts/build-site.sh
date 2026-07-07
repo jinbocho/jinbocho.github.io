@@ -33,6 +33,7 @@ echo ""
 # Step 4: Copy shared CSS/JS assets used by the landing and pricing pages
 echo "🎨 Step 4: Deploying site assets (css/js)..."
 mkdir -p site/assets
+rm -rf site/assets/css site/assets/js
 cp -R assets/css site/assets/css
 cp -R assets/js  site/assets/js
 echo "✅ Assets deployed → site/assets/"

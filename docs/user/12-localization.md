@@ -1,7 +1,8 @@
-# Language & Localization
+# Language & Appearance
 
-Jinbocho is fully translated into four languages. Each family member can
-use the app in their preferred language.
+Jinbocho is fully translated into four languages, and lets every member choose
+their own visual theme. Both are personal preferences — they don't affect what
+other members see.
 
 ---
 
@@ -57,6 +58,18 @@ When you log in on a new device, the app uses your saved language preference aut
 
 ---
 
+## Theme & Appearance
+
+Under **Settings → Appearance**, each member can independently choose:
+
+- **Color theme** — three named palettes: **Pergamena**, **Akabeni**, and **Sumi**
+- **Mode** — **Light**, **Dark**, or **System** (follows your device/browser setting)
+
+Like your language, your theme choice is personal to your account and follows
+you across devices.
+
+---
+
 ## Form Validation Messages
 
 Validation messages (for example, "Title is required" or "Invalid email") are
@@ -92,9 +105,9 @@ also translated. They appear in the same language as the interface.
 
 ---
 
-## Mixed-Language Families
+## Mixed-Language Libraries
 
-Each family member chooses their own language independently.
+Each member chooses their own language independently.
 The library data (book titles, authors) is **not** translated —
 it reflects whatever was stored when the book was added
 (usually the language of the book itself).

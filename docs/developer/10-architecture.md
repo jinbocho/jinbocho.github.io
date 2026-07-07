@@ -20,28 +20,26 @@
 │                                                                  │
 │  JWT validation · CORS · Reverse proxy                          │
 │  routes: /v1/auth /v1/users /v1/families /v1/catalog            │
-│          /v1/location /v1/ai                                    │
-└─────────┬─────────────────┬─────────────────┬──────────────────┘
-          │ internal HTTP   │ internal HTTP   │ internal HTTP
-          ▼                 ▼                 ▼
-┌──────────────────┐ ┌──────────────────┐ ┌──────────────────┐
-│  auth-service    │ │  catalog-service  │ │  ai-service       │
-│  (Private)       │ │  (Private)        │ │  (Private, Pro)   │
-│                  │ │                   │ │                   │
-│  families        │ │  rooms            │ │  tag suggestions  │
-│  users           │ │  bookcases        │ │  dedup hints      │
-│  JWT             │ │  books / loans    │ │  recommendations  │
-│  refresh tokens  │ │  ISBN ingestion   │ │  incipit generation│
-└────────┬────────┘ └────────┬─────────┘ └────────┬─────────┘
-         │                    │                     │
-         ▼                    ▼                     ▼
-   ┌──────────┐       ┌────────────┐       ┌──────────┐
-   │ auth_db  │       │ catalog_db │       │  ai_db   │
-   │ (Neon)   │       │ (Neon)     │       │ (Neon)   │
-   └──────────┘       └────────────┘       └──────────┘
+│          /v1/location                                           │
+└─────────┬─────────────────┬──────────────────────────────────┘
+          │ internal HTTP   │ internal HTTP
+          ▼                 ▼
+┌──────────────────┐ ┌──────────────────┐
+│  auth-service    │ │  catalog-service  │
+│  (Private)       │ │  (Private)        │
+│                  │ │                   │
+│  families        │ │  rooms            │
+│  users           │ │  bookcases        │
+│  JWT             │ │  books / loans    │
+│  refresh tokens  │ │  ISBN ingestion   │
+└────────┬────────┘ └────────┬─────────┘
+         │                    │
+         ▼                    ▼
+   ┌──────────┐       ┌────────────┐
+   │ auth_db  │       │ catalog_db │
+   │ (Neon)   │       │ (Neon)     │
+   └──────────┘       └────────────┘
 ```
-
-`ai-service` is only present in the **Pro edition** (see [07-production-deployment.md](07-production-deployment.md)); the Community edition runs without it and the gateway simply has no `/v1/ai` route mounted.
 
 **Roadmap:** `jinbocho-auth-v2` (passwordless magic-link login + optional TOTP MFA) exists as a scaffold only — domain entities and use-case stubs are done, but infrastructure, API, and persistence layers are not implemented yet, so it is not deployed anywhere. The JWT contract is designed to be identical to v1, so no other service will need changes when it ships.
 
@@ -68,16 +66,6 @@ Owns everything about **what books exist and where they are**:
 - Export (CSV, JSON)
 
 This service intentionally fuses Location + Catalog + Ingestion into one service to keep book creation and shelf assignment in a single ACID transaction.
-
-### AI Context (`ai-service` + `ai_db`, Pro edition only)
-
-Owns optional, non-critical intelligence features layered on top of the catalog:
-- Tag suggestions for a book
-- Duplicate-record detection hints
-- Per-family recommendations
-- AI-generated book "incipit" presentations
-
-This service never holds catalog data as the source of truth — it reads from catalog-service over HTTP and caches/derives its own data in `ai_db`. It can be disabled entirely (Community edition) with no impact on auth or catalog.
 
 ### Gateway Context (`api-gateway`)
 

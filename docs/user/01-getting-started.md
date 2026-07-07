@@ -1,16 +1,16 @@
 # Getting Started with Jinbocho
 
-Welcome to Jinbocho, your family's home library management system. This guide will help you set up your account and start cataloging your books in minutes.
+Welcome to Jinbocho, your home library management system. This guide will help you set up your library and start cataloging your books in minutes.
 
 ## What is Jinbocho?
 
-**Jinbocho** is a digital home library management system designed for families. It allows you to:
+**Jinbocho** is a digital home library management system. It allows you to:
 
 - **Catalog your physical books** across multiple rooms and bookcases
 - **Search and filter** your library instantly
-- **Track reading progress** for books you own
+- **Track reading progress**, ratings, and personalised AI recommendations for books you own
 - **Organize locations** (rooms → bookcases → shelves)
-- **Share with family members** and invite them to collaborate
+- **Share with other people** and invite them to collaborate on the same library
 - **Export and backup** your library data anytime
 
 Whether you have 10 books or 10,000, Jinbocho helps you organize, find, and manage your collection.
@@ -37,24 +37,20 @@ Jinbocho is fully responsive and works on:
 
 ### Internet Connection
 
-Jinbocho requires an active internet connection. There is currently no offline mode (coming soon).
+Jinbocho requires an active internet connection. There is currently no offline mode.
 
 ## Accessing Jinbocho
 
 ### Visit the App
 
-Open your browser and navigate to:
-```
-https://jinbocho.onrender.com
-```
+Open your browser and navigate to your Jinbocho instance's URL (for example
+`https://jinbocho.onrender.com`, or a custom domain if you self-host).
 
-Or if your family has a custom domain, use that instead.
+### First Visit: Create a Library
 
-### First Visit: Create an Account
+When you visit Jinbocho for the first time, you'll see the login screen. Click **"Don't have an account? Register"** to create your library.
 
-When you visit Jinbocho for the first time, you'll see the login screen. Click **"Don't have an account? Register"** to create your family account.
-
-## Creating Your Family Account
+## Creating Your Library
 
 ### Step 1: Fill in Account Details
 
@@ -62,18 +58,19 @@ You'll see a registration form with:
 
 | Field | Example | Notes |
 |-------|---------|-------|
-| **Family Name** | "Smith Family" | Name of your household (visible to all members) |
-| **Your Name** | "Alice" | Your personal name in the family |
+| **Library name** | "The Smith Library" | Name of your book collection (visible to everyone you invite) |
+| **Your Name** | "Alice" | Your personal name in the library |
 | **Email** | "alice@example.com" | Used for login and password reset |
 | **Password** | (hidden) | Minimum 8 characters, case-sensitive |
+| **Privacy Policy & Terms** | (checkbox) | You must accept the current Privacy Policy and Terms of Service to register |
 
-### Step 2: Create Your Account
+### Step 2: Create Your Library
 
-Click **"Register"**. The account is created instantly.
+Click **"Register"**. The library is created instantly.
 
 **What happens next**:
-- You become the **Admin** of your family (full access)
-- You can now invite other family members
+- You become the **Admin** of your new library (full access)
+- You can now invite other people to join it
 - Your library is empty (ready to add books)
 
 ### Step 3: Log In
@@ -85,6 +82,11 @@ After registration, you may be asked to log in again:
 
 **Success!** You're now in your Jinbocho dashboard.
 
+!!! note "Already a member of another library?"
+    If the email you registered also belongs to a library someone else invited you
+    to, you'll see a **library picker** after login instead of going straight to
+    the dashboard. See **[Authentication → Belonging to Multiple Libraries](02-authentication.md#belonging-to-multiple-libraries)**.
+
 ## Your First Look Around
 
 After logging in, you'll see the main dashboard with:
@@ -95,7 +97,7 @@ After logging in, you'll see the main dashboard with:
 - **Logo/Home** — click to return to dashboard
 - **Search** — find books by title, author, ISBN
 - **Locations** — manage rooms and bookcases
-- **Settings** — user preferences and family management
+- **Settings** — user preferences and library management
 
 **On mobile** (bottom tab bar):
 - 🏠 Dashboard
@@ -133,14 +135,24 @@ If a barcode doesn't scan:
 4. Select location in your library
 5. Click **"Save"**
 
-### Option 3: From Your Library Export
+### Option 3: Photograph a Whole Shelf
 
-If you have a previous library backup (CSV or JSON):
+If you already have several books arranged on a shelf and want to add them all
+at once, take a single photo instead of scanning book by book — Jinbocho's AI
+reads every visible spine and proposes each title for you to confirm. See
+**[ISBN Scanning → Shelf Scan](07-isbn-scanning.md#shelf-scan-photograph-a-whole-shelf)**
+for the full walkthrough (requires AI to be enabled on your instance).
 
-1. Go to **Settings** → **"Import Library"** (admin only)
+### Option 4: From a Backup or Goodreads
+
+If you have a previous Jinbocho backup, or an export from Goodreads:
+
+1. Go to **Settings** → **"Backup & restore"** (Jinbocho backup) or **"Library data"** (Goodreads import) — admin/editor only
 2. Upload your file
 3. Review and confirm the import
 4. Your books appear instantly
+
+See **[Export & Import](08-export-import.md)** for details on both.
 
 ## Organizing Your Library (First Setup)
 
@@ -165,26 +177,31 @@ Before you add many books, set up your locations:
 ### Step 3: Start Adding Books
 
 Now you can:
-1. Add books using scan or manual entry
+1. Add books using scan, manual entry, or a whole-shelf photo
 2. Assign each to a specific shelf
 3. See your library fill up!
 
-## Inviting Family Members (Optional)
+## Inviting Other Members (Optional)
 
-Only the family admin can invite members.
+Only Admins can invite new members.
 
 ### To Invite Someone
 
-1. Go to **Settings** → **"Manage Family"**
+1. Go to **Settings → Users**
 2. Click **"Invite User"**
-3. Enter their email
+3. Start typing the person's name or email — if they already have a Jinbocho account,
+   they'll appear in a suggestion list (pick them directly); otherwise, enter their
+   email address as free text
 4. Choose their role:
    - **Admin**: Full access (manage users, locations, settings)
    - **Editor**: Can add/edit books and locations
    - **Viewer**: Read-only (browse books)
-5. Click **"Send Invite"**
+5. Click **"Send Invitation"**
 
-An email with an invitation link is sent to them. They click the link, set a password, and join your family library.
+If they don't already have a Jinbocho account, an email with a registration link
+is sent to them. If they do, the invitation appears in their **library picker**
+next time they log in, where they can accept or decline it — see
+**[Authentication → Belonging to Multiple Libraries](02-authentication.md#belonging-to-multiple-libraries)**.
 
 ## Tips for Success
 
@@ -197,16 +214,16 @@ An email with an invitation link is sent to them. They click the link, set a pas
 ### 🔍 Using Search
 - Search by book title, author, ISBN, or notes
 - Use filters to narrow down (room, reading status, language)
-- Bookmark frequent searches (future feature)
 
-### 👨‍👩‍👧 Family Collaboration
-- Each family member sees the **same library**
+### 👥 Sharing a Library
+- Every member sees the **same library**
 - You can see who added each book
 - Notes and reading status are personal (not shared by default)
+- Each member can hold a different role in different libraries they belong to
 
 ### 📤 Backup Your Data
-- Go to **Settings** → **"Export Library"**
-- Download CSV or JSON anytime
+- Go to **Settings** → **"Backup & restore"**
+- Download a full backup anytime
 - Your data is yours—keep a backup offline
 
 ## Common Questions
@@ -215,21 +232,21 @@ An email with an invitation link is sent to them. They click the link, set a pas
 A: All data is encrypted in transit (HTTPS). Data is stored on secure cloud servers. See **[FAQ](13-faq.md)** for more details.
 
 **Q: Can I use Jinbocho offline?**  
-A: Not yet. Offline mode with sync is planned for 2026.
+A: Not yet.
 
-**Q: Can I share my library with friends (not family)?**  
-A: Currently family-only. Friend sharing is planned for a future release.
+**Q: Can I share my library with people outside my household?**  
+A: Yes — a library isn't limited to family. Invite anyone by email or username, and assign them a role.
 
 **Q: How do I change my password?**  
-A: Go to **Settings** → **"Account"** → **"Change Password"**.
+A: Go to your profile (click your name/avatar) → **"Change Password"**.
 
-**Q: How do I leave my family?**  
-A: Go to **Settings** → **"Leave Family"**. (Admin cannot leave unless transferring admin to another member.)
+**Q: How do I leave a library?**  
+A: Ask an Admin of that library to remove you as a member, or suspend/reassign yourself if you are the sole Admin.
 
 ## Next Steps
 
-1. ✅ You've created your account
-2. 📚 **Next**: Read **[Authentication & Accounts](02-authentication.md)** to understand login, passwords, and sessions
+1. ✅ You've created your library
+2. 📚 **Next**: Read **[Authentication & Accounts](02-authentication.md)** to understand login, passwords, sessions, and multi-library membership
 3. 🎯 **Then**: Learn how to **[Manage Your Library](03-managing-library.md)**
 
 Happy cataloging! 📖

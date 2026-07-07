@@ -36,17 +36,20 @@ shelf map keeps the physical layout and the catalog in sync.
 
 ## Do this with Jinbocho
 
-**[Jinbocho](https://github.com/jinbocho)** is a free, open-source, self-hosted home
+**[Jinbocho](https://github.com/jinbocho)** is a free, source-available, self-hosted home
 library manager built specifically to track which shelf each book is on — visual map,
 ISBN scanning, multi-user family accounts, and full CSV/JSON export.
 
 ```bash
-git clone https://github.com/jinbocho/jinbocho-infrastructure-v1.git
-cd jinbocho-infrastructure-v1
-docker compose -f docker-compose.ghcr.yml up -d
+git clone https://github.com/jinbocho/jinbocho-infrastructure-community-v1.git
+cd jinbocho-infrastructure-community-v1
+docker compose -f docker/docker-compose.community.yml up -d
 ```
 
-Or try the **[live demo](https://jinbocho.onrender.com)** first.
+(Copy the example env files first — see the **[Developer Manual](../developer/02-local-development.md)** for the full setup.)
+
+Or try the **[live demo](https://jinbocho.github.io/jinbocho-demo/)** first.
 
 **See also:** [How to catalog your home library](catalog-your-home-library.md) ·
-[A self-hosted Goodreads alternative](goodreads-self-hosted-alternative.md)
+[A self-hosted Goodreads alternative](goodreads-self-hosted-alternative.md) ·
+[Jinbocho vs Libib vs Skoolib](jinbocho-vs-libib-vs-skoolib.md)

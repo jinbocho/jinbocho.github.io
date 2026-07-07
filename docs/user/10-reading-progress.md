@@ -1,7 +1,7 @@
 # Reading Progress
 
 Track what you've read, what you're reading, and what's next — across your
-whole family library.
+whole library.
 
 ---
 
@@ -70,14 +70,14 @@ you're reading different books in different rooms.
 
 ---
 
-## Who Read This Book (Family Reads)
+## Who Read This Book (Library Reads)
 
 The coloured **status** above is one value per book — it tells you whether
-*the book* is being read. But in a family library, more than one person can
+*the book* is being read. But in a shared library, more than one person can
 read the same copy, at different times. Jinbocho tracks that separately.
 
-On the book detail page, the **Read by** card lists every family member with
-a toggle:
+On the book detail page, the **Read by** card lists every library member with
+a toggle, showing their avatar if they've set one:
 
 1. Open a book → scroll to **Read by**
 2. Click **Mark read** next to your name once you've finished it
@@ -97,7 +97,7 @@ automatically:
 
 When a book's status is **Reading**, the person who set it shows up as a
 small 📖 badge next to the status badge (e.g. *📖 Carmelo*). This is who is
-actively reading that specific copy right now — handy when several family
+actively reading that specific copy right now — handy when several library
 members share one physical book and want to know who has the bookmark.
 
 ---
@@ -129,7 +129,7 @@ pie title My Library (example)
 
 | Stat | Description |
 |------|-------------|
-| Total books | All owned copies in the family library |
+| Total books | All owned copies in the library |
 | Want to read | Your to-read pile |
 | Reading | Books in progress |
 | Finished | Completed books |
@@ -138,12 +138,12 @@ pie title My Library (example)
 
 ### Per-member stats
 
-Below the family totals, a **Family members** card appears for each member,
-showing:
+Below the library totals, a **Library members** card appears for each member,
+with their avatar if they've set one, showing:
 
 | Field | Description |
 |-------|--------------|
-| Books read | Count of copies that member has marked as read (see [Family Reads](#who-read-this-book-family-reads) above) |
+| Books read | Count of copies that member has marked as read (see [Library Reads](#who-read-this-book-library-reads) above) |
 | Books owned | Count of copies registered as owned by that member |
 | Favorite genre | The genre that appears most often among that member's read books |
 

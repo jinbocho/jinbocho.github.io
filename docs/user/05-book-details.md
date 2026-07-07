@@ -11,7 +11,7 @@ Every book in Jinbocho has two layers of information: the **bibliographic record
 graph LR
     BR["📖 Bibliographic Record<br/>ISBN · Title · Author<br/>Publisher · Year · Cover"]
     OB1["📗 Your copy<br/>Shelf 3 · Pos 2<br/>Finished reading"]
-    OB2["📗 Another family member's copy<br/>Shelf 1 · Pos 5<br/>Want to read"]
+    OB2["📗 Another member's copy<br/>Shelf 1 · Pos 5<br/>Want to read"]
     BR --> OB1
     BR --> OB2
 
@@ -29,7 +29,7 @@ graph LR
 | Genre tags | Audit history |
 
 !!! info "Why two separate things?"
-    Multiple family members can own the same book. Each has their own copy
+    Multiple library members can own the same book. Each has their own copy
     record (with their own reading status and location), but they all share
     one bibliographic record. This avoids duplicate metadata.
 
@@ -62,7 +62,7 @@ From any book list or search result, click the book card. The detail page shows:
 ## Your Copy's Own Attributes
 
 Beyond location and reading status, each owned copy carries its own details —
-separate from the bibliographic record, so they don't affect other family
+separate from the bibliographic record, so they don't affect other library
 members' copies of the same book:
 
 | Field | What it's for |
@@ -71,7 +71,7 @@ members' copies of the same book:
 | **Condition** | New, Good, Fair, or Poor |
 | **Source** | Purchased, Gift, Borrowed, or Other |
 | **Purchase date** and **price** | Optional, for your own records |
-| **Owner** | Which family member this physical copy belongs to |
+| **Owner** | Which library member this physical copy belongs to |
 | **Notes** | Free-text notes about this specific copy |
 
 To edit them: open the book detail page → **Edit** → see the **"This copy"**
@@ -79,13 +79,13 @@ section of the edit form (the fields above the shared book details).
 
 ### Who's Reading It Right Now
 
-If a copy's status is **Reading**, the detail page shows a 📖 badge next to
-the status with the name of the family member currently reading it. This is
-separate from the per-member read history — see
-**[Reading Progress → Who Read This Book](10-reading-progress.md#who-read-this-book-family-reads)**.
+If a copy's status is **Reading**, the detail page shows a 📖 badge — with the
+member's avatar, if they've set one — next to the status with the name of the
+library member currently reading it. This is separate from the per-member read
+history — see
+**[Reading Progress → Who Read This Book](10-reading-progress.md#who-read-this-book-library-reads)**.
 
-If the copy is lent to someone outside the family, a 📤 badge shows who has
-it on loan — see **[Loans](16-loans.md)**.
+If the copy is lent out, a 📤 badge shows who has it on loan — see **[Loans](16-loans.md)**.
 
 ---
 
@@ -116,6 +116,23 @@ stateDiagram-v2
 2. Click the status badge
 3. Select a new status from the dropdown
 4. The change is saved immediately and recorded in the audit log
+
+---
+
+## Ratings
+
+Every owned copy can carry your personal **star rating**, separate from its
+reading status — you can rate a book you've finished, or one you're still
+reading.
+
+1. Open the book detail page
+2. Click the star rating widget
+3. Pick a rating — it's saved immediately
+
+The book detail page also shows the **library's average rating** for that
+title, aggregated across every member who rated a copy of it. Your own rating
+only affects your own copy's record; it doesn't change what other members see
+for theirs.
 
 ---
 
@@ -165,7 +182,7 @@ Every change to a book is recorded:
 The audit log is visible at the bottom of the book detail page. It cannot be deleted.
 
 !!! tip "Useful for shared libraries"
-    In a family library, the audit log tells you who moved a book and when —
+    In a shared library, the audit log tells you who moved a book and when —
     handy when a book is missing from its expected shelf.
 
 ---

@@ -55,8 +55,8 @@ si sposta in un drawer scorrevole laterale.
 ```
 
 Toccando `☰` si apre un drawer con la navigazione completa: Home, Libri,
-In Prestito, Posizioni, Statistiche, Utenti (solo admin) e Impostazioni —
-le stesse voci mostrate nella sidebar su desktop.
+Lista dei desideri, In Prestito, Posizioni, Statistiche, Utenti (solo admin) e
+Impostazioni — le stesse voci mostrate nella sidebar su desktop.
 
 ---
 

@@ -54,8 +54,8 @@ slide-in drawer.
 ```
 
 Tapping `☰` slides in a drawer with the full navigation: Home, Books,
-On Loan, Locations, Stats, Users (admins only), and Settings — the same
-items shown in the sidebar on desktop.
+Wishlist, On Loan, Locations, Stats, Users (admins only), and Settings — the
+same items shown in the sidebar on desktop.
 
 ---
 

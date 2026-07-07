@@ -152,6 +152,101 @@ Scan → Review → Save → Scan → Review → Save …
 
 ---
 
+## Shelf Scan: Photograph a Whole Shelf
+
+If AI is enabled on your Jinbocho instance, you don't have to scan books one
+barcode at a time. **Shelf Scan** reads every spine in a single photo and
+proposes each book for you to confirm.
+
+!!! info "Requires AI with a vision-capable model"
+    Shelf Scan only appears if your instance's AI module is enabled **and**
+    configured with a model that can read images. If it's not available, you
+    won't see the option — ask your administrator, or fall back to regular
+    ISBN scanning above.
+
+### Starting a Shelf Scan
+
+You can start a scan from two places:
+
+- **Bookcase Map** — open the map for a bookcase, click **Scan** next to the
+  shelf you want to catalogue
+- **Add Book → Scan a whole shelf** — pick the shelf first, then take the photo
+
+### Steps
+
+1. Pick the shelf you're photographing (pre-filled if you started from the map)
+2. Take **one photo** of the shelf — on mobile this opens your camera directly
+3. Wait for AI to read the spines — for a full shelf this can take **a couple
+   of minutes**, so don't close the tab
+4. Review the results: each detected book is shown as one of:
+
+    | Status | Meaning |
+    |--------|---------|
+    | ✅ Matched | AI is confident about title and author |
+    | ⚠️ Uncertain | AI has a guess, but you should double-check it |
+    | ❌ Not found | A spine was detected but couldn't be identified — edit it manually or skip it |
+
+5. Edit any title/author that's wrong, and uncheck any book you don't want to add
+6. Books that look like duplicates — either a copy you already own, or the same
+   spine detected twice in the photo — are flagged and excluded from the count
+   by default; re-select them if you really do want a second copy
+7. Click **Add N books** — every selected book is created already positioned on
+   that shelf
+
+!!! tip "Why it's slower than a single scan"
+    Reading an entire shelf photo is a much heavier AI task than looking up one
+    ISBN, which is why it can take one to two minutes for a full shelf. This is
+    expected — let it finish rather than retrying.
+
+### If AI Isn't Available
+
+Depending on what's misconfigured, you'll see one of these instead of the Scan
+button or after trying to use it:
+
+- *"AI photo scanning isn't configured for this library"* — the AI module isn't enabled at all
+- *"The configured AI model can't read photos"* — AI is enabled, but the model in use has no vision support; ask your administrator to configure a vision-capable model
+- A generic error — AI is temporarily unavailable; try again later, or add the books manually
+
+---
+
+## Shelf Audit: Check an Already-Catalogued Shelf
+
+**Shelf Audit** is the opposite of Shelf Scan: instead of adding new books, it
+checks a shelf you've *already* catalogued against what's physically there
+right now, and tells you what changed.
+
+1. Open the Bookcase Map, click **Audit** next to the shelf
+2. Take a photo of the shelf as it currently looks
+3. Jinbocho compares the photo to what's recorded on that shelf and reports:
+
+    | Result | Meaning | What you can do |
+    |--------|---------|-------------------|
+    | **Missing** | Catalogued on this shelf, but not seen in the photo | It may have been moved, lent out, or lost — **View** the book to check |
+    | **Unexpected** | Seen in the photo, but not catalogued on this shelf | It may be misfiled — **Add here** if it belongs, or **Search library** to find where it's supposed to be |
+
+This is a good way to catch books that were physically moved without updating
+Jinbocho, or that were lent out and never marked as returned.
+
+---
+
+## Shelf Mode: Rapid Barcode Scanning for One Shelf
+
+If you're adding many books to the **same** shelf and prefer scanning barcodes
+over AI photos, **Shelf Mode** locks in the destination location for the whole
+session so you don't have to re-pick it after every book:
+
+1. Click **Add Book** → **Scan a shelf** (Shelf Mode)
+2. Choose the room → bookcase → section → shelf once
+3. Scan (or type) one ISBN after another — each book is saved straight to that
+   shelf without asking for a location again
+4. Close Shelf Mode when you're done with that shelf
+
+If AI is available, Shelf Mode also offers a one-tap shortcut to switch to
+**Shelf Scan** instead — take a single photo of the whole shelf and it's sent
+straight into the Shelf Scan review flow.
+
+---
+
 ## ISBN Formats
 
 Jinbocho recognises:

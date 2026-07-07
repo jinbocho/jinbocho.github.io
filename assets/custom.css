@@ -66,12 +66,12 @@
   --md-admonition-fg-color:            var(--md-default-fg-color);
   --md-admonition-bg-color:            #fdf4f5;
 
-  /* Footer */
-  --md-footer-fg-color:                rgba(255, 255, 255, 0.90);
-  --md-footer-fg-color--light:         rgba(255, 255, 255, 0.70);
-  --md-footer-fg-color--lighter:       rgba(255, 255, 255, 0.45);
-  --md-footer-bg-color:                #BC002D;
-  --md-footer-bg-color--dark:          #8a0020;
+  /* Footer — light, like the landing page footer, not a solid red band */
+  --md-footer-fg-color:                #111111;
+  --md-footer-fg-color--light:         #444444;
+  --md-footer-fg-color--lighter:       #777777;
+  --md-footer-bg-color:                #ffffff;
+  --md-footer-bg-color--dark:          #f8f7f4;
 
   /* Borders */
   --md-typeset-table-color:            rgba(17, 17, 17, 0.12);
@@ -117,11 +117,11 @@
 
   --md-admonition-bg-color:            #2a1a1e;
 
-  --md-footer-bg-color:                #BC002D;
-  --md-footer-bg-color--dark:          #8a0020;
-  --md-footer-fg-color:                rgba(255, 255, 255, 0.90);
-  --md-footer-fg-color--light:         rgba(255, 255, 255, 0.70);
-  --md-footer-fg-color--lighter:       rgba(255, 255, 255, 0.45);
+  --md-footer-bg-color:                #1a1a1a;
+  --md-footer-bg-color--dark:          #242424;
+  --md-footer-fg-color:                hsla(0, 0%, 93%, 0.94);
+  --md-footer-fg-color--light:         hsla(0, 0%, 93%, 0.62);
+  --md-footer-fg-color--lighter:       hsla(0, 0%, 93%, 0.32);
 
   --md-typeset-table-color:            rgba(255, 255, 255, 0.12);
 }
@@ -168,14 +168,26 @@
   color: hsla(0, 0%, 93%, 0.94);
 }
 
-/* ---------- Header ---------- */
+/* ---------- Header — white bar like the landing page nav, not a solid red band ---------- */
 .md-header {
-  background-color: #BC002D;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.20);
+  background-color: var(--md-default-bg-color);
+  color: var(--md-default-fg-color);
+  box-shadow: none;
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
 }
 
 [data-md-color-scheme="slate"] .md-header {
-  background-color: #BC002D;
+  background-color: var(--md-default-bg-color);
+  border-bottom-color: hsla(0, 0%, 100%, 0.08);
+}
+
+.md-header__button:hover {
+  opacity: 1;
+  color: #BC002D;
+}
+
+[data-md-color-scheme="slate"] .md-header__button:hover {
+  color: #ff4d6d;
 }
 
 .md-header__title {
@@ -192,13 +204,34 @@
   width: 28px;
 }
 
-/* ---------- Navigation tabs ---------- */
+/* Search — light pill like the landing page's language toggle, not a dark translucent box */
+.md-header .md-search__form {
+  background-color: var(--md-default-bg-color--light);
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 100px;
+}
+
+.md-header .md-search__form:hover {
+  background-color: var(--md-default-bg-color--lighter);
+}
+
+.md-header .md-search__input,
+.md-header .md-search__input::placeholder,
+.md-header .md-search__input ~ .md-search__icon,
+.md-header .md-search__input + .md-search__icon {
+  color: var(--md-default-fg-color--light);
+}
+
+/* ---------- Navigation tabs — light row of text links, like the landing page nav ---------- */
 .md-tabs {
-  background-color: #8a0020;
+  background-color: var(--md-default-bg-color);
+  color: var(--md-default-fg-color--light);
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
 }
 
 [data-md-color-scheme="slate"] .md-tabs {
-  background-color: #8a0020;
+  background-color: var(--md-default-bg-color);
+  border-bottom-color: hsla(0, 0%, 100%, 0.08);
 }
 
 .md-tabs__link {
@@ -206,12 +239,16 @@
   font-weight: 500;
   font-size: 0.8rem;
   letter-spacing: 0.02em;
-  opacity: 0.82;
 }
 
-.md-tabs__link--active,
+.md-tabs__item--active .md-tabs__link,
 .md-tabs__link:hover {
-  opacity: 1;
+  color: #BC002D;
+}
+
+[data-md-color-scheme="slate"] .md-tabs__item--active .md-tabs__link,
+[data-md-color-scheme="slate"] .md-tabs__link:hover {
+  color: #ff4d6d;
 }
 
 /* ---------- Sidebar ---------- */
@@ -367,13 +404,21 @@
   font-family: 'Inter', sans-serif;
 }
 
-/* ---------- Footer ---------- */
+/* ---------- Footer — light, like the landing page footer ---------- */
 .md-footer {
-  background-color: #BC002D;
+  border-top: 1px solid var(--md-default-fg-color--lightest);
 }
 
-.md-footer-meta {
-  background-color: #8a0020;
+[data-md-color-scheme="slate"] .md-footer {
+  border-top-color: hsla(0, 0%, 100%, 0.08);
+}
+
+.md-footer-meta.md-typeset a:hover {
+  color: #BC002D;
+}
+
+[data-md-color-scheme="slate"] .md-footer-meta.md-typeset a:hover {
+  color: #ff4d6d;
 }
 
 .md-footer__link:hover .md-footer__title {

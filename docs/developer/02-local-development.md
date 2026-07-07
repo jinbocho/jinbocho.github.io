@@ -5,21 +5,18 @@ Get your local development environment running with Docker Compose in a few minu
 ## Overview
 
 The Jinbocho backend ships as a separate orchestration repository,
-[`jinbocho-infrastructure-v1`](https://github.com/jinbocho/jinbocho-infrastructure-v1). No
+[`jinbocho-infrastructure-community-v1`](https://github.com/jinbocho/jinbocho-infrastructure-community-v1). No
 application code lives there — it only contains Docker Compose files, env
-templates, and the VPS/Render deploy tooling for the `auth`, `catalog`,
-`api-gateway`, and optional `ai` services.
+templates, and the VPS/Render deploy tooling for the `auth`, `catalog`, and
+`api-gateway` services.
 
-There are five Compose files, picked depending on which images you want to run
-and whether the AI module (Pro edition) is enabled:
+There are three Compose files, picked depending on which images you want to run:
 
-| File | Images | Edition | Use case |
-|---|---|---|---|
-| `docker/docker-compose.community.yml` | GHCR (pre-built) | Community | Self-host, no source checkout |
-| `docker/docker-compose.pro.yml` | GHCR (pre-built) | Pro | Self-host with AI module |
-| `docker/docker-compose.community.local.yml` | Built from `../jinbocho-*-v1` | Community | Local dev from source |
-| `docker/docker-compose.pro.local.yml` | Built from `../jinbocho-*-v1` | Pro | Local dev from source — used by `./scripts/dev.sh` |
-| `docker/docker-compose.all.yml` | GHCR backend + locally-built frontend | Either (`COMPOSE_PROFILES=pro`) | Single-server VPS deploy, includes Caddy + TLS |
+| File | Images | Use case |
+|---|---|---|
+| `docker/docker-compose.community.yml` | GHCR (pre-built) | Self-host, no source checkout |
+| `docker/docker-compose.community.local.yml` | Built from `../jinbocho-*-v1` | Local dev from source — used by `./scripts/dev.sh` |
+| `docker/docker-compose.all.yml` | GHCR backend + locally-built frontend | Single-server VPS deploy, includes Caddy + TLS |
 
 This chapter covers **local development from source** (`*.local.yml`). For
 self-hosting with pre-built images or a one-shot VPS install, see
@@ -29,26 +26,25 @@ self-hosting with pre-built images or a one-shot VPS install, see
 
 If you haven't cloned the repositories yet, follow [Repositories Checkout](01-prerequisites.md#repositories-checkout).
 
-`jinbocho-infrastructure-v1` expects the service repos checked out as
+`jinbocho-infrastructure-community-v1` expects the service repos checked out as
 siblings:
 
 ```
 ~/workspace/jinbocho/
-├── jinbocho-infrastructure-v1/
+├── jinbocho-infrastructure-community-v1/
 ├── jinbocho-auth-v1/
 ├── jinbocho-catalog-v1/
 ├── jinbocho-api-gateway-v1/
-├── jinbocho-ai-v1/            ← only needed for the Pro edition
 └── jinbocho-fe/
 ```
 
 ## 2. Configure Environment Variables
 
-From `jinbocho-infrastructure-v1/`, copy the root `.env` and the per-service
+From `jinbocho-infrastructure-community-v1/`, copy the root `.env` and the per-service
 templates from `envs/`:
 
 ```bash
-cd jinbocho-infrastructure-v1
+cd jinbocho-infrastructure-community-v1
 
 cp .env.example .env
 cp envs/auth-service.env.example    envs/auth-service.env
@@ -65,7 +61,6 @@ Variables not listed below already have a working default in the matching
 |---|---|---|---|
 | `POSTGRES_PASSWORD` | `change_me_local_dev` | Always | Password for the local Postgres containers |
 | `JINBOCHO_VERSION` | `latest` | No | GHCR image tag (only used by the non-`.local` compose files) |
-| `COMPOSE_PROFILES` | unset | No | Set to `pro` on `docker-compose.all.yml` to also start `postgres-ai` + `ai-service` |
 
 **`envs/auth-service.env`** — key variables:
 
@@ -89,26 +84,19 @@ Variables not listed below already have a working default in the matching
 | Variable | Default | Required | Description |
 |---|---|---|---|
 | `JWT_SECRET_KEY` | — | **Yes** | Must match `auth-service`'s value |
-| `AUTH_SERVICE_URL` / `CATALOG_SERVICE_URL` / `AI_SERVICE_URL` | internal Docker hostnames | No | Leave as-is for local dev |
+| `AUTH_SERVICE_URL` / `CATALOG_SERVICE_URL` | internal Docker hostnames | No | Leave as-is for local dev |
 | `CORS_ORIGINS` | `["*"]` | No | Set to your frontend URL in production |
-| `JINBOCHO_FEATURES` | `catalog,auth` | No | Comma-separated enabled modules. Add `ai` only for the Pro edition |
-
-For the Pro edition, also copy `envs/ai-service.env.example` and see
-[Backend Services](03-backend-services.md#ai-service-port-8003-pro-edition-only) for its variables.
+| `JINBOCHO_FEATURES` | `catalog,auth` | No | Comma-separated enabled modules |
 
 !!! warning "Never commit .env files"
-    All `.env` files under `jinbocho-infrastructure-v1/` are (and must remain) gitignored.
+    All `.env` files under `jinbocho-infrastructure-community-v1/` are (and must remain) gitignored.
 
 ## 3. Start the Stack
 
-From `jinbocho-infrastructure-v1/`:
+From `jinbocho-infrastructure-community-v1/`:
 
 ```bash
-# Community edition (no AI module):
 docker compose -f docker/docker-compose.community.local.yml up --build -d
-
-# Pro edition (with AI module):
-docker compose -f docker/docker-compose.pro.local.yml up --build -d
 ```
 
 **Check status**:
@@ -129,19 +117,18 @@ Swagger UI is available at:
 - Gateway: `http://localhost:8000/docs`
 - Auth: `http://localhost:8001/docs`
 - Catalog: `http://localhost:8002/docs`
-- AI (Pro only): `http://localhost:8003/docs`
 
 ## 4. Start Backend + Frontend Together
 
-`./scripts/dev.sh` brings up the Pro local Compose stack and then starts the
+`./scripts/dev.sh` brings up the local Compose stack and then starts the
 frontend dev server in the same terminal:
 
 ```bash
-cd jinbocho-infrastructure-v1
+cd jinbocho-infrastructure-community-v1
 ./scripts/dev.sh
 ```
 
-It is equivalent to running `docker compose -f docker/docker-compose.pro.local.yml up --build -d`
+It is equivalent to running `docker compose -f docker/docker-compose.community.local.yml up --build -d`
 followed by `npm run dev` in `jinbocho-fe/`.
 
 To start the frontend on its own, in a new terminal:
@@ -162,12 +149,9 @@ psql -U postgres -h 127.0.0.1 -p 5432 -d auth_db
 
 # Catalog database
 psql -U postgres -h 127.0.0.1 -p 5433 -d catalog_db
-
-# AI database (Pro edition only)
-psql -U postgres -h 127.0.0.1 -p 5434 -d ai_db
 ```
 
-Password: the value of `POSTGRES_PASSWORD` from `jinbocho-infrastructure-v1/.env`
+Password: the value of `POSTGRES_PASSWORD` from `jinbocho-infrastructure-community-v1/.env`
 (`change_me_local_dev` by default).
 
 ## Verification
@@ -178,16 +162,15 @@ Password: the value of `POSTGRES_PASSWORD` from `jinbocho-infrastructure-v1/.env
 curl http://localhost:8000/health   # {"status":"ok"}
 curl http://localhost:8001/health   # {"status":"ok"}
 curl http://localhost:8002/health   # {"status":"ok"}
-curl http://localhost:8003/health   # {"status":"ok"}  — Pro edition only
 ```
 
 ### Smoke-Test the Whole Stack
 
-`jinbocho-infrastructure-v1` ships a script that registers a test family and
+`jinbocho-infrastructure-community-v1` ships a script that registers a test family and
 exercises the main endpoints through the gateway:
 
 ```bash
-cd jinbocho-infrastructure-v1
+cd jinbocho-infrastructure-community-v1
 ./scripts/validate-api.sh
 ```
 
@@ -266,6 +249,6 @@ docker compose -f docker/docker-compose.community.local.yml restart auth-service
 
 ## Next Steps
 
-- **View API docs**: `http://localhost:8001/docs` (auth) / `http://localhost:8002/docs` (catalog) / `http://localhost:8003/docs` (ai, Pro only)
+- **View API docs**: `http://localhost:8001/docs` (auth) / `http://localhost:8002/docs` (catalog)
 - **Run tests**: `cd jinbocho-auth-v1 && pytest tests/ -v`
 - **Deploy to production**: See **[Production Deployment](07-production-deployment.md)**

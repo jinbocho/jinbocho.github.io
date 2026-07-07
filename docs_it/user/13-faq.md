@@ -4,25 +4,47 @@ Raccolta delle domande più comuni su Jinbocho.
 
 ---
 
-## Account e famiglia
+## Account e biblioteca
 
-??? question "Posso usare Jinbocho da solo, senza creare una famiglia?"
-    Sì. Quando ti registri, crei automaticamente una famiglia con te come unico membro.
-    Puoi invitare altri in seguito dalla sezione impostazioni, ma non è obbligatorio.
+??? question "Posso usare Jinbocho da solo, senza invitare nessuno?"
+    Sì. Quando ti registri, crei automaticamente una biblioteca con te come unico membro (Admin).
+    Puoi invitare altri in seguito dalla sezione Utenti, ma non è obbligatorio.
 
-??? question "Quanti utenti può avere una famiglia?"
-    Non c'è un limite tecnico al numero di membri. Una famiglia può avere uno o decine di utenti.
+??? question "Quanti utenti può avere una biblioteca?"
+    Non c'è un limite tecnico al numero di membri. Una biblioteca può avere uno o decine di utenti.
 
-??? question "Posso avere più famiglie con lo stesso account?"
-    No. Ogni account appartiene a una sola famiglia. Se vuoi gestire biblioteche separate,
-    crea account separati con email diverse.
+??? question "Posso appartenere a più di una biblioteca con lo stesso account?"
+    Sì. Lo stesso account può essere membro di più biblioteche contemporaneamente
+    — ad esempio la tua e quella di un amico o partner — e può avere un ruolo
+    diverso in ciascuna. Se appartieni a più di una, dopo il login vedrai un
+    **selettore di biblioteche** per scegliere quale aprire, e potrai passare
+    dall'una all'altra in seguito dall'header. Le biblioteche restano comunque
+    isolate: appartenere a due biblioteche non unisce i loro libri o membri.
+    Vedi **[Autenticazione → Appartenere a più biblioteche](02-authentication.md#appartenere-a-piu-biblioteche)**.
 
 ??? question "Cosa succede se dimentico la password?"
     Nella pagina di login clicca **"Password dimenticata"** e inserisci la tua email.
-    Riceverai un link per reimpostare la password.
+    Riceverai un link per reimpostare la password. Su un'istanza self-hosted senza
+    email configurata, il link viene scritto nei log invece che inviato — chiedi
+    a chi gestisce l'istanza di controllarli.
 
 ??? question "Posso cambiare l'email del mio account?"
     Sì, dalla pagina **Profilo → Modifica email**. Riceverai una email di conferma al nuovo indirizzo.
+
+??? question "Posso eliminare il mio account?"
+    L'eliminazione è **riservata agli Admin ed elimina l'intera biblioteca**, non
+    solo il singolo account — al momento non esiste un modo per un membro non-Admin
+    di autoeliminare solo il proprio account. Chiedi a un Admin di rimuoverti come
+    membro se vuoi solo lasciare la biblioteca, oppure vedi
+    **[Autenticazione → Eliminare una biblioteca](02-authentication.md#eliminare-una-biblioteca)**
+    se sei un Admin e vuoi eliminare tutto.
+
+??? question "Posso ottenere una copia dei miei dati personali?"
+    Non esiste ancora un pulsante self-service "esporta i miei dati" per il
+    singolo membro. Chiedi al tuo Admin di scaricare un
+    **[backup completo](08-export-import.md#backup-e-ripristino)** (che include
+    l'elenco membri, i libri, i prestiti e la cronologia di lettura), oppure
+    contatta **jinbochoapp@gmail.com** direttamente.
 
 ---
 
@@ -52,6 +74,13 @@ Raccolta delle domande più comuni su Jinbocho.
     lingua del libro (es. `en`, `it`, `de`, `ja`). La ricerca funziona anche con titoli
     in caratteri non latini.
 
+??? question "Perché non vedo l'opzione per scansionare un intero scaffale?"
+    La Scansione scaffale compare solo quando il modulo AI della tua istanza è
+    attivo **e** configurato con un modello capace di leggere immagini. Se manca
+    uno dei due, l'opzione resta nascosta — chiedi al tuo amministratore, oppure
+    usa la scansione ISBN normale. Vedi
+    **[Scansione ISBN → Scansione scaffale](07-isbn-scanning.md#scansione-scaffale-fotografa-un-intero-scaffale)**.
+
 ---
 
 ## Posizioni
@@ -73,10 +102,12 @@ Raccolta delle domande più comuni su Jinbocho.
 
 ## Stato di lettura
 
-??? question "Lo stato di lettura è condiviso tra i familiari?"
-    No. Lo stato di lettura è personale per ogni copia. Se più familiari hanno la stessa
-    copia sullo stesso scaffale, c'è un solo record di copia con un unico stato.
-    Per tracciare stati individuali, ogni persona dovrebbe avere la propria copia registrata.
+??? question "Lo stato di lettura è condiviso tra tutti i membri?"
+    Lo **stato** (Da leggere/In lettura/Letto) è personale per ogni copia fisica.
+    Ma se più membri condividono la stessa copia, ognuno può comunque segnare
+    *personalmente* di averla letta tramite la funzione **Letto da** sulla
+    pagina di dettaglio — indipendentemente dallo stato generale della copia.
+    Vedi **[Progressi di lettura → Chi ha letto questo libro](10-reading-progress.md#chi-ha-letto-questo-libro-letture-di-biblioteca)**.
 
 ??? question "Posso vedere la cronologia dei cambi di stato?"
     Sì. Nella pagina di dettaglio di ogni libro c'è un log che mostra tutti i cambi di stato
@@ -87,13 +118,15 @@ Raccolta delle domande più comuni su Jinbocho.
 ## Esportazione e dati
 
 ??? question "I miei dati sono al sicuro? Posso portarli via?"
-    Sì. Jinbocho è open source (CC BY-NC-ND 4.0) e puoi esportare l'intera biblioteca in CSV o JSON
-    in qualsiasi momento da Impostazioni → Esporta dati. Non sei mai bloccato.
+    Sì. Jinbocho è source-available (Jinbocho Source-Available License) e puoi esportare l'intera biblioteca in CSV o JSON
+    in qualsiasi momento da Impostazioni → Esporta libri, oppure scaricare un backup completo
+    da Impostazioni → Backup e ripristino. Non sei mai bloccato.
 
-??? question "Posso importare libri da Goodreads, Calibre o altri servizi?"
-    L'importazione non è ancora disponibile in questa versione. È pianificata per una versione
-    futura. Per ora, usa l'esportazione CSV di Goodreads come riferimento e aggiungi i libri
-    manualmente o tramite ISBN.
+??? question "Posso importare libri da Goodreads?"
+    Sì — un Admin o Editor può importare un export CSV di Goodreads da
+    **Impostazioni → Dati biblioteca**. Vedi
+    **[Esportazione → Importare da Goodreads](08-export-import.md#importare-da-goodreads)**.
+    L'importazione da Calibre o altri servizi non è ancora disponibile.
 
 ---
 
@@ -114,4 +147,4 @@ Raccolta delle domande più comuni su Jinbocho.
     Vedi [Uso su mobile](11-mobile.md) per le istruzioni.
 
 ??? question "Il codice sorgente è disponibile?"
-    Sì. Jinbocho è open source con licenza CC BY-NC-ND 4.0. Il codice è disponibile su GitHub.
+    Sì. Jinbocho è source-available con licenza Jinbocho Source-Available License. Il codice è disponibile su GitHub.

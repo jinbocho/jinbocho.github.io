@@ -5,7 +5,8 @@ Jinbocho gives you two separate tools, for two different jobs:
 | Tool | Where | What it's for |
 |------|-------|----------------|
 | **Export books (CSV/JSON)** | Settings → Export books, or the export menu on the Books page | A lightweight, books-only list for spreadsheets or quick analysis. **Not a restore format.** |
-| **Backup & restore** | Settings → Backup & restore | A complete, restorable snapshot of your whole family library — locations, books, loans, reading history and the member roster. Use it to move to a new database without losing anything. |
+| **Backup & restore** | Settings → Backup & restore | A complete, restorable snapshot of your whole library — locations, books, loans, reading history and the member roster. Use it to move to a new database without losing anything. |
+| **Goodreads import** | Settings → Library data | Bring in an existing Goodreads export as a starting point, instead of adding books one by one. |
 
 This page covers both, plus how to restore from a backup.
 
@@ -30,7 +31,7 @@ The export button is also available directly on the **Books** page via the expor
 
 !!! note "Not a restore format"
     This export only contains your owned books and where they're shelved. It does
-    not include loans, per-member reading history, or the family member roster,
+    not include loans, per-member reading history, or the member roster,
     and there is no matching "import CSV" feature. For anything you might need to
     restore later, use **Backup & restore** below instead.
 
@@ -86,7 +87,7 @@ nested location objects.
 ```json
 {
   "exported_at": "2026-06-11T20:00:00Z",
-  "family_id": "fam_abc123",
+  "library_id": "lib_abc123",
   "books": [
     {
       "id": "c3f1a2b4",
@@ -118,14 +119,14 @@ nested location objects.
 
 ## Backup & Restore
 
-For a complete, restorable backup of your family library, use **Backup &
+For a complete, restorable backup of your whole library, use **Backup &
 restore** in Settings — not the CSV/JSON book export above.
 
 ### What's included
 
 A full backup contains everything:
 
-- The family and its member roster (names, emails, roles)
+- The library and its member roster (names, emails, roles)
 - Rooms, bookcases, sections and shelves
 - Every owned book and its bibliographic record
 - Loans (active and past)
@@ -144,8 +145,8 @@ keep it in a cloud storage folder (Google Drive, Dropbox, iCloud).
 
 1. Open **Settings** → **Backup & restore**
 2. Click **Restore from backup** and select a previously downloaded backup file
-3. Review the confirmation dialog: it shows the family name, when the backup
-   was exported, and counts of family members, rooms, books and loans it contains
+3. Review the confirmation dialog: it shows the library name, when the backup
+   was exported, and counts of members, rooms, books and loans it contains
 4. Click **Restore** to confirm
 
 !!! tip "Restoring merges, it doesn't overwrite"
@@ -155,7 +156,7 @@ keep it in a cloud storage folder (Google Drive, Dropbox, iCloud).
     the same file twice. This also makes it safe to use a backup to migrate
     your library to a new Jinbocho instance.
 
-If a family member was removed after the backup was taken but is still
+If a member was removed after the backup was taken but is still
 referenced in it (e.g. they used to own or read a book), restoring recreates
 them with their original name and email so that history isn't lost.
 
@@ -168,6 +169,25 @@ For adding individual books instead of restoring a backup, see:
 - **[ISBN Scanning](07-isbn-scanning.md)** — the fastest method for physical books
 - **[ISBN manual entry](03-managing-library.md#method-2-enter-an-isbn-manually)** — type or paste an ISBN
 - **[Manual entry](03-managing-library.md#method-3-manual-entry)** — for books without ISBN
+
+---
+
+## Importing from Goodreads
+
+If you're moving from Goodreads, you don't have to re-enter your list by hand.
+
+1. In Goodreads, export your library (**My Books → Import/Export → Export Library**) to get a CSV file
+2. In Jinbocho, open **Settings → Library data** (Admin or Editor only)
+3. Click **Import from Goodreads** and upload the CSV
+4. Review the results — Jinbocho looks up each ISBN and adds a bibliographic
+   record and an owned copy for every match
+5. Assign locations afterwards, since Goodreads exports don't know about your
+   rooms and shelves
+
+!!! note "Matching is best-effort"
+    Books without a usable ISBN in the Goodreads export, or that Open Library
+    and Google Books don't recognise, won't be imported automatically — add
+    those manually afterwards.
 
 ---
 

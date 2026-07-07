@@ -1,17 +1,18 @@
 # Loans
 
-Keep track of books you've lent out — to family members or to anyone outside
-the household — so nothing gets forgotten on someone else's shelf.
+Keep track of books you've lent out — to another library member or to anyone
+outside your library — so nothing gets forgotten on someone else's shelf.
 
 ---
 
 ## What a Loan Tracks
 
-A loan records three things about a physical copy:
+A loan records these things about a physical copy:
 
 | Field | Description |
 |-------|-------------|
-| **Borrower name** | Free text — a family member's name, a friend, a colleague, anyone |
+| **Borrower name** | Required — either a name you type freely (a friend, a colleague, anyone outside your library), or an existing library member picked from search |
+| **Linked member** *(optional)* | If you picked a library member from search instead of typing a name, the loan is linked to their profile |
 | **Loaned on** | Recorded automatically when you lend the book |
 | **Due date** | Optional — set it if you want a reminder of when the book should come back |
 
@@ -29,7 +30,12 @@ a copy that's already on loan until it's marked as returned.
 
 1. Open the book's detail page
 2. Scroll to the **Loans** section
-3. Enter the **borrower's name** (required)
+3. Start typing the borrower's name in the **borrower** field:
+    - If it matches a current library member, pick them from the suggestions —
+      the loan is linked to their profile and their name becomes clickable
+      everywhere the loan is shown
+    - Otherwise, just keep typing — it's saved as free text (for someone
+      outside your library)
 4. Optionally pick a **due date**
 5. Click **Lend**
 
@@ -51,7 +57,7 @@ available to lend out again.
 ## The "On Loan" Page
 
 The **On Loan** page lists every book currently lent out across your entire
-family library, regardless of who lent it or which room it normally lives in.
+library, regardless of who lent it or which room it normally lives in.
 
 ```
 On Loan — 3 books currently out
@@ -61,6 +67,10 @@ On Loan — 3 books currently out
 📤 Il barone rampante            → Grandma Lucia     since 2026-06-10   due 2026-06-25
 📤 Sapiens                       → A colleague       since 2026-06-15   (no due date)
 ```
+
+If a borrower is a linked library member, their name is shown as a link —
+click it to open their **[profile](09-user-management.md#member-profiles)**.
+Names typed as free text (people outside your library) are plain text.
 
 Use this page when you want a single overview of "what's out there" instead
 of checking each book individually.
@@ -90,5 +100,5 @@ physical copy is*, not who has read it or when.
 
 !!! tip "Loans vs. Reads"
     Lending a book to someone doesn't automatically mark it as read by them.
-    If you also want to track who in the family has actually *read* that
-    copy, see [Reading Progress](10-reading-progress.md#who-read-this-book-family-reads).
+    If you also want to track who has actually *read* that copy, see
+    [Reading Progress](10-reading-progress.md#who-read-this-book-library-reads).

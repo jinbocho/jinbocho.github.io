@@ -1,6 +1,6 @@
 ---
 title: How to catalog your home library (and find any book in seconds)
-description: A practical guide to cataloging a home book collection — by ISBN, by room, by shelf — using free, open-source, self-hosted software.
+description: A practical guide to cataloging a home book collection — by ISBN, by room, by shelf — using free, source-available, self-hosted software.
 ---
 
 # How to catalog your home library
@@ -45,17 +45,20 @@ Pick a tool that lets you **export everything** (CSV/JSON) and, ideally, that yo
 
 ## A tool that does all of this
 
-**[Jinbocho](https://github.com/jinbocho)** is a free, open-source, self-hosted home
+**[Jinbocho](https://github.com/jinbocho)** is a free, source-available, self-hosted home
 library manager built around exactly this workflow: four-level locations, ISBN scanning,
 a visual shelf map, multi-user family accounts, and full export.
 
 ```bash
-git clone https://github.com/jinbocho/jinbocho-infrastructure-v1.git
-cd jinbocho-infrastructure-v1
-docker compose -f docker-compose.ghcr.yml up -d
+git clone https://github.com/jinbocho/jinbocho-infrastructure-community-v1.git
+cd jinbocho-infrastructure-community-v1
+docker compose -f docker/docker-compose.community.yml up -d
 ```
 
-Prefer to look before installing? Open the **[live demo](https://jinbocho.onrender.com)**.
+(Copy the example env files first — see the **[Developer Manual](../developer/02-local-development.md)** for the full setup.)
+
+Prefer to look before installing? Open the **[live demo](https://jinbocho.github.io/jinbocho-demo/)**.
 
 **See also:** [Track which shelf a book is on](track-which-shelf-a-book-is-on.md) ·
-[A self-hosted Goodreads alternative](goodreads-self-hosted-alternative.md)
+[A self-hosted Goodreads alternative](goodreads-self-hosted-alternative.md) ·
+[Jinbocho vs Libib vs Skoolib](jinbocho-vs-libib-vs-skoolib.md)

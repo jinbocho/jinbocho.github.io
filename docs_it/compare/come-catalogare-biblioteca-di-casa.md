@@ -1,6 +1,6 @@
 ---
 title: Come catalogare la biblioteca di casa (e trovare ogni libro in pochi secondi)
-description: Guida pratica per catalogare la collezione di libri di casa — per ISBN, per stanza, per scaffale — con software libero, open source e self-hosted.
+description: Guida pratica per catalogare la collezione di libri di casa — per ISBN, per stanza, per scaffale — con software gratuito, source-available e self-hosted.
 ---
 
 # Come catalogare la biblioteca di casa
@@ -47,17 +47,20 @@ puoi **self-hostare**. Il tuo catalogo deve sopravvivere a qualsiasi azienda.
 ## Uno strumento che fa tutto questo
 
 **[Jinbocho](https://github.com/jinbocho)** è un gestionale per la biblioteca di casa
-gratuito, open source e self-hosted, costruito esattamente su questo flusso: posizioni a
+gratuito, source-available e self-hosted, costruito esattamente su questo flusso: posizioni a
 quattro livelli, scansione ISBN, mappa visiva degli scaffali, account famiglia multi-utente
 ed esportazione completa.
 
 ```bash
-git clone https://github.com/jinbocho/jinbocho-infrastructure-v1.git
-cd jinbocho-infrastructure-v1
-docker compose -f docker-compose.ghcr.yml up -d
+git clone https://github.com/jinbocho/jinbocho-infrastructure-community-v1.git
+cd jinbocho-infrastructure-community-v1
+docker compose -f docker/docker-compose.community.yml up -d
 ```
 
-Preferisci guardare prima di installare? Apri la **[demo live](https://jinbocho.onrender.com)**.
+(Copia prima i file .env di esempio — vedi il **[Manuale Sviluppatori](../developer/02-local-development.md)** per il setup completo.)
+
+Preferisci guardare prima di installare? Apri la **[demo live](https://jinbocho.github.io/jinbocho-demo/)**.
 
 **Vedi anche:** [Sapere su quale scaffale è un libro](sapere-su-quale-scaffale-e-un-libro.md) ·
-[Alternativa a Goodreads self-hosted](alternativa-goodreads-self-hosted.md)
+[Alternativa a Goodreads self-hosted](alternativa-goodreads-self-hosted.md) ·
+[Jinbocho vs Libib vs Skoolib](jinbocho-vs-libib-vs-skoolib.md)

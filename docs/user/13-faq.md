@@ -6,9 +6,10 @@
 
 ### Is Jinbocho free?
 
-Yes. Jinbocho is open-source software licensed under CC BY-NC-ND 4.0-or-later.
-You can self-host it for free. The public hosted version (if available) runs on
-Render and Neon free tiers, which means it may have cold-start delays but costs nothing.
+Yes. Jinbocho is source-available software licensed under the Jinbocho Source-Available
+License (free for personal, non-commercial use). You can self-host it for free. The public
+hosted version (if available) runs on Render and Neon free tiers, which means it may have
+cold-start delays but costs nothing.
 
 ---
 
@@ -19,11 +20,23 @@ tablet, or computer. No app installation is required.
 
 ---
 
-### Can multiple family members use the same library?
+### Can multiple people use the same library?
 
-Yes — that is the core use case. One family account can have multiple users
+Yes — that is the core use case. One library can have multiple members
 with different roles (Admin, Editor, Viewer). All members share the same
 book collection. See **[User Management](09-user-management.md)**.
+
+---
+
+### Can I belong to more than one library?
+
+Yes. The same account can be a member of several libraries at once — for
+example your own plus a friend's or partner's — and can hold a different role
+in each. If you belong to more than one, you'll see a **library picker** after
+login to choose which one to enter, and can switch between them later from the
+header. Libraries themselves stay isolated: belonging to two libraries doesn't
+merge their books or members. See
+**[Authentication → Belonging to Multiple Libraries](02-authentication.md#belonging-to-multiple-libraries)**.
 
 ---
 
@@ -44,7 +57,7 @@ that is enough for tens of thousands of books with metadata.
 3. Correct the title, author, or any other field
 4. Click **Save Changes**
 
-The fix applies only to your copy — it does not affect other families' libraries.
+The fix applies only to your copy — it does not affect other libraries.
 
 ---
 
@@ -84,7 +97,14 @@ The cover is loaded from the URL you provide, not uploaded.
 
 ---
 
-## Barcode Scanning
+### Can I import my existing Goodreads library?
+
+Yes — an Admin or Editor can import a Goodreads CSV export from
+**Settings → Library data**. See **[Export & Import → Importing from Goodreads](08-export-import.md#importing-from-goodreads)**.
+
+---
+
+## Barcode Scanning and Shelf Scan
 
 ### The scanner won't open. What's wrong?
 
@@ -114,6 +134,15 @@ The camera decodes the barcode without internet. But the ISBN lookup
 (fetching title and author) requires an internet connection.
 If you're offline, the scan still reads the ISBN — but you'll need
 to add the metadata manually or wait until you're online.
+
+---
+
+### Why don't I see a "Scan a whole shelf" option?
+
+Shelf Scan only shows up when your instance's AI module is enabled **and**
+configured with a vision-capable model. If either is missing, the option is
+hidden — ask your administrator, or use regular ISBN scanning instead. See
+**[ISBN Scanning → Shelf Scan](07-isbn-scanning.md#shelf-scan-photograph-a-whole-shelf)**.
 
 ---
 
@@ -153,38 +182,55 @@ When you scan or enter an ISBN, Jinbocho queries:
 - **Open Library** (openlibrary.org) — sends only the ISBN number
 - **Google Books** (googleapis.com) — sends only the ISBN number
 
-No personal data or book lists are shared. Only ISBNs go to external services.
+If AI features are enabled on your instance (Shelf Scan, Book Presentation,
+Recommendations), your library's configured AI provider also receives the
+relevant book photo/metadata to process those requests. No personal data or
+book lists are shared with Open Library or Google Books beyond the ISBN.
+
+---
+
+### Can I get a copy of my personal data (GDPR-style export)?
+
+There's no self-service "export my data" button for individual members yet.
+Ask your library's Admin to download a
+**[full backup](08-export-import.md#backup-restore)** (which includes the
+member roster, books, loans and reading history), or contact
+**jinbochoapp@gmail.com** directly.
 
 ---
 
 ### Can I delete my account?
 
-Contact your family Admin to remove your user account from the family.
-Full account and family deletion is not yet available through the UI —
-contact the person who manages your Jinbocho instance for assistance.
+Account deletion is **Admin-only and deletes the whole library**, not just one
+person's account — there's currently no way for a non-Admin to self-delete
+just their own account. Ask an Admin to remove you as a member instead if you
+just want to leave, or see
+**[Authentication → Deleting a Library](02-authentication.md#deleting-a-library)**
+if you're an Admin and want to delete everything.
 
 ---
 
 ## Sharing and Collaboration
 
-### Can I share a specific book's page with someone outside my family?
+### Can I share a specific book's page with someone outside my library?
 
-Not currently. Jinbocho is a private family library — all content requires
-login to view. Public sharing is not available.
-
----
-
-### Can two separate families share a library?
-
-No. Each family account is isolated. Books in one family are not visible
-to members of another family.
+Not currently. Jinbocho requires login to view any content. Public sharing is not available.
 
 ---
 
-### What happens if I leave a family?
+### Can two separate libraries share book data?
 
-An Admin removes you from the family. You lose access to the library
-immediately. You can create your own family account with a new registration.
+No. Each library's books, locations and loans are isolated from every other
+library, even if the same person is a member of both (see
+**[Can I belong to more than one library?](#can-i-belong-to-more-than-one-library)** above).
+
+---
+
+### What happens if I leave a library?
+
+An Admin removes you (or suspends you temporarily) from that library. You lose
+access to it immediately, but your account and any other libraries you belong
+to are unaffected. You can also register your own new library at any time.
 
 ---
 
@@ -205,5 +251,5 @@ immediately. You can create your own family account with a new registration.
 
 ### Can I self-host Jinbocho?
 
-Yes. Jinbocho is open-source (CC BY-NC-ND 4.0-or-later) and can be self-hosted
+Yes. Jinbocho is source-available (Jinbocho Source-Available License) and can be self-hosted
 with Docker Compose. See the **[Developer Manual](../developer/index.md)** for full instructions.

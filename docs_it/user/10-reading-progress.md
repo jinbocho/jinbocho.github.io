@@ -1,7 +1,7 @@
 # Progressi di lettura
 
 Tieni traccia di cosa hai letto, cosa stai leggendo e cosa ti aspetta — in tutta
-la biblioteca di famiglia.
+la biblioteca.
 
 ---
 
@@ -70,15 +70,15 @@ leggi libri diversi in stanze diverse.
 
 ---
 
-## Chi ha letto questo libro (Letture di famiglia)
+## Chi ha letto questo libro (Letture di biblioteca)
 
 Lo **stato** colorato visto sopra è un valore unico per libro — indica se
-*il libro* viene letto. Ma in una biblioteca di famiglia, più persone possono
+*il libro* viene letto. Ma in una biblioteca condivisa, più persone possono
 leggere la stessa copia, in momenti diversi. Jinbocho tiene traccia di questo
 separatamente.
 
 Nella pagina di dettaglio del libro, la card **Letto da** elenca ogni membro
-della famiglia con un interruttore:
+della biblioteca con un interruttore, mostrando il suo avatar se ne ha impostato uno:
 
 1. Apri un libro → scorri fino a **Letto da**
 2. Clicca **Segna come letto** vicino al tuo nome una volta finito
@@ -99,7 +99,7 @@ generale del libro si aggiorna automaticamente:
 Quando lo stato di un libro è **In lettura**, la persona che l'ha impostato
 compare come piccolo badge 📖 vicino al badge di stato (es. *📖 Carmelo*).
 Indica chi sta leggendo attivamente quella copia in questo momento — utile
-quando più membri della famiglia condividono una copia fisica e vogliono
+quando più membri della biblioteca condividono una copia fisica e vogliono
 sapere chi ha il segnalibro.
 
 ---
@@ -132,7 +132,7 @@ pie title La mia biblioteca (esempio)
 
 | Statistica | Descrizione |
 |------|-------------|
-| Totale libri | Tutte le copie possedute nella biblioteca di famiglia |
+| Totale libri | Tutte le copie possedute nella biblioteca |
 | Da leggere | La tua pila da leggere |
 | In lettura | Libri in corso |
 | Letto | Libri completati |
@@ -141,12 +141,12 @@ pie title La mia biblioteca (esempio)
 
 ### Statistiche per membro
 
-Sotto i totali di famiglia, compare una card **Membri della famiglia** per
-ciascun membro, che mostra:
+Sotto i totali della biblioteca, compare una card **Membri della biblioteca**
+per ciascun membro, con il suo avatar se ne ha impostato uno, che mostra:
 
 | Campo | Descrizione |
 |-------|--------------|
-| Libri letti | Conteggio delle copie che quel membro ha segnato come lette (vedi [Letture di famiglia](#chi-ha-letto-questo-libro-letture-di-famiglia) sopra) |
+| Libri letti | Conteggio delle copie che quel membro ha segnato come lette (vedi [Letture di biblioteca](#chi-ha-letto-questo-libro-letture-di-biblioteca) sopra) |
 | Libri posseduti | Conteggio delle copie registrate come possedute da quel membro |
 | Genere preferito | Il genere che compare più spesso tra i libri letti da quel membro |
 

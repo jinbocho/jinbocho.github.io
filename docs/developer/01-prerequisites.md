@@ -135,12 +135,6 @@ For enhanced ISBN lookup functionality, consider obtaining:
 - **How to get**: https://developers.google.com/books/docs/v1/using#APIKey
 - **When needed**: Set `GOOGLE_BOOKS_API_KEY` in the catalog-service `.env`
 
-### LLM API Key (for ai-service)
-- **Why**: Powers the optional `ai-service` (book presentation/incipit, tag suggestions, dedup hints, recommendations). The service is **off by default** — with no key it still runs and AI endpoints return empty results, so the rest of the platform works unchanged.
-- **Cost**: Free tier available (e.g. Groq)
-- **Providers**: any OpenAI-compatible endpoint — Groq, OpenAI, Google Gemini, or a local Ollama install
-- **When needed**: Set `LLM_ENABLED=true` and `LLM_API_KEY` in the ai-service `.env` (see `jinbocho-ai-v1/README.md`)
-
 ## Cloud Accounts (Production Only)
 
 For production deployment on Render + Neon:
@@ -164,19 +158,22 @@ Create a workspace folder and clone all Jinbocho repositories from the GitHub or
 ```bash
 mkdir -p ~/workspace/jinbocho && cd ~/workspace/jinbocho
 
-# Clone the public Jinbocho repositories
+# Orchestration repo (Docker Compose, env templates, deploy scripts) — clone first,
+# the service repos below are expected as its siblings
+git clone https://github.com/jinbocho/jinbocho-infrastructure-community-v1.git
+
+# Clone the Jinbocho service repositories
 git clone https://github.com/jinbocho/jinbocho-auth-v1.git
 git clone https://github.com/jinbocho/jinbocho-catalog-v1.git
 git clone https://github.com/jinbocho/jinbocho-api-gateway-v1.git
-git clone https://github.com/jinbocho/jinbocho-ai-v1.git   # optional: AI features, off by default
 git clone https://github.com/jinbocho/jinbocho-fe.git
 
 # Verify all services are present
 ls | grep jinbocho
-# Expected: jinbocho-auth-v1  jinbocho-catalog-v1  jinbocho-api-gateway-v1  jinbocho-ai-v1  jinbocho-fe
+# Expected: jinbocho-infrastructure-community-v1  jinbocho-auth-v1  jinbocho-catalog-v1  jinbocho-api-gateway-v1  jinbocho-fe
 ```
 
-All public repositories live under the `jinbocho` GitHub organization: https://github.com/jinbocho
+All repositories live under the `jinbocho` GitHub organization: https://github.com/jinbocho
 
 ## System Check Script
 

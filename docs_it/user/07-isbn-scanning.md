@@ -121,6 +121,102 @@ sequenceDiagram
 
 ---
 
+## Scansione scaffale: fotografa un intero scaffale
+
+Se l'AI è attiva sulla tua istanza Jinbocho, non devi scansionare i libri un
+codice a barre alla volta. La **Scansione scaffale** legge ogni dorso in una
+singola foto e propone ogni libro perché tu lo confermi.
+
+!!! info "Richiede un'AI con modello capace di leggere immagini"
+    La Scansione scaffale compare solo se il modulo AI della tua istanza è
+    attivo **e** configurato con un modello capace di leggere immagini. Se non
+    è disponibile, l'opzione non compare — chiedi al tuo amministratore, oppure
+    usa la scansione ISBN normale sopra.
+
+### Avviare una scansione scaffale
+
+Puoi iniziare da due punti:
+
+- **Mappa della libreria** — apri la mappa di una libreria, clicca **Scansiona**
+  accanto allo scaffale che vuoi catalogare
+- **Aggiungi libro → Scansiona un intero scaffale** — scegli prima lo scaffale, poi scatta la foto
+
+### Passi
+
+1. Scegli lo scaffale che stai fotografando (precompilato se sei partito dalla mappa)
+2. Scatta **una foto** dello scaffale — su mobile si apre direttamente la fotocamera
+3. Aspetta che l'AI legga i dorsi — per uno scaffale pieno può richiedere
+   **un paio di minuti**, quindi non chiudere la scheda
+4. Rivedi i risultati: ogni libro rilevato è mostrato in uno di questi stati:
+
+    | Stato | Significato |
+    |--------|-------------|
+    | ✅ Trovato | L'AI è sicura di titolo e autore |
+    | ⚠️ Incerto | L'AI ha un'ipotesi, ma vale la pena controllarla |
+    | ❌ Non trovato | Un dorso è stato rilevato ma non identificato — modificalo a mano o saltalo |
+
+5. Correggi titolo/autore dove serve, e deseleziona qualsiasi libro non vuoi aggiungere
+6. I libri che sembrano duplicati — una copia che già possiedi, o lo stesso
+   dorso rilevato due volte nella foto — sono segnalati ed esclusi dal
+   conteggio di default; riselezionali se vuoi davvero aggiungere una seconda copia
+7. Clicca **Aggiungi N libri** — ogni libro selezionato viene creato già
+   posizionato su quello scaffale
+
+!!! tip "Perché è più lenta di una singola scansione"
+    Leggere la foto di un intero scaffale è un compito AI molto più pesante
+    che cercare un singolo ISBN, per questo può richiedere uno o due minuti
+    per uno scaffale pieno. È normale — lascia che finisca invece di riprovare.
+
+### Se l'AI non è disponibile
+
+A seconda di cosa è mal configurato, vedrai uno di questi messaggi al posto
+del pulsante Scansiona o dopo averlo usato:
+
+- *"La scansione fotografica AI non è configurata per questa biblioteca"* — il modulo AI non è attivo
+- *"Il modello AI configurato non può leggere le foto"* — l'AI è attiva ma il modello in uso non supporta le immagini; chiedi all'amministratore di configurarne uno con supporto vision
+- Un errore generico — l'AI è temporaneamente non disponibile; riprova più tardi, oppure aggiungi i libri manualmente
+
+---
+
+## Verifica scaffale: controlla uno scaffale già catalogato
+
+La **Verifica scaffale** è l'opposto della Scansione scaffale: invece di
+aggiungere nuovi libri, controlla uno scaffale **già** catalogato rispetto a
+quello che c'è fisicamente ora, e ti dice cosa è cambiato.
+
+1. Apri la Mappa della libreria, clicca **Verifica** accanto allo scaffale
+2. Scatta una foto dello scaffale così com'è ora
+3. Jinbocho confronta la foto con quanto registrato su quello scaffale e segnala:
+
+    | Risultato | Significato | Cosa puoi fare |
+    |--------|---------|-------------------|
+    | **Mancante** | Catalogato su questo scaffale, ma non visto nella foto | Potrebbe essere stato spostato, prestato o perso — clicca **Visualizza** per controllare |
+    | **Inatteso** | Visto nella foto, ma non catalogato su questo scaffale | Potrebbe essere fuori posto — **Aggiungi qui** se appartiene a questo scaffale, o **Cerca in biblioteca** per trovare dove dovrebbe stare |
+
+Utile per scovare libri spostati fisicamente senza aggiornare Jinbocho, o
+prestati e mai segnati come restituiti.
+
+---
+
+## Modalità scaffale: scansione rapida per uno scaffale
+
+Se stai aggiungendo molti libri allo **stesso** scaffale e preferisci
+scansionare i codici a barre invece di usare foto AI, la **Modalità scaffale**
+blocca la posizione di destinazione per tutta la sessione, così non devi
+sceglierla di nuovo dopo ogni libro:
+
+1. Clicca **Aggiungi libro** → **Scansiona uno scaffale** (Modalità scaffale)
+2. Scegli una volta sola stanza → libreria → sezione → scaffale
+3. Scansiona (o digita) un ISBN dopo l'altro — ogni libro viene salvato
+   direttamente su quello scaffale senza richiedere di nuovo la posizione
+4. Chiudi la Modalità scaffale quando hai finito con quello scaffale
+
+Se l'AI è disponibile, la Modalità scaffale offre anche una scorciatoia per
+passare alla **Scansione scaffale** — scatta una sola foto dell'intero
+scaffale e viene inviata direttamente al flusso di revisione della Scansione scaffale.
+
+---
+
 ## Formati ISBN riconosciuti
 
 | Formato | Esempio | Note |

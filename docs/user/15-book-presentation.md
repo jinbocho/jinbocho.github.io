@@ -1,7 +1,8 @@
-# Book Presentation
+# Book Presentation & AI
 
 Every book can show a short **presentation** — a few spoiler-free lines that help you decide
 whether to start reading it. You'll find it on the book's detail page, just below the metadata.
+This page also covers **AI Recommendations**, a separate feature that suggests what to read next.
 
 ---
 
@@ -67,6 +68,34 @@ This is handy when the editorial description is missing, too long, or in the wro
 | Read the presentation | ✅ | ✅ | ✅ |
 | Generate with AI | — | ✅ | ✅ |
 | Edit by hand | — | ✅ | ✅ |
+
+---
+
+## AI Recommendations
+
+If AI is enabled for your library, Jinbocho can suggest books to read next, tailored to you
+personally rather than to the whole library.
+
+### How suggestions are built
+
+Recommendations combine:
+
+- Your **favorite genre** (derived from the books you've marked as read)
+- Your **recent reads**
+- The rest of the **catalog** you haven't read yet
+
+The AI model uses these to propose titles already in your library (or, depending on
+configuration, titles worth adding) that fit your reading taste.
+
+### Getting recommendations
+
+1. Open the **Recommendations** section (sidebar or dashboard, depending on your instance)
+2. Jinbocho generates a short list of suggestions with a reason for each
+3. Recommendations refresh as your reading history changes
+
+!!! info "Optional feature"
+    Like Book Presentation, this requires your library to have an AI provider configured.
+    If it isn't, the Recommendations section simply doesn't offer suggestions.
 
 ---
 

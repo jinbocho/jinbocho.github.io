@@ -103,6 +103,13 @@ Scaffale 2 — Salotto › Billy › Colonna sinistra › Scaffale 2
     Le posizioni non devono essere consecutive. Lasciare la posizione 4 vuota significa
     che c'è fisicamente un gap sullo scaffale (un libro in prestito, per esempio).
 
+!!! tip "Catalogare o verificare un intero scaffale in un colpo solo"
+    Dalla **Mappa della libreria**, ogni scaffale ha i pulsanti **Scansiona** e
+    **Verifica**: Scansiona fotografa lo scaffale e aggiunge in blocco ogni
+    libro riconosciuto dall'AI, già posizionato; Verifica confronta una foto
+    con quanto già catalogato su quello scaffale e segnala cosa manca o è fuori posto.
+    Vedi **[Scansione scaffale e Verifica scaffale](07-isbn-scanning.md#scansione-scaffale-fotografa-un-intero-scaffale)**.
+
 ---
 
 ## Modificare e rinominare una posizione

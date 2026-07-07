@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,10 +7,10 @@
   <script src="./assets/js/ga-consent-default.js"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-TF0Z5E1TLK"></script>
   <script src="./assets/js/ga-init.js"></script>
-  <title>Jinbocho — La biblioteca di casa, finalmente in ordine</title>
-  <meta name="description" content="Jinbocho è il sistema open source per catalogare, organizzare e ritrovare i libri della tua famiglia. Scansiona ISBN, mappa le librerie, condividi con i tuoi cari." />
-  <meta property="og:title" content="Jinbocho — La biblioteca di casa, finalmente in ordine" />
-  <meta property="og:description" content="Cataloga i tuoi libri con uno scan. Trova ogni volume sullo scaffale giusto. Open source, per la tua famiglia." />
+  <title>Jinbocho — Your home library, finally organised</title>
+  <meta name="description" content="Jinbocho is the source-available system to catalogue, organise and find every book in your home library. Scan ISBNs, map your bookcases, share with the people you live with." />
+  <meta property="og:title" content="Jinbocho — Your home library, finally organised" />
+  <meta property="og:description" content="Catalogue your books with a scan. Find every volume on the right shelf. Source-available, for your home library." />
   <meta property="og:type" content="website" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -37,7 +37,7 @@
       <ul class="nav-links">
         <li><a href="#funzionalita" data-i18n="nav-features">Funzionalità</a></li>
         <li><a href="#come-funziona" data-i18n="nav-how">Come funziona</a></li>
-        <li><a href="#opensource" data-i18n="nav-opensource">Open source</a></li>
+        <li><a href="#opensource" data-i18n="nav-opensource">Source available</a></li>
         <li><a href="./manuals/" data-i18n="nav-docs" data-href-it="./manuals/it/" data-href-en="./manuals/">Documentazione</a></li>
         <li><a href="./pricing/" data-i18n="nav-pricing">Prezzi</a></li>
       </ul>
@@ -60,10 +60,9 @@
       <ul class="mobile-nav-links">
         <li><a href="#funzionalita" data-i18n="nav-features">Funzionalità</a></li>
         <li><a href="#come-funziona" data-i18n="nav-how">Come funziona</a></li>
-        <li><a href="#opensource" data-i18n="nav-opensource">Open source</a></li>
+        <li><a href="#opensource" data-i18n="nav-opensource">Source available</a></li>
         <li><a href="./manuals/" data-i18n="nav-docs" data-href-it="./manuals/it/" data-href-en="./manuals/">Documentazione</a></li>
-         <li><a href="./pricing/" data-i18n="nav-pricing">Prezzi</a></li>
-         <li><a href="./pricing/" data-i18n="nav-pricing">Prezzi</a></li>
+        <li><a href="./pricing/" data-i18n="nav-pricing">Prezzi</a></li>
       </ul>
       <div class="mobile-menu-cta">
         <div class="lang-toggle" aria-label="Scegli lingua / Choose language">
@@ -98,7 +97,9 @@
   <div class="container">
     <ul class="badge-list">
       <li class="badge-item"><span class="badge-dot"></span><span data-i18n="badge-isbn">Scansione ISBN in-browser</span></li>
+      <li class="badge-item"><span class="badge-dot"></span><span data-i18n="badge-shelfscan">Scansione AI di uno scaffale intero</span></li>
       <li class="badge-item"><span class="badge-dot"></span><span data-i18n="badge-map">Mappa interattiva delle librerie</span></li>
+      <li class="badge-item"><span class="badge-dot"></span><span data-i18n="badge-wishlist">Wishlist e valutazioni di famiglia</span></li>
       <li class="badge-item"><span class="badge-dot"></span><span data-i18n="badge-multiuser">Multiutente e multi-ruolo</span></li>
       <li class="badge-item"><span class="badge-dot"></span><span data-i18n="badge-lang">Italiano, inglese, spagnolo e francese</span></li>
       <li class="badge-item"><span class="badge-dot"></span><span data-i18n="badge-export">Esportazione CSV e JSON</span></li>
@@ -162,6 +163,30 @@
         <p data-i18n="feat6-p">Interfaccia disponibile in italiano, inglese, spagnolo e francese. La lingua si sincronizza sul profilo utente, così l'app parla la stessa lingua su qualsiasi dispositivo.</p>
       </div>
 
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+        <h3 data-i18n="feat7-title">Wishlist di famiglia</h3>
+        <p data-i18n="feat7-p">Ogni membro può segnare i libri desiderati con una priorità e vedere chi altro in famiglia li vuole. Quando lo acquisti, un clic trasforma il desiderio in un libro catalogato.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <h3 data-i18n="feat8-title">Prestiti e valutazioni</h3>
+        <p data-i18n="feat8-p">Tieni traccia di chi ha in prestito cosa, con avviso automatico sui ritardi e storico completo dei resi. Ogni membro può valutare la propria copia di un libro, indipendentemente dagli altri.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <h3 data-i18n="feat9-title">Importa da Goodreads</h3>
+        <p data-i18n="feat9-p">Hai già un catalogo su Goodreads? Importa l'intero export CSV in un'unica sessione: rivedi ogni riga prima di confermare, con stato di lettura, voti e recensioni già pronti e i doppioni riconosciuti in automatico.</p>
+      </div>
+
     </div>
   </div>
 </section>
@@ -170,9 +195,17 @@
 <section class="ai-pro-section">
   <div class="container">
     <p class="section-label ai-pro-label" data-i18n="ai-label">Modulo AI Pro</p>
-    <h2 class="section-title" data-i18n="ai-title">Intelligenza artificiale per il catalogo</h2>
-    <p class="section-sub" data-i18n="ai-sub">Funzionalità avanzate che completano il flusso di catalogazione, disponibili nella versione Pro. Altre ne arriveranno nel tempo.</p>
+    <h2 class="section-title" data-i18n="ai-title">Intelligenza artificiale per il tuo catalogo</h2>
+    <p class="section-sub" data-i18n="ai-sub">Descrizione automatica, suggerimento tag e un intero scaffale verificato da una foto: funzionalità avanzate disponibili nella versione Pro. Altre ne arriveranno nel tempo.</p>
     <div class="ai-grid">
+
+      <div class="ai-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M4 3v18M4 8h16M4 16h16M20 3v18"/></svg>
+        </div>
+        <h3 data-i18n="ai3-title">Verifica uno scaffale da una foto</h3>
+        <p data-i18n="ai3-p">Fotografa uno scaffale: un LLM legge ogni dorso, verifica cosa hai già in catalogo e propone solo i libri nuovi da aggiungere. Rivedi la selezione e conferma in blocco tutta la fila in un colpo solo.</p>
+      </div>
 
       <div class="ai-card">
         <div class="feature-icon">
@@ -184,10 +217,10 @@
 
       <div class="ai-card">
         <div class="feature-icon">
-          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/><line x1="11" y1="8" x2="11" y2="14"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M20.59 13.41L11 3.83V3H4v7h.83l9.58 9.59a2 2 0 0 0 2.83 0l3.35-3.35a2 2 0 0 0 0-2.83z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>
         </div>
-        <h3 data-i18n="ai2-title">Riconoscimento titolo e autore via AI</h3>
-        <p data-i18n="ai2-p">Se l'ISBN non è leggibile o il libro non è nei database online, algoritmi di machine learning identificano automaticamente titolo e autore, permettendo di completare la catalogazione senza inserimento manuale.</p>
+        <h3 data-i18n="ai7-title">Suggerimento tag automatico</h3>
+        <p data-i18n="ai7-p">L'AI analizza il libro appena catalogato e propone i tag più adatti — genere, argomento, ambientazione — per tenere il catalogo organizzato senza doverli scrivere a mano.</p>
       </div>
 
     </div>
@@ -413,7 +446,7 @@
   <div class="container">
     <div class="opensource-inner">
       <div>
-        <p class="section-label" data-i18n="os-label">Open source</p>
+        <p class="section-label" data-i18n="os-label">Source available</p>
         <h2 class="section-title" data-i18n="os-title">Il codice è pubblico, i dati sono tuoi</h2>
         <p class="section-sub" data-i18n="os-sub">Il codice di Jinbocho è pubblico e disponibile per trasparenza, source-available con licenza Proprietaria – Uso Community Consentito. Puoi visualizzarlo e verificare cosa fa con i tuoi dati.</p>
         <div class="tech-chips">
@@ -499,6 +532,14 @@
       </a>
 
     </div>
+
+    <p class="compare-links">
+      <span data-i18n="compare-label">Confronti:</span>
+      <a href="./manuals/compare/goodreads-self-hosted-alternative/" data-href-it="./manuals/it/compare/alternativa-goodreads-self-hosted/" data-href-en="./manuals/compare/goodreads-self-hosted-alternative/" data-i18n="compare-goodreads">vs Goodreads</a> ·
+      <a href="./manuals/compare/catalog-your-home-library/" data-href-it="./manuals/it/compare/come-catalogare-biblioteca-di-casa/" data-href-en="./manuals/compare/catalog-your-home-library/" data-i18n="compare-catalog">Catalogare la libreria</a> ·
+      <a href="./manuals/compare/track-which-shelf-a-book-is-on/" data-href-it="./manuals/it/compare/sapere-su-quale-scaffale-e-un-libro/" data-href-en="./manuals/compare/track-which-shelf-a-book-is-on/" data-i18n="compare-shelf">Trovare uno scaffale</a> ·
+      <a href="./manuals/compare/jinbocho-vs-libib-vs-skoolib/" data-href-it="./manuals/it/compare/jinbocho-vs-libib-vs-skoolib/" data-href-en="./manuals/compare/jinbocho-vs-libib-vs-skoolib/" data-i18n="compare-libib">vs Libib &amp; Skoolib</a>
+    </p>
   </div>
 </section>
 

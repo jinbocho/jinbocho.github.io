@@ -1,6 +1,6 @@
 # Backend Services
 
-Jinbocho's backend is composed of FastAPI microservices: three are always present (Community edition), a fourth — **ai-service** — is optional and only required for the **Pro edition**. Two are **Private Services** (internal only); one is the public **API Gateway**.
+Jinbocho's backend is composed of three FastAPI microservices. Two are **Private Services** (internal only); one is the public **API Gateway**.
 
 ## Architecture at a Glance
 
@@ -10,21 +10,21 @@ Client (Browser)    │   API Gateway  :8000  (PUBLIC)   │
 ──────────────────► │  JWT validation · CORS · Proxy   │
                     └───────────┼─────────────────┘
                                 │ internal HTTP
-              ┌─────────────────┼─────────────────┬─────────────────┐
-              │                 │                 │
-   ┌──────────────┐   ┌──────────────────┐   ┌──────────────┐
-   │ auth-service │   │ catalog-service   │   │  ai-service   │
-   │    :8001     │   │    :8002          │   │    :8003      │
-   │  (Private)   │   │  (Private)        │   │ (Private, Pro)│
-   └──────┼───────┘   └──────┼────────────┘   └──────┼────────┘
-          │                  │                       │
-   ┌──────┴──────┐   ┌───────┴──────┐         ┌──────┴──────┐
-   │  auth_db     │   │  catalog_db  │         │   ai_db      │
-   │ (PostgreSQL) │   │ (PostgreSQL) │         │ (PostgreSQL) │
-   └──────────────┘   └──────────────┘         └──────────────┘
+                  ┌─────────────┴─────────────┐
+                  │                           │
+       ┌──────────────┐             ┌──────────────────┐
+       │ auth-service │             │ catalog-service   │
+       │    :8001     │             │    :8002          │
+       │  (Private)   │             │  (Private)        │
+       └──────┼───────┘             └──────┼────────────┘
+              │                            │
+       ┌──────┴──────┐             ┌───────┴──────┐
+       │  auth_db     │             │  catalog_db  │
+       │ (PostgreSQL) │             │ (PostgreSQL) │
+       └──────────────┘             └──────────────┘
 ```
 
-Each service has its own database. Services never share a database. `catalog-service` validates JWTs locally (it does **not** call back into `auth-service`); `ai-service` calls out to `catalog-service` for ISBN/cover lookups and to the configured LLM provider.
+Each service has its own database. Services never share a database. `catalog-service` validates JWTs locally (it does **not** call back into `auth-service`).
 
 ---
 
@@ -282,74 +282,6 @@ Tables managed via Alembic migrations:
 
 ---
 
-## ai-service (port 8003) — Pro edition only
-
-**Repository**: `jinbocho-ai-v1`
-
-### Responsibilities
-
-- Generate AI book presentations ("incipit") on demand for `catalog-service`
-- Tag suggestions, duplicate detection and recommendations (currently stubbed, return empty results)
-- Cover-photo OCR/classification pipeline (implemented but **paused** — disabled in the router because OCR accuracy is currently inadequate)
-- Talks to an OpenAI-compatible LLM endpoint (works out of the box with Groq's free tier) and to `catalog-service` / Google Books for cover lookups
-
-This service is optional. It is only started, and only reachable through the gateway, when `ai` is included in the gateway's `JINBOCHO_FEATURES` (the **Pro edition**). The **Community edition** runs without it.
-
-### Key Endpoints
-
-| Method | Path | Description |
-|--------|------|-------------|
-| `POST` | `/v1/suggestions/tags` | Tag suggestions (currently returns an empty list — not yet implemented) |
-| `POST` | `/v1/suggestions/incipit` | Generate a book presentation via the configured LLM |
-| `POST` | `/v1/suggestions/dedup` | Duplicate detection (currently returns an empty list — not yet implemented) |
-| `GET` | `/v1/suggestions/recommendations/{family_id}` | Recommendations (currently returns an empty list — not yet implemented) |
-| `GET` | `/health` | Health check |
-
-!!! warning "Cover OCR is implemented but disabled"
-    `app/api/v1/endpoints/cover.py` and its `POST /v1/cover/extract` endpoint exist in the
-    codebase, but the route is **commented out** in `app/api/v1/router.py` pending accuracy
-    improvements. The gateway's `/v1/ai/cover/*` proxy path will 404 until this is re-enabled.
-
-### Environment Variables
-
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `DATABASE_URL` | ✅ | — | `postgresql+asyncpg://...` (own `ai_db`) |
-| `LLM_ENABLED` | — | `false` | Master switch for all LLM-backed features |
-| `LLM_BASE_URL` | — | `https://api.openai.com/v1` | Any OpenAI-compatible endpoint (Groq, OpenAI, Gemini, local Ollama, ...) |
-| `LLM_MODEL` | — | `gpt-4o-mini` | Model name for the configured provider |
-| `LLM_API_KEY` | — | *(empty)* | API key for the configured provider |
-| `CATALOG_SERVICE_URL` | — | `http://catalog-service:8002` | Internal URL of catalog-service |
-| `GOOGLE_BOOKS_API_KEY` | — | *(empty)* | Same key as catalog-service's; used for cover lookups |
-| `GOOGLE_BOOKS_TIMEOUT` | — | `3.0` | Seconds before giving up on a Google Books request |
-| `COVER_MAX_IMAGE_DIMENSION` | — | `1200` | Downscale covers larger than this (px, longest side) before OCR |
-| `COVER_MAX_FILE_SIZE_MB` | — | `5` | Reject cover uploads above this size before reading them into memory |
-| `DEBUG` | — | `false` | SQL query logging |
-
-!!! info "Bring your own LLM provider"
-    The default `.env.example` is pre-filled for Groq's free tier (`LLM_BASE_URL=https://api.groq.com/openai/v1`),
-    while `LLM_BASE_URL`'s own default and the Render blueprint both fall back to OpenAI. Pick whichever
-    OpenAI-compatible provider you want — Groq, OpenAI, Gemini, or a local Ollama instance — by setting
-    `LLM_BASE_URL` / `LLM_MODEL` / `LLM_API_KEY` together.
-
-### Run Locally (without Docker)
-
-```bash
-cd jinbocho-ai-v1
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env   # set DATABASE_URL, and LLM_* if you want real suggestions
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8003
-```
-
-Swagger UI: [http://localhost:8003/docs](http://localhost:8003/docs)
-
-### Database Schema
-
-- `ai_suggestions` — Cached/generated suggestions (incipit text, tags, dedup hints) keyed by bibliographic record
-
----
-
 ## api-gateway (port 8000)
 
 **Repository**: `jinbocho-api-gateway-v1`
@@ -372,8 +304,6 @@ All endpoints are mounted under `/v1` and proxied to internal services. Unlike a
 | `/v1/users/*` | `auth-service:8001/v1/users/*` | |
 | `/v1/catalog/*` | `catalog-service:8002/v1/*` | Records, books, ingestion, export, import, members, account |
 | `/v1/location/*` | `catalog-service:8002/v1/*` | Rooms, bookcases, sections, shelves |
-| `/v1/ai/cover/*` | `ai-service:8003/v1/cover/*` | Requires `ai` in `JINBOCHO_FEATURES`; currently 404s (cover route disabled, see ai-service) |
-| `/v1/ai/*` | `ai-service:8003/v1/suggestions/*` | Requires `ai` in `JINBOCHO_FEATURES` |
 | `/health` | local | |
 
 So, for example, the frontend's `bibliographic-records` calls go to `/v1/catalog/bibliographic-records`, and `rooms` calls go to `/v1/location/rooms` — not to `/v1/records` or `/v1/rooms` directly.
@@ -386,9 +316,8 @@ So, for example, the frontend's `bibliographic-records` calls go to `/v1/catalog
 | `JWT_ALGORITHM` | — | `HS256` | Signing algorithm |
 | `AUTH_SERVICE_URL` | — | `http://auth-service:8001` | Internal URL of auth-service |
 | `CATALOG_SERVICE_URL` | — | `http://catalog-service:8002` | Internal URL of catalog-service |
-| `AI_SERVICE_URL` | — | `http://ai-service:8003` | Internal URL of ai-service (only reachable when `ai` is in `JINBOCHO_FEATURES`) |
 | `CORS_ORIGINS` | — | `["*"]` | JSON array of allowed origins, e.g. `["https://jinbocho-fe.onrender.com"]` |
-| `JINBOCHO_FEATURES` | — | `catalog,auth` | Comma-separated enabled modules. Community edition: `catalog,auth`. Pro edition: `catalog,auth,ai` (requires ai-service + Pro license) |
+| `JINBOCHO_FEATURES` | — | `catalog,auth` | Comma-separated enabled modules |
 | `DEBUG` | — | `false` | FastAPI debug mode + verbose logging |
 
 !!! danger "CORS in production"

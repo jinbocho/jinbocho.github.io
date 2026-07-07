@@ -43,6 +43,12 @@ Il modo più rapido per aggiungere un libro che hai in mano.
 
 Vedi la pagina dedicata **[Scansione ISBN](07-isbn-scanning.md)** per una guida dettagliata.
 
+!!! tip "Catalogare un intero scaffale in un colpo solo"
+    Se hai già diversi libri sistemati su uno scaffale, fotografare l'intero
+    scaffale e lasciare che l'AI legga ogni dorso è molto più veloce che
+    scansionare uno per uno. Vedi
+    **[Scansione scaffale](07-isbn-scanning.md#scansione-scaffale-fotografa-un-intero-scaffale)**.
+
 ---
 
 ## Metodo 2: inserimento ISBN manuale
@@ -88,19 +94,31 @@ Per libri senza ISBN (edizioni antiche, manoscritti) o quando vuoi avere pieno c
 
 ---
 
-## Se un libro è già presente nella biblioteca della famiglia
+## Metodo 4: aggiungere dalla lista dei desideri
 
-Qualunque metodo usi, Jinbocho controlla l'intera biblioteca della famiglia prima
-di aggiungere un nuovo libro — non solo i tuoi libri. Se trova una corrispondenza
+Se il libro è già nella tua **[Lista dei desideri](17-wishlist.md)**, non serve
+reinserirlo da zero:
+
+1. Apri **Lista dei desideri** (barra laterale)
+2. Trova il libro e clicca **Aggiungi alla biblioteca**
+3. Il modulo Aggiungi libro si apre precompilato con i dati della voce
+4. Assegna una posizione e clicca **"Salva"** — la voce viene rimossa automaticamente dalla lista dei desideri
+
+---
+
+## Se un libro è già presente nella biblioteca
+
+Qualunque metodo usi, Jinbocho controlla l'intera biblioteca prima
+di aggiungere un nuovo libro — non solo i libri che hai aggiunto tu. Se trova una corrispondenza
 per **ISBN** o per **titolo e autore**, vedrai una finestra che ti indica:
 
 - A quale libro esistente corrisponde
-- Chi in famiglia possiede già una copia
+- Chi altro possiede già una copia
 - Dove è collocata quella copia
 
 Questo è solo un avviso, non un blocco. Possedere due copie dello stesso libro
-tra membri diversi della famiglia è comune ed è completamente supportato — ad
-esempio, tu e il tuo partner potreste aver acquistato ciascuno la propria copia.
+tra membri diversi della biblioteca è comune ed è completamente supportato — ad
+esempio, tu e un altro membro potreste aver acquistato ciascuno la propria copia.
 Puoi:
 
 - **Confermare** — aggiungi comunque la tua copia, come libro separato nella biblioteca
@@ -133,7 +151,7 @@ Puoi aggiornare la posizione senza modificare tutti i metadati:
 
 ## Eliminare un libro
 
-Eliminare rimuove la copia fisica dalla tua biblioteca. Il record bibliografico (ISBN, titolo, autore) rimane nel database nel caso altri familiari abbiano lo stesso libro.
+Eliminare rimuove la copia fisica dalla tua biblioteca. Il record bibliografico (ISBN, titolo, autore) rimane nel database nel caso altri membri della biblioteca abbiano lo stesso libro.
 
 1. Apri il dettaglio del libro
 2. Clicca **"Elimina"** (icona cestino)

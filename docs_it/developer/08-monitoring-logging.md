@@ -15,7 +15,7 @@ Ogni servizio (Web Service, Private Service, Static Site) ha una scheda **Logs**
 Dopo un deploy, controlla i log per queste righe che confermano un avvio sano:
 
 ```
-# auth-service, catalog-service e ai-service (ognuno ha il proprio database):
+# auth-service e catalog-service (ognuno ha il proprio database):
 INFO  [alembic] Running upgrade -> <revision>, <description>
 INFO  [alembic] Done.
 INFO:     Application startup complete.

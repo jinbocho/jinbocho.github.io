@@ -1,20 +1,15 @@
 # Deploy in produzione
 
-Jinbocho è disponibile in due edizioni e due percorsi di deployment:
-
-- **Community edition** — `auth` + `catalog` + `api-gateway` + frontend. Gratuita.
-- **Pro edition** — aggiunge il modulo `ai-service` (tagging AI, deduplicazione, raccomandazioni) e un proprio database. Richiede una chiave di un provider LLM (o un'istanza locale di Ollama) e, per il percorso self-hosted, una licenza Jinbocho Pro per scaricare l'immagine privata `ghcr.io/jinbocho/jinbocho-ai-v1`.
-
-E due modi per eseguire ciascuna edizione in produzione:
+Jinbocho prevede due percorsi di deployment:
 
 1. **Render + Neon** (questo capitolo, Step 0-5 sotto) — PaaS gestito, zero server da mantenere, livello gratuito disponibile. Si può distribuire a mano (click-ops, descritto sotto) oppure in un solo passaggio con il **Render Blueprint** (`render.yaml`) — vedi [Deploy con Render Blueprint](#deploy-con-render-blueprint-iac).
 2. **VPS self-hosted** (Docker Compose + Caddy, TLS automatico) — vedi [Deploy self-hosted su VPS](#deploy-self-hosted-su-vps). Costo a lungo termine più basso, ma gestisci tu il server.
 
-Tutto il tooling di deployment (file compose, template env, script) si trova nel repository gemello `jinbocho-infrastructure-v1` — sia la procedura manuale Render di questo capitolo sia la sezione VPS attingono da lì.
+Tutto il tooling di deployment (file compose, template env, script) si trova nel repository gemello `jinbocho-infrastructure-community-v1` — sia la procedura manuale Render di questo capitolo sia la sezione VPS attingono da lì.
 
 ## Render + Neon (procedura manuale)
 
-Questa combinazione offre uno stack Community completamente operativo a costo zero con i livelli gratuiti.
+Questa combinazione offre uno stack completamente operativo a costo zero con i livelli gratuiti.
 
 ## Architettura su Render
 
@@ -152,7 +147,6 @@ Il gateway è l'**unico** componente backend pubblico.
 | `JWT_ALGORITHM` | `HS256` |
 | `AUTH_SERVICE_URL` | Indirizzo interno di auth-service |
 | `CATALOG_SERVICE_URL` | Indirizzo interno di catalog-service |
-| `AI_SERVICE_URL` | Indirizzo interno di ai-service *(omettere se non distribuito)* |
 | `CORS_ORIGINS` | `["https://jinbocho-fe.onrender.com"]` — imposta dopo il deploy del FE |
 | `DEBUG` | `false` |
 
@@ -239,43 +233,31 @@ Per eliminare i cold start, passa a Render Starter ($7/mese per servizio). I dat
 
 ## Deploy con Render Blueprint (IaC)
 
-Invece di seguire a mano gli Step 0-4 sopra, puoi distribuire l'intero stack Community in un solo passaggio con il Render Blueprint in `jinbocho-infrastructure-v1/render.yaml`:
+Invece di seguire a mano gli Step 0-4 sopra, puoi distribuire l'intero stack in un solo passaggio con il Render Blueprint in `jinbocho-infrastructure-community-v1/render.yaml`:
 
 1. Fai un fork/clone di `jinbocho-auth-v1`, `jinbocho-catalog-v1`, `jinbocho-api-gateway-v1`, `jinbocho-fe` sotto il tuo account o organizzazione GitHub, e sostituisci ogni placeholder `CHANGEME` in `render.yaml` con quell'account.
-2. Dashboard Render → **New + → Blueprint** → puntalo al tuo fork di `jinbocho-infrastructure-v1`.
+2. Dashboard Render → **New + → Blueprint** → puntalo al tuo fork di `jinbocho-infrastructure-community-v1`.
 3. Render crea tutti e quattro i servizi in un colpo: `jinbocho-auth` e `jinbocho-catalog` come Servizi Privati (`type: pserv`, non raggiungibili da internet — defense in depth), `jinbocho-api-gateway` come unico Web Service pubblico, e `jinbocho-fe` come sito statico.
 4. `JWT_SECRET_KEY`, `JWT_ALGORITHM`, `JWT_ISSUER`, `JWT_AUDIENCE` sono definite una sola volta nel gruppo di variabili d'ambiente condiviso `jinbocho-jwt` e iniettate in auth, catalog e gateway — imposti `JWT_SECRET_KEY` una sola volta.
 5. Ogni variabile `sync: false` (`DATABASE_URL` per auth/catalog, `GOOGLE_BOOKS_API_KEY`, `CORS_ORIGINS`, `VITE_API_BASE_URL`, le variabili SMTP dell'auth-service, `FRONTEND_BASE_URL`) **non è salvata in git** — Render te la richiede al primo deploy.
 6. Si applica la stessa risoluzione della dipendenza circolare descritta nello Step 4 sopra: distribuisci una volta, poi compila `CORS_ORIGINS` (gateway) e `VITE_API_BASE_URL` (frontend) una volta che conosci gli URL pubblici reciproci, e ridistribuisci questi due servizi.
 7. I Servizi Privati (`pserv`) richiedono un piano Render a pagamento (~$7/mese ciascuno). Per restare nel livello gratuito al costo di esporre pubblicamente auth/catalog, cambia il loro `type` da `pserv` a `web` nel tuo fork di `render.yaml` — restano comunque protetti dalla validazione JWT in entrambi i casi.
 
-Il blocco per l'ai-service è presente in `render.yaml` ma commentato — è scaffolding per la Pro edition. Per attivarlo: crea un database `ai_db` su Neon, decommenta il blocco, imposta `OPENAI_API_KEY` (oppure punta `LLM_BASE_URL`/`LLM_MODEL` a un altro provider compatibile con OpenAI nelle env vars del servizio), e aggiungi `AI_SERVICE_URL=http://jinbocho-ai:8003` alle env vars del gateway.
-
-Vedi `RENDER_DEPLOYMENT.md` in `jinbocho-infrastructure-v1` per l'esempio completo con valori di esempio.
+Vedi `RENDER_DEPLOYMENT.md` in `jinbocho-infrastructure-community-v1` per l'esempio completo con valori di esempio.
 
 ## Deploy self-hosted su VPS
 
-`jinbocho-infrastructure-v1/scripts/setup-vps-community.sh` e `setup-vps-pro.sh` eseguono `docker/docker-compose.all.yml` end to end su un VPS Debian/Ubuntu pulito (Hetzner, Scaleway, DigitalOcean, ...): installano Docker se manca, generano i segreti, scrivono ogni file env, buildano l'immagine del frontend, e avviano l'intero stack (Postgres × N + backend + gateway + frontend + reverse proxy Caddy con TLS Let's Encrypt automatico) in un'unica esecuzione.
+`jinbocho-infrastructure-community-v1/scripts/setup-vps-community.sh` esegue `docker/docker-compose.all.yml` end to end su un VPS Debian/Ubuntu pulito (Hetzner, Scaleway, DigitalOcean, ...): installa Docker se manca, genera i segreti, scrive ogni file env, builda l'immagine del frontend, e avvia l'intero stack (Postgres × 2 + backend + gateway + frontend + reverse proxy Caddy con TLS Let's Encrypt automatico) in un'unica esecuzione.
 
 ```bash
-# Community edition — auth + catalog + gateway + frontend:
+cd jinbocho-infrastructure-community-v1
 sudo ./scripts/setup-vps-community.sh \
   --domain library.example.com \
   --email you@example.com \
   --google-books-key AIza...
-
-# Pro edition — aggiunge ai-service + il suo database; richiede il login a GHCR perché
-# ghcr.io/jinbocho/jinbocho-ai-v1 è un'immagine privata (licenza Jinbocho Pro):
-sudo ./scripts/setup-vps-pro.sh \
-  --domain library.example.com \
-  --email you@example.com \
-  --google-books-key AIza... \
-  --ghcr-user you --ghcr-token ghp_xxx
 ```
 
-Flag utili su entrambi gli script: `--smtp-user`/`--smtp-password`/`--email-from` per abilitare l'invio email reale per i link di invito/reset (omettendoli, il servizio registra il link nei log invece di inviarlo), `--frontend-base-url` per sovrascrivere l'URL incluso nelle email, `--version` per fissare un tag di immagine GHCR invece di `latest`, `--enable-firewall` per configurare `ufw` (22/80/443). Esegui entrambi gli script con `--help` per l'elenco completo. Ri-eseguirli è sicuro — i segreti, i file env e il Caddyfile esistenti vengono mantenuti a meno che tu non li elimini prima.
-
-Per lo script Pro, `--ghcr-token` deve essere un PAT **classico** con lo scope `read:packages` (GHCR non supporta ancora i token a granularità fine per questo) — generalo da un account macchina dedicato, non dal tuo account GitHub personale.
+Flag utili: `--smtp-user`/`--smtp-password`/`--email-from` per abilitare l'invio email reale per i link di invito/reset (omettendoli, il servizio registra il link nei log invece di inviarlo), `--frontend-base-url` per sovrascrivere l'URL incluso nelle email, `--version` per fissare un tag di immagine GHCR invece di `latest`, `--enable-firewall` per configurare `ufw` (22/80/443). Esegui lo script con `--help` per l'elenco completo. Ri-eseguirlo è sicuro — i segreti, i file env e il Caddyfile esistenti vengono mantenuti a meno che tu non li elimini prima.
 
 Una volta che lo stack è attivo, fai uno smoke-test con:
 
@@ -284,18 +266,3 @@ Una volta che lo stack è attivo, fai uno smoke-test con:
 ```
 
 Questo registra una famiglia di test ed esercita gli endpoint principali tramite il gateway su `http://localhost:8000` (o il tuo dominio).
-
-## Community vs Pro edition
-
-L'unica differenza tra le edizioni è il modulo `ai-service`:
-
-| | Community | Pro |
-|---|---|---|
-| `auth`, `catalog`, `api-gateway`, frontend | ✅ | ✅ |
-| `ai-service` + `ai_db` | ❌ | ✅ |
-| File compose | `docker-compose.community*.yml` | `docker-compose.pro*.yml` |
-| Installer VPS | `setup-vps-community.sh` | `setup-vps-pro.sh` |
-| Immagine `ai-service` | — | privata (`ghcr.io/jinbocho/jinbocho-ai-v1`), richiede licenza Pro + login GHCR |
-| Feature flag del gateway | `JINBOCHO_FEATURES=catalog,auth` | `JINBOCHO_FEATURES=catalog,auth,ai` |
-
-Per passare un deployment Community attivo a Pro: aggiungi il modulo `ai` a `JINBOCHO_FEATURES` sul gateway, distribuisci `ai-service` (su Render: decommenta il blocco in `render.yaml`; su VPS: ri-esegui con `setup-vps-pro.sh`, oppure imposta `COMPOSE_PROFILES=pro` se stai eseguendo direttamente `docker-compose.all.yml`), e configura il suo provider LLM (`LLM_ENABLED=true` + `LLM_BASE_URL`/`LLM_MODEL`/`LLM_API_KEY` — OpenRouter, OpenAI, Gemini e Ollama locale funzionano tutti come endpoint compatibili OpenAI). Con `LLM_ENABLED=false` le funzionalità AI degradano in modo controllato nella UI invece di generare errori.

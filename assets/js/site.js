@@ -2,7 +2,7 @@
 /* Reads translations from window.JINBOCHO_I18N (set by a page-specific *-i18n.js loaded before this file) */
 (function () {
   function setLang(lang) {
-    if (lang !== 'it' && lang !== 'en') lang = 'it';
+    if (lang !== 'it' && lang !== 'en') lang = 'en';
     document.documentElement.lang = lang;
     localStorage.setItem('jinbocho-lang', lang);
 
@@ -46,9 +46,7 @@
       a.addEventListener('click', function () { toggleMobileMenu(false); });
     });
   }
-  var browser = (navigator.language || navigator.userLanguage || 'it').toLowerCase();
-  var detected = browser.startsWith('it') ? 'it' : 'en';
-  setLang(saved || detected);
+  setLang(saved || 'en');
 
   function applyConsent(value) {
     if (typeof gtag === 'function') {

@@ -18,12 +18,12 @@
 
 ## Pubblicazione delle immagini (tutti i servizi backend)
 
-Ogni repository di servizio backend — `jinbocho-auth-v1`, `jinbocho-catalog-v1`, `jinbocho-api-gateway-v1`, `jinbocho-ai-v1` — ha un identico `.github/workflows/publish-image.yml`. Builda l'immagine Docker del servizio e la pubblica sul **GitHub Container Registry (GHCR)**, così il `docker-compose.ghcr.yml` del repo infrastruttura può scaricare immagini già costruite invece di buildare dal sorgente (self-host con un solo comando).
+Ogni repository di servizio backend — `jinbocho-auth-v1`, `jinbocho-catalog-v1`, `jinbocho-api-gateway-v1` — ha un identico `.github/workflows/publish-image.yml`. Builda l'immagine Docker del servizio e la pubblica sul **GitHub Container Registry (GHCR)**, così il `docker-compose.community.yml` del repo infrastruttura può scaricare immagini già costruite invece di buildare dal sorgente (self-host con un solo comando).
 
 **Trigger**: push su `main`, push di un tag che corrisponde a `v*`, oppure `workflow_dispatch` manuale.
 
 ```yaml
-# .github/workflows/publish-image.yml (identico in auth-v1, catalog-v1, api-gateway-v1, ai-v1)
+# .github/workflows/publish-image.yml (identico in auth-v1, catalog-v1, api-gateway-v1)
 name: Publish image
 
 on:
@@ -75,7 +75,7 @@ Questo job **non ha alcuno step di lint, type-check o test** — builda e pubbli
 
 ## Backup del database (repo infrastruttura)
 
-`jinbocho-infrastructure-v1/.github/workflows/db-backup.yml` viene eseguito ogni giorno (`cron: "0 2 * * *"`, 02:00 UTC) oppure manualmente via `workflow_dispatch`. Esegue il dump di `auth_db` e `catalog_db` ospitati su Neon con `pg_dump`, comprime ogni dump con gzip e li carica come artifact della build con una **retention di 90 giorni**.
+`jinbocho-infrastructure-community-v1/.github/workflows/db-backup.yml` viene eseguito ogni giorno (`cron: "0 2 * * *"`, 02:00 UTC) oppure manualmente via `workflow_dispatch`. Esegue il dump di `auth_db` e `catalog_db` ospitati su Neon con `pg_dump`, comprime ogni dump con gzip e li carica come artifact della build con una **retention di 90 giorni**.
 
 **Secret di repository richiesti**:
 
@@ -85,9 +85,6 @@ Questo job **non ha alcuno step di lint, type-check o test** — builda e pubbli
 | `NEON_CATALOG_DB_URL` | `postgresql://user:pass@ep-xxx.neon.tech/catalog_db?sslmode=require` |
 
 Usa la connection string Neon originale (`postgresql://`), **non** quella trasformata per asyncpg usata dai servizi a runtime.
-
-!!! note "ai_db non viene ancora sottoposto a backup"
-    Il workflow esegue il dump solo di `auth_db` e `catalog_db`. Se provisioni un database separato per `jinbocho-ai-v1`, aggiungi uno step di dump equivalente anche per esso.
 
 **Ripristinare un backup**:
 
@@ -100,7 +97,7 @@ psql "$NEON_AUTH_DB_URL" < auth_db_YYYYMMDD_HHMM.sql
 
 ## Risveglio dei servizi Render
 
-`jinbocho-infrastructure-v1/.github/workflows/wake-render.yml` esegue il ping di tutti i servizi ospitati su Render (frontend, api-gateway, auth-service, catalog-service, ai-service `/health`) in parallelo e attende fino a 90 secondi che ciascuno risponda con HTTP 200 — utile per "scaldare" i servizi Render del piano gratuito dopo un cold start.
+`jinbocho-infrastructure-community-v1/.github/workflows/wake-render.yml` esegue il ping di tutti i servizi ospitati su Render (frontend, api-gateway, auth-service, catalog-service `/health`) in parallelo e attende fino a 90 secondi che ciascuno risponda con HTTP 200 — utile per "scaldare" i servizi Render del piano gratuito dopo un cold start.
 
 Questo workflow ha solo un trigger `workflow_dispatch` — **non viene eseguito automaticamente in base a uno schedule**. Per risvegliare i servizi automaticamente prima che siano necessari, va invocato esternamente (ad es. un servizio cron esterno che chiama l'API "dispatch workflow" di GitHub Actions) — vedi [Risoluzione dei problemi](09-troubleshooting.md) per la configurazione raccomandata.
 

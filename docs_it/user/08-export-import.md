@@ -5,7 +5,8 @@ Jinbocho offre due strumenti separati, per due scopi diversi:
 | Strumento | Dove | Per cosa serve |
 |------|-------|----------------|
 | **Esporta libri (CSV/JSON)** | Impostazioni → Esporta libri, oppure il menu di esportazione nella pagina Libri | Un elenco leggero, solo libri, per foglio di calcolo o analisi rapida. **Non è un formato di ripristino.** |
-| **Backup e ripristino** | Impostazioni → Backup e ripristino | Uno snapshot completo e ripristinabile di tutta la biblioteca famiglia — posizioni, libri, prestiti, cronologia letture e l'elenco dei membri. Usalo per migrare a un nuovo database senza perdere nulla. |
+| **Backup e ripristino** | Impostazioni → Backup e ripristino | Uno snapshot completo e ripristinabile di tutta la biblioteca — posizioni, libri, prestiti, cronologia letture e l'elenco dei membri. Usalo per migrare a un nuovo database senza perdere nulla. |
+| **Importazione da Goodreads** | Impostazioni → Dati biblioteca | Importa un export Goodreads esistente come punto di partenza, invece di aggiungere i libri uno per uno. |
 
 Questa pagina copre entrambi gli strumenti, più come ripristinare da un backup.
 
@@ -30,7 +31,7 @@ Il bottone di esportazione è disponibile anche direttamente nella pagina **Libr
 
 !!! note "Non è un formato di ripristino"
     Questa esportazione contiene solo i libri posseduti e dove sono collocati. Non
-    include prestiti, cronologia di lettura per membro, o l'elenco dei membri famiglia,
+    include prestiti, cronologia di lettura per membro, o l'elenco dei membri,
     e non esiste una funzione "importa CSV" corrispondente. Per qualsiasi cosa che
     potresti dover ripristinare in futuro, usa **Backup e ripristino** più sotto.
 
@@ -86,7 +87,7 @@ inclusi gli oggetti di posizione annidati.
 ```json
 {
   "exported_at": "2026-06-11T20:00:00Z",
-  "family_id": "fam_abc123",
+  "library_id": "lib_abc123",
   "books": [
     {
       "id": "c3f1a2b4",
@@ -118,14 +119,14 @@ inclusi gli oggetti di posizione annidati.
 
 ## Backup e ripristino
 
-Per un backup completo e ripristinabile della tua biblioteca famiglia, usa
+Per un backup completo e ripristinabile di tutta la tua biblioteca, usa
 **Backup e ripristino** in Impostazioni — non l'esportazione CSV/JSON sopra.
 
 ### Cosa è incluso
 
 Un backup completo contiene tutto:
 
-- La famiglia e l'elenco dei suoi membri (nomi, email, ruoli)
+- La biblioteca e l'elenco dei suoi membri (nomi, email, ruoli)
 - Stanze, librerie, sezioni e scaffali
 - Ogni libro posseduto e il suo record bibliografico
 - Prestiti (attivi e passati)
@@ -144,8 +145,8 @@ conservalo in una cartella di storage cloud (Google Drive, Dropbox, iCloud).
 
 1. Apri **Impostazioni** → **Backup e ripristino**
 2. Clicca **Ripristina da backup** e seleziona un file di backup scaricato precedentemente
-3. Controlla la finestra di conferma: mostra il nome della famiglia, quando il
-   backup è stato esportato, e il conteggio di membri famiglia, stanze, libri e
+3. Controlla la finestra di conferma: mostra il nome della biblioteca, quando il
+   backup è stato esportato, e il conteggio di membri, stanze, libri e
    prestiti che contiene
 4. Clicca **Ripristina** per confermare
 
@@ -156,7 +157,7 @@ conservalo in una cartella di storage cloud (Google Drive, Dropbox, iCloud).
     lo stesso file due volte. Questo rende anche sicuro l'uso di un backup per
     migrare la tua libreria su una nuova istanza di Jinbocho.
 
-Se un membro della famiglia è stato rimosso dopo che il backup è stato fatto ma
+Se un membro è stato rimosso dopo che il backup è stato fatto ma
 è ancora referenziato in esso (ad es. possedeva o aveva letto un libro), il
 ripristino lo ricrea con il suo nome e email originali, così la cronologia non
 viene persa.
@@ -170,6 +171,24 @@ Per aggiungere singoli libri invece di ripristinare un backup, vedi:
 - **[Scansione ISBN](07-isbn-scanning.md)** — il metodo più rapido per libri fisici
 - **[Inserimento manuale dell'ISBN](03-managing-library.md#metodo-2-inserimento-isbn-manuale)** — digita o incolla un ISBN
 - **[Inserimento manuale](03-managing-library.md#metodo-3-inserimento-manuale)** — per libri senza ISBN
+
+---
+
+## Importare da Goodreads
+
+Se stai passando da Goodreads, non devi reinserire a mano la tua lista.
+
+1. Su Goodreads, esporta la tua libreria (**My Books → Import/Export → Export Library**) per ottenere un file CSV
+2. Su Jinbocho, apri **Impostazioni → Dati biblioteca** (solo Admin o Editor)
+3. Clicca **Importa da Goodreads** e carica il CSV
+4. Controlla i risultati — Jinbocho cerca ogni ISBN e aggiunge un record
+   bibliografico e una copia posseduta per ogni corrispondenza trovata
+5. Assegna le posizioni in seguito, dato che gli export di Goodreads non conoscono le tue stanze e i tuoi scaffali
+
+!!! note "La corrispondenza è best-effort"
+    I libri senza un ISBN utilizzabile nell'export Goodreads, o che Open
+    Library e Google Books non riconoscono, non vengono importati
+    automaticamente — aggiungili manualmente in seguito.
 
 ---
 

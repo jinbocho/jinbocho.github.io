@@ -1,17 +1,18 @@
 # Prestiti
 
-Tieni traccia dei libri che hai prestato — a un familiare o a chiunque al di fuori
-del nucleo familiare — così niente resta dimenticato sullo scaffale di qualcun altro.
+Tieni traccia dei libri che hai prestato — a un altro membro della biblioteca o a
+chiunque altro — così niente resta dimenticato sullo scaffale di qualcun altro.
 
 ---
 
 ## Cosa registra un prestito
 
-Un prestito registra tre informazioni su una copia fisica:
+Un prestito registra queste informazioni su una copia fisica:
 
 | Campo | Descrizione |
 |-------|-------------|
-| **Nome del richiedente** | Testo libero — il nome di un familiare, un amico, un collega, chiunque |
+| **Nome del richiedente** | Obbligatorio — un nome digitato liberamente (un amico, un collega, chiunque fuori dalla tua biblioteca), oppure un membro esistente scelto dalla ricerca |
+| **Membro collegato** *(opzionale)* | Se hai scelto un membro dalla ricerca invece di digitare un nome, il prestito viene collegato al suo profilo |
 | **Prestato il** | Registrato automaticamente quando presti il libro |
 | **Data di restituzione** | Opzionale — impostala se vuoi un promemoria di quando il libro dovrebbe tornare |
 
@@ -29,7 +30,12 @@ prestare una copia già in prestito finché non viene segnata come restituita.
 
 1. Apri la pagina di dettaglio del libro
 2. Scorri fino alla sezione **Prestiti**
-3. Inserisci il **nome del richiedente** (obbligatorio)
+3. Inizia a digitare il nome del richiedente nel campo **richiedente**:
+    - Se corrisponde a un membro attuale della biblioteca, selezionalo dai
+      suggerimenti — il prestito viene collegato al suo profilo e il suo nome
+      diventa cliccabile ovunque il prestito venga mostrato
+    - Altrimenti, continua a digitare — viene salvato come testo libero (per
+      qualcuno fuori dalla tua biblioteca)
 4. Opzionalmente scegli una **data di restituzione**
 5. Clicca **Presta**
 
@@ -51,7 +57,7 @@ disponibile per essere prestato di nuovo.
 ## La pagina "In prestito"
 
 La pagina **In prestito** elenca tutti i libri attualmente prestati in tutta la
-biblioteca di famiglia, indipendentemente da chi li ha prestati o in quale stanza vivono di solito.
+tua biblioteca, indipendentemente da chi li ha prestati o in quale stanza vivono di solito.
 
 ```
 In prestito — 3 libri attualmente fuori
@@ -61,6 +67,11 @@ In prestito — 3 libri attualmente fuori
 📤 Il barone rampante            → Nonna Lucia       dal 2026-06-10   scade 2026-06-25
 📤 Sapiens                       → Un collega        dal 2026-06-15   (nessuna scadenza)
 ```
+
+Se un richiedente è un membro collegato della biblioteca, il suo nome è
+mostrato come link — cliccalo per aprire il suo
+**[profilo](09-user-management.md#profili-dei-membri)**. I nomi digitati come
+testo libero (persone fuori dalla tua biblioteca) restano testo semplice.
 
 Usa questa pagina quando vuoi una panoramica unica di "cosa è fuori" invece
 di controllare ogni libro singolarmente.
@@ -90,5 +101,5 @@ fisica*, non chi l'ha letta o quando.
 
 !!! tip "Prestiti vs. Letture"
     Prestare un libro a qualcuno non lo segna automaticamente come letto da quella persona.
-    Se vuoi anche tracciare chi in famiglia ha effettivamente *letto* quella
-    copia, vedi [Progressi di lettura](10-reading-progress.md#chi-ha-letto-questo-libro-letture-di-famiglia).
+    Se vuoi anche tracciare chi ha effettivamente *letto* quella
+    copia, vedi [Progressi di lettura](10-reading-progress.md#chi-ha-letto-questo-libro-letture-di-biblioteca).

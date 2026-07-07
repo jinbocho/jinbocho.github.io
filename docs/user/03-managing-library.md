@@ -49,6 +49,11 @@ The fastest way to add a book you're holding in your hands.
 
 See the dedicated **[ISBN Scanning](07-isbn-scanning.md)** page for detailed guidance, including mobile tips.
 
+!!! tip "Cataloging a whole shelf at once"
+    If you have several books already arranged on a shelf, photographing the
+    whole shelf and letting AI read every spine is much faster than scanning
+    one by one. See **[Shelf Scan](07-isbn-scanning.md#shelf-scan-photograph-a-whole-shelf)**.
+
 ---
 
 ## Method 2: Enter an ISBN Manually
@@ -94,19 +99,31 @@ For books with no ISBN (very old editions, handwritten notes, manuscripts) or wh
 
 ---
 
-## If a Book Already Exists in Your Family Library
+## Method 4: Add From Your Wishlist
 
-Whichever method you use, Jinbocho checks the whole family's library before
-adding a new book — not just your own books. If it finds a match by **ISBN**
+If the book is already on your **[Wishlist](17-wishlist.md)**, you don't need
+to re-enter it from scratch:
+
+1. Open **Wishlist** (sidebar)
+2. Find the book and click **Add to Library**
+3. The Add Book form opens pre-filled from the wishlist entry
+4. Assign a location and click **Save** — the item is automatically removed from your wishlist
+
+---
+
+## If a Book Already Exists in Your Library
+
+Whichever method you use, Jinbocho checks your whole library before
+adding a new book — not just books you personally added. If it finds a match by **ISBN**
 or by **title and author**, you'll see a dialog telling you:
 
 - Which existing book it matches
-- Who in the family already owns a copy
+- Who else already owns a copy
 - Where that copy is shelved
 
 This is just a heads-up, not a block. Owning two copies of the same book under
-different family members is common and fully supported — for example, you and
-your partner may each have bought your own copy. You can:
+different members is common and fully supported — for example, you and
+another member may each have bought your own copy. You can:
 
 - **Confirm** — add your copy anyway, as a separate book in the library
 - **Cancel** — go back without adding it, e.g. if you realise it's already yours
@@ -144,7 +161,7 @@ You can update a book's position without editing all its metadata:
 ## Deleting a Book
 
 Deleting removes the book copy from your library. The bibliographic record
-(ISBN, title, author) is kept in the database in case other family members
+(ISBN, title, author) is kept in the database in case other library members
 have the same book.
 
 1. Open the book's detail page

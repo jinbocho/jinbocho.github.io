@@ -18,12 +18,12 @@
 
 ## Image Publishing (all backend services)
 
-Each backend service repository — `jinbocho-auth-v1`, `jinbocho-catalog-v1`, `jinbocho-api-gateway-v1`, `jinbocho-ai-v1` — has an identical `.github/workflows/publish-image.yml`. It builds the service's Docker image and pushes it to the **GitHub Container Registry (GHCR)**, so the infrastructure repo's `docker-compose.ghcr.yml` can pull pre-built images instead of building from source (1-command self-host).
+Each backend service repository — `jinbocho-auth-v1`, `jinbocho-catalog-v1`, `jinbocho-api-gateway-v1` — has an identical `.github/workflows/publish-image.yml`. It builds the service's Docker image and pushes it to the **GitHub Container Registry (GHCR)**, so the infrastructure repo's `docker-compose.community.yml` can pull pre-built images instead of building from source (1-command self-host).
 
 **Triggers**: push to `main`, push of a tag matching `v*`, or manual `workflow_dispatch`.
 
 ```yaml
-# .github/workflows/publish-image.yml (identical in auth-v1, catalog-v1, api-gateway-v1, ai-v1)
+# .github/workflows/publish-image.yml (identical in auth-v1, catalog-v1, api-gateway-v1)
 name: Publish image
 
 on:
@@ -75,7 +75,7 @@ This job has **no lint, type-check, or test step** — it only builds and pushes
 
 ## Database Backups (infrastructure repo)
 
-`jinbocho-infrastructure-v1/.github/workflows/db-backup.yml` runs daily (`cron: "0 2 * * *"`, 02:00 UTC) or on manual `workflow_dispatch`. It dumps the Neon-hosted `auth_db` and `catalog_db` with `pg_dump`, gzips each dump, and uploads them as build artifacts with a **90-day retention**.
+`jinbocho-infrastructure-community-v1/.github/workflows/db-backup.yml` runs daily (`cron: "0 2 * * *"`, 02:00 UTC) or on manual `workflow_dispatch`. It dumps the Neon-hosted `auth_db` and `catalog_db` with `pg_dump`, gzips each dump, and uploads them as build artifacts with a **90-day retention**.
 
 **Required repository secrets**:
 
@@ -85,9 +85,6 @@ This job has **no lint, type-check, or test step** — it only builds and pushes
 | `NEON_CATALOG_DB_URL` | `postgresql://user:pass@ep-xxx.neon.tech/catalog_db?sslmode=require` |
 
 Use the original Neon connection string (`postgresql://`), **not** the asyncpg-transformed one used by the services at runtime.
-
-!!! note "ai_db is not backed up yet"
-    The workflow only dumps `auth_db` and `catalog_db`. If you provision a separate database for `jinbocho-ai-v1`, add an equivalent dump step for it.
 
 **Restore a backup**:
 
@@ -100,7 +97,7 @@ psql "$NEON_AUTH_DB_URL" < auth_db_YYYYMMDD_HHMM.sql
 
 ## Waking Render Services
 
-`jinbocho-infrastructure-v1/.github/workflows/wake-render.yml` pings all Render-hosted services (frontend, api-gateway, auth-service, catalog-service, ai-service `/health`) in parallel and waits up to 90 seconds for each to return HTTP 200 — useful to warm up free-tier Render services after a cold start.
+`jinbocho-infrastructure-community-v1/.github/workflows/wake-render.yml` pings all Render-hosted services (frontend, api-gateway, auth-service, catalog-service `/health`) in parallel and waits up to 90 seconds for each to return HTTP 200 — useful to warm up free-tier Render services after a cold start.
 
 This workflow only has a `workflow_dispatch` trigger — **it does not run on a schedule by itself**. To wake services automatically before they're needed, trigger it externally (e.g. an external cron service calling the GitHub Actions "dispatch workflow" API) — see [Troubleshooting](09-troubleshooting.md) for the recommended setup.
 
