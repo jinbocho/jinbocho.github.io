@@ -164,6 +164,74 @@
       flex-shrink: 0;
     }
 
+    /* ── HERO VISUAL ── */
+    .hero-visual {
+      padding: 60px 0;
+      background: var(--white);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .flow-animation {
+      width: 100%;
+      max-width: 550px;
+      height: auto;
+    }
+    .flow-animation #book-scan {
+      animation: scanBook 8s ease-in-out infinite;
+    }
+    .flow-animation #shelf-populate .book-item {
+      animation: popBook 8s ease-out infinite;
+    }
+    .flow-animation #shelf-populate .book-item:nth-child(1) { animation-delay: 1.6s; }
+    .flow-animation #shelf-populate .book-item:nth-child(2) { animation-delay: 1.9s; }
+    .flow-animation #shelf-populate .book-item:nth-child(3) { animation-delay: 2.2s; }
+    .flow-animation #shelf-populate .book-item:nth-child(4) { animation-delay: 2.5s; }
+    .flow-animation #shelf-populate .book-item:nth-child(5) { animation-delay: 2.8s; }
+    .flow-animation #shelf-populate .book-item:nth-child(6) { animation-delay: 3.1s; }
+    .flow-animation #library-map {
+      animation: buildMap 8s ease-in-out infinite;
+    }
+    .flow-animation #dashboard-stats {
+      animation: showDashboard 8s ease-out infinite;
+    }
+
+    /* Keyframes */
+    @keyframes scanBook {
+      0%, 100% { opacity: 0; }
+      15% { opacity: 1; }
+      35% { opacity: 1; transform: translateY(-10px); }
+      40% { opacity: 0; }
+    }
+    @keyframes popBook {
+      0%, 100% { opacity: 0; transform: scale(0.8); }
+      55% { opacity: 1; transform: scale(1); }
+      85% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+    @keyframes buildMap {
+      0%, 45% { opacity: 0; }
+      60% { opacity: 1; }
+      100% { opacity: 1; }
+    }
+    @keyframes showDashboard {
+      0%, 75% { opacity: 0; }
+      85% { opacity: 1; }
+      100% { opacity: 1; }
+    }
+
+    /* Accessibility: respect motion preferences */
+    @media (prefers-reduced-motion: reduce) {
+      .flow-animation #book-scan,
+      .flow-animation #shelf-populate .book-item,
+      .flow-animation #library-map,
+      .flow-animation #dashboard-stats {
+        animation: none;
+        opacity: 0.7;
+      }
+    }
+
     /* ── SECTION ── */
     section { padding: 88px 0; }
     .section-label {
