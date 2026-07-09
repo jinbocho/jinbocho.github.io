@@ -30,12 +30,13 @@ cp assets/jinbocho-logo.png site/manuals/it/assets/jinbocho-logo.png 2>/dev/null
 echo "✅ Assets synced to EN and IT manuals"
 echo ""
 
-# Step 4: Copy shared CSS/JS assets used by the landing and pricing pages
-echo "🎨 Step 4: Deploying site assets (css/js)..."
+# Step 4: Copy shared CSS/JS/screenshot assets used by the landing and pricing pages
+echo "🎨 Step 4: Deploying site assets (css/js/screenshots)..."
 mkdir -p site/assets
-rm -rf site/assets/css site/assets/js
-cp -R assets/css site/assets/css
-cp -R assets/js  site/assets/js
+rm -rf site/assets/css site/assets/js site/assets/screenshots
+cp -R assets/css         site/assets/css
+cp -R assets/js          site/assets/js
+cp -R assets/screenshots site/assets/screenshots
 echo "✅ Assets deployed → site/assets/"
 echo ""
 
@@ -55,7 +56,7 @@ echo ""
 # Step 7: Verify structure
 echo "🔍 Step 7: Verifying site structure..."
 ERRORS=0
-for path in "site/index.html" "site/manuals/index.html" "site/manuals/it/index.html" "site/pricing/index.html" "site/assets/css/base.css" "site/assets/js/site.js"; do
+for path in "site/index.html" "site/manuals/index.html" "site/manuals/it/index.html" "site/pricing/index.html" "site/assets/css/base.css" "site/assets/js/site.js" "site/assets/screenshots/hero-dashboard.webp"; do
   if [ -f "$path" ]; then
     echo "   ✅ $path"
   else

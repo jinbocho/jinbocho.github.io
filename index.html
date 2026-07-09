@@ -95,170 +95,24 @@
 <!-- ── HERO VISUAL ── -->
 <section class="hero-visual">
   <div class="container">
-    <svg class="flow-animation" viewBox="0 0 600 380" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="woodGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style="stop-color:#8B6F47;stop-opacity:1" />
-          <stop offset="100%" style="stop-color:#5a4a37;stop-opacity:1" />
-        </linearGradient>
-        <linearGradient id="bookRed" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" style="stop-color:#E63946;stop-opacity:1" />
-          <stop offset="100%" style="stop-color:#BC002D;stop-opacity:1" />
-        </linearGradient>
-        <linearGradient id="bookBlue" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" style="stop-color:#457B9D;stop-opacity:1" />
-          <stop offset="100%" style="stop-color:#2F5A7C;stop-opacity:1" />
-        </linearGradient>
-        <linearGradient id="bookGreen" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" style="stop-color:#2A9D8F;stop-opacity:1" />
-          <stop offset="100%" style="stop-color:#1d6e64;stop-opacity:1" />
-        </linearGradient>
-        <linearGradient id="bookYellow" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" style="stop-color:#F4A261;stop-opacity:1" />
-          <stop offset="100%" style="stop-color:#E08C3A;stop-opacity:1" />
-        </linearGradient>
-      </defs>
-
-      <!-- PHASE 1: BOOK SCAN (0-20%) -->
-      <g id="book-scan">
-        <!-- Scanning book with gradient -->
-        <rect x="220" y="70" width="50" height="140" fill="url(#bookRed)" rx="3"/>
-        <rect x="225" y="75" width="15" height="130" fill="rgba(255,255,255,0.15)"/>
-        <!-- Barcode -->
-        <rect x="232" y="190" width="20" height="15" fill="#333"/>
-        <line x1="235" y1="190" x2="235" y2="205" stroke="#555" stroke-width="1"/>
-        <line x1="240" y1="190" x2="240" y2="205" stroke="#555" stroke-width="1"/>
-        <line x1="245" y1="190" x2="245" y2="205" stroke="#555" stroke-width="1"/>
-        <!-- Scan effect circles -->
-        <circle cx="245" cy="50" r="12" fill="none" stroke="#BC002D" stroke-width="2" opacity="0.7"/>
-        <circle cx="245" cy="50" r="20" fill="none" stroke="#BC002D" stroke-width="1.5" opacity="0.4"/>
-      </g>
-
-      <!-- PHASE 2: SHELF POPULATE (20-45%) -->
-      <g id="shelf-populate">
-        <!-- Shelf background with wood texture -->
-        <rect x="70" y="220" width="460" height="120" fill="url(#woodGradient)" rx="2"/>
-        <rect x="70" y="220" width="460" height="8" fill="rgba(0,0,0,0.15)"/>
-        <!-- Decorative shelf line -->
-        <line x1="70" y1="225" x2="530" y2="225" stroke="rgba(0,0,0,0.1)" stroke-width="1"/>
-        <!-- Books on shelf - animated -->
-        <g class="book-item">
-          <rect x="85" y="155" width="22" height="65" fill="url(#bookRed)" rx="2"/>
-          <rect x="89" y="160" width="4" height="55" fill="rgba(255,255,255,0.1)"/>
-          <text x="96" y="185" font-size="8" fill="white" text-anchor="middle" font-weight="bold">A</text>
-        </g>
-        <g class="book-item">
-          <rect x="113" y="150" width="22" height="70" fill="url(#bookBlue)" rx="2"/>
-          <rect x="117" y="155" width="4" height="60" fill="rgba(255,255,255,0.1)"/>
-          <text x="124" y="185" font-size="8" fill="white" text-anchor="middle" font-weight="bold">B</text>
-        </g>
-        <g class="book-item">
-          <rect x="141" y="165" width="22" height="55" fill="url(#bookGreen)" rx="2"/>
-          <rect x="145" y="170" width="4" height="45" fill="rgba(255,255,255,0.1)"/>
-          <text x="152" y="192" font-size="8" fill="white" text-anchor="middle" font-weight="bold">C</text>
-        </g>
-        <g class="book-item">
-          <rect x="169" y="155" width="22" height="65" fill="url(#bookYellow)" rx="2"/>
-          <rect x="173" y="160" width="4" height="55" fill="rgba(0,0,0,0.05)"/>
-          <text x="180" y="187" font-size="8" fill="#333" text-anchor="middle" font-weight="bold">D</text>
-        </g>
-        <g class="book-item">
-          <rect x="197" y="170" width="22" height="50" fill="url(#bookRed)" rx="2"/>
-          <rect x="201" y="175" width="4" height="40" fill="rgba(255,255,255,0.1)"/>
-          <text x="208" y="193" font-size="8" fill="white" text-anchor="middle" font-weight="bold">E</text>
-        </g>
-        <g class="book-item">
-          <rect x="225" y="160" width="22" height="60" fill="url(#bookBlue)" rx="2"/>
-          <rect x="229" y="165" width="4" height="50" fill="rgba(255,255,255,0.1)"/>
-          <text x="236" y="192" font-size="8" fill="white" text-anchor="middle" font-weight="bold">F</text>
-        </g>
-      </g>
-
-      <!-- PHASE 3: LIBRARY MAP (45-75%) -->
-      <g id="library-map">
-        <!-- House outline -->
-        <rect x="280" y="90" width="280" height="200" fill="none" stroke="#BC002D" stroke-width="2" stroke-dasharray="6,3" rx="3"/>
-        <!-- Room 1: Camera -->
-        <rect x="300" y="110" width="100" height="80" fill="#E5F3FF" opacity="0.7" stroke="#457B9D" stroke-width="1.5" rx="2"/>
-        <text x="350" y="125" font-size="11" fill="#2F5A7C" text-anchor="middle" font-weight="600">Camera</text>
-        <!-- Bookcase in room 1 -->
-        <g class="room-bookcase">
-          <rect x="310" y="150" width="30" height="30" fill="none" stroke="#457B9D" stroke-width="1"/>
-          <line x1="320" y1="150" x2="320" y2="180" stroke="#457B9D" stroke-width="0.8"/>
-          <line x1="330" y1="150" x2="330" y2="180" stroke="#457B9D" stroke-width="0.8"/>
-          <line x1="310" y1="160" x2="340" y2="160" stroke="#457B9D" stroke-width="0.8"/>
-          <line x1="310" y1="170" x2="340" y2="170" stroke="#457B9D" stroke-width="0.8"/>
-        </g>
-        <!-- Room 2: Soggiorno -->
-        <rect x="410" y="110" width="140" height="80" fill="#FFF5E5" opacity="0.7" stroke="#E08C3A" stroke-width="1.5" rx="2"/>
-        <text x="480" y="125" font-size="11" fill="#8B6F47" text-anchor="middle" font-weight="600">Soggiorno</text>
-        <!-- Bookshelves in room 2 -->
-        <g class="room-bookcase">
-          <rect x="425" y="150" width="25" height="30" fill="none" stroke="#E08C3A" stroke-width="1"/>
-          <line x1="437" y1="150" x2="437" y2="180" stroke="#E08C3A" stroke-width="0.8"/>
-          <line x1="425" y1="160" x2="450" y2="160" stroke="#E08C3A" stroke-width="0.8"/>
-          <line x1="425" y1="170" x2="450" y2="170" stroke="#E08C3A" stroke-width="0.8"/>
-        </g>
-        <g class="room-bookcase">
-          <rect x="465" y="150" width="25" height="30" fill="none" stroke="#E08C3A" stroke-width="1"/>
-          <line x1="477" y1="150" x2="477" y2="180" stroke="#E08C3A" stroke-width="0.8"/>
-          <line x1="465" y1="160" x2="490" y2="160" stroke="#E08C3A" stroke-width="0.8"/>
-          <line x1="465" y1="170" x2="490" y2="170" stroke="#E08C3A" stroke-width="0.8"/>
-        </g>
-        <!-- Room 3: Studio -->
-        <rect x="300" y="200" width="120" height="75" fill="#F0E5FF" opacity="0.7" stroke="#7209B7" stroke-width="1.5" rx="2"/>
-        <text x="360" y="215" font-size="11" fill="#5a3fa0" text-anchor="middle" font-weight="600">Studio</text>
-        <!-- Bookcase in room 3 -->
-        <g class="room-bookcase">
-          <rect x="315" y="235" width="30" height="25" fill="none" stroke="#7209B7" stroke-width="1"/>
-          <line x1="325" y1="235" x2="325" y2="260" stroke="#7209B7" stroke-width="0.8"/>
-          <line x1="315" y1="245" x2="345" y2="245" stroke="#7209B7" stroke-width="0.8"/>
-          <line x1="315" y1="255" x2="345" y2="255" stroke="#7209B7" stroke-width="0.8"/>
-        </g>
-        <!-- Connectors between rooms -->
-        <circle cx="410" cy="145" r="3" fill="#BC002D" opacity="0.5"/>
-        <circle cx="360" cy="200" r="3" fill="#BC002D" opacity="0.5"/>
-      </g>
-
-      <!-- PHASE 4: DASHBOARD STATS (75-100%) -->
-      <g id="dashboard-stats">
-        <!-- Stat card 1: Books -->
-        <rect x="80" y="50" width="110" height="90" fill="white" stroke="#BC002D" stroke-width="2" rx="6"/>
-        <circle cx="95" cy="65" r="10" fill="#fdf4f5" stroke="#BC002D" stroke-width="1"/>
-        <text x="95" y="70" font-size="12" fill="#BC002D" text-anchor="middle" font-weight="bold">📚</text>
-        <text x="135" y="70" font-size="18" fill="#111111" font-weight="bold" class="stat-number">247</text>
-        <text x="135" y="85" font-size="11" fill="#444444" text-anchor="middle">Libri</text>
-        <line x1="85" y1="105" x2="145" y2="105" stroke="#e5e3de" stroke-width="1"/>
-        <text x="115" y="125" font-size="9" fill="#777777" text-anchor="middle">+12 questo mese</text>
-
-        <!-- Stat card 2: Reading -->
-        <rect x="210" y="50" width="110" height="90" fill="white" stroke="#BC002D" stroke-width="2" rx="6"/>
-        <circle cx="225" cy="65" r="10" fill="#fdf4f5" stroke="#BC002D" stroke-width="1"/>
-        <text x="225" y="70" font-size="12" fill="#BC002D" text-anchor="middle" font-weight="bold">📖</text>
-        <text x="265" y="70" font-size="18" fill="#111111" font-weight="bold" class="stat-number">8</text>
-        <text x="265" y="85" font-size="11" fill="#444444" text-anchor="middle">In lettura</text>
-        <line x1="215" y1="105" x2="275" y2="105" stroke="#e5e3de" stroke-width="1"/>
-        <text x="245" y="125" font-size="9" fill="#777777" text-anchor="middle">Questa settimana</text>
-
-        <!-- Stat card 3: Libraries -->
-        <rect x="340" y="50" width="110" height="90" fill="white" stroke="#BC002D" stroke-width="2" rx="6"/>
-        <circle cx="355" cy="65" r="10" fill="#fdf4f5" stroke="#BC002D" stroke-width="1"/>
-        <text x="355" y="70" font-size="12" fill="#BC002D" text-anchor="middle" font-weight="bold">🏠</text>
-        <text x="395" y="70" font-size="18" fill="#111111" font-weight="bold" class="stat-number">3</text>
-        <text x="395" y="85" font-size="11" fill="#444444" text-anchor="middle">Librerie</text>
-        <line x1="345" y1="105" x2="405" y2="105" stroke="#e5e3de" stroke-width="1"/>
-        <text x="375" y="125" font-size="9" fill="#777777" text-anchor="middle">Camera, Soggiorno, Studio</text>
-
-        <!-- Mini chart -->
-        <g class="mini-chart">
-          <line x1="85" y1="165" x2="95" y2="165" stroke="#BC002D" stroke-width="8" stroke-linecap="round" opacity="0.3"/>
-          <line x1="105" y1="155" x2="115" y2="155" stroke="#BC002D" stroke-width="8" stroke-linecap="round" opacity="0.5"/>
-          <line x1="125" y1="145" x2="135" y2="145" stroke="#BC002D" stroke-width="8" stroke-linecap="round" opacity="0.7"/>
-          <line x1="145" y1="140" x2="155" y2="140" stroke="#BC002D" stroke-width="8" stroke-linecap="round"/>
-          <text x="160" y="180" font-size="9" fill="#777777">Libri aggiunti (ultimi 4 mesi)</text>
-        </g>
-      </g>
-    </svg>
+    <figure class="product-shot">
+      <div class="product-shot-bar" aria-hidden="true">
+        <span class="product-shot-dot"></span>
+        <span class="product-shot-dot"></span>
+        <span class="product-shot-dot"></span>
+        <span class="product-shot-url">jinbocho.github.io/jinbocho-demo</span>
+      </div>
+      <picture>
+        <source media="(max-width: 640px)" srcset="./assets/screenshots/hero-dashboard-mobile.webp">
+        <img
+          src="./assets/screenshots/hero-dashboard.webp"
+          width="1920" height="1333"
+          alt="Dashboard di Jinbocho con libri totali, letture in corso, prestiti e libri aggiunti di recente"
+          loading="eager"
+          decoding="async"
+        >
+      </picture>
+    </figure>
   </div>
 </section>
 
