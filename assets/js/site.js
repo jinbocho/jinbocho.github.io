@@ -48,6 +48,18 @@
   }
   setLang(saved || 'en');
 
+  var trialBanner = document.getElementById('trial-banner');
+  if (trialBanner) {
+    if (localStorage.getItem('jinbocho-trial-banner-dismissed') === '1') {
+      trialBanner.classList.add('hidden');
+    }
+    var trialBannerClose = document.getElementById('trial-banner-close');
+    if (trialBannerClose) trialBannerClose.addEventListener('click', function () {
+      localStorage.setItem('jinbocho-trial-banner-dismissed', '1');
+      trialBanner.classList.add('hidden');
+    });
+  }
+
   function applyConsent(value) {
     if (typeof gtag === 'function') {
       gtag('consent', 'update', { 'analytics_storage': value === 'granted' ? 'granted' : 'denied' });

@@ -6,6 +6,60 @@
     /* ── LAYOUT ── */
     .container { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
 
+    /* ── TRIAL BANNER ── */
+    .trial-banner {
+      background: var(--red-bg);
+      border-bottom: 1px solid #f5c5cb;
+    }
+    .trial-banner.hidden { display: none; }
+    .trial-banner-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 12px 44px 12px 20px;
+      position: relative;
+    }
+    .trial-banner-inner p {
+      font-size: 14px;
+      color: var(--ink);
+      margin: 0;
+    }
+    .trial-banner-inner p strong { color: var(--red); }
+    .trial-banner-inner .btn {
+      padding: 7px 18px;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+    .trial-banner-close {
+      position: absolute;
+      top: 50%;
+      right: 12px;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+      color: var(--ink-soft);
+      padding: 6px;
+    }
+    .trial-banner-close:hover { color: var(--ink); }
+    @media (max-width: 560px) {
+      .trial-banner-inner {
+        flex-direction: column;
+        text-align: center;
+        padding: 16px 40px;
+        gap: 10px;
+      }
+      .trial-banner-inner p { font-size: 13px; }
+      .trial-banner-inner .btn { width: 100%; max-width: 240px; }
+      .trial-banner-close { top: 10px; transform: none; right: 10px; }
+    }
+
     /* ── NAV ── */
     nav {
       position: sticky;
@@ -69,6 +123,13 @@
       border-color: var(--red);
     }
     .btn-primary:hover { background: var(--red-dim); border-color: var(--red-dim); }
+    .btn-accent {
+      background: var(--red-bg);
+      color: var(--red);
+      border-color: var(--red);
+      font-weight: 600;
+    }
+    .btn-accent:hover { background: var(--red); color: var(--white); }
     .btn-outline {
       background: transparent;
       color: var(--ink);
@@ -829,7 +890,12 @@
     @media (max-width: 560px) {
       .hero { padding: 60px 0 56px; }
       section { padding: 64px 0; }
-      .hero-actions .btn-lg { width: 100%; }
+      .hero-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .hero-actions .btn-lg { width: 100%; padding-left: 8px; padding-right: 8px; }
       .steps { gap: 32px; }
       .footer-inner { flex-direction: column; align-items: flex-start; }
       .badge-list { grid-template-columns: repeat(2, 1fr); }
