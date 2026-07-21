@@ -43,6 +43,7 @@ Viewer in un'altra.
 | **Admin** | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **Editor** | ✅ | ✅ | ✅ | — | ✅ |
 | **Viewer** | ✅ | — | — | — | — |
+| **Child** | solo la propria lettura | — | — | — | — |
 
 ### Admin
 
@@ -65,7 +66,16 @@ Usa questo ruolo per: i membri che curano attivamente la collezione.
 Accesso in sola lettura. Può cercare e sfogliare l'intera biblioteca ma non
 può fare modifiche.
 
-Usa questo ruolo per: bambini, ospiti, o membri che vogliono solo consultare la biblioteca.
+Usa questo ruolo per: ospiti, o membri che vogliono solo consultare la biblioteca.
+
+### Child
+
+Un ruolo speciale disponibile solo quando **[Kids Mode](18-kids-mode.md)** è attivo per la
+biblioteca. Gli account Child non vedono affatto l'interfaccia di gestione del catalogo —
+hanno una pagina di lettura dedicata con le proprie sessioni di lettura, diario e quiz. Admin
+ed Editor creano gli account Child da **Impostazioni → Utenti**.
+
+Usa questo ruolo per: i bambini della famiglia che usano Kids Mode.
 
 ---
 

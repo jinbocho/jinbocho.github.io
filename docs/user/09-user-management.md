@@ -42,6 +42,7 @@ one library and Viewer in another.
 | **Admin** | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **Editor** | ✅ | ✅ | ✅ | — | ✅ |
 | **Viewer** | ✅ | — | — | — | — |
+| **Child** | own reading only | — | — | — | — |
 
 ### Admin
 
@@ -63,7 +64,16 @@ Use this role for: members who actively maintain the collection.
 Read-only access. Can search and browse the full library but cannot
 make any changes.
 
-Use this role for: children, guests, or members who just want to look things up.
+Use this role for: guests, or members who just want to look things up.
+
+### Child
+
+A special role available only when **[Kids Mode](18-kids-mode.md)** is enabled for the
+library. Child accounts don't see the catalog-management interface at all — they get a
+dedicated reading page with their own reading sessions, journal, and quizzes. Admins and
+Editors create child accounts from **Settings → Users**.
+
+Use this role for: children in the family who are using Kids Mode.
 
 ---
 

@@ -8,7 +8,7 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-TF0Z5E1TLK"></script>
   <script src="../assets/js/ga-init.js"></script>
   <title>Pricing — Jinbocho</title>
-  <meta name="description" content="Jinbocho Community is free forever. The AI Pro module adds a package of AI features: automatic descriptions, tag suggestions and auditing a shelf from a photo. Available on request." />
+  <meta name="description" content="Jinbocho Community is free forever. Education adds Kids Mode (reading education for families and schools, no AI); Pro adds Kids Mode plus a package of AI features: automatic descriptions, tag suggestions and auditing a shelf from a photo. Available on request." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
@@ -31,6 +31,7 @@
     </a>
     <ul class="nav-links">
       <li><a href="../../.." data-i18n="p-nav-home">Home</a></li>
+      <li><a href="../../..#kids-mode" data-i18n="p-nav-kids">Kids Mode</a></li>
       <li><a href="../manuals/" data-i18n="p-nav-docs" data-href-it="../manuals/it/" data-href-en="../manuals/">Documentazione</a></li>
       <li><a href="../pricing/" class="active" data-i18n="p-nav-pricing">Prezzi</a></li>
     </ul>
@@ -50,6 +51,7 @@
   <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
     <ul class="mobile-nav-links">
       <li><a href="../../.." data-i18n="p-nav-home">Home</a></li>
+      <li><a href="../../..#kids-mode" data-i18n="p-nav-kids">Kids Mode</a></li>
       <li><a href="../manuals/" data-i18n="p-nav-docs" data-href-it="../manuals/it/" data-href-en="../manuals/">Documentazione</a></li>
       <li><a href="../pricing/" class="active" data-i18n="p-nav-pricing">Prezzi</a></li>
     </ul>
@@ -73,6 +75,7 @@
 
     <!-- COMMUNITY -->
     <div class="pricing-card">
+      <div class="plan-kicker" data-i18n="p-c-kicker">Self-hosted, gratis</div>
       <div class="plan-name" data-i18n="p-c-name">Community</div>
       <div class="plan-tagline" data-i18n="p-c-tagline">Per uso personale e familiare</div>
       <div class="plan-price" data-i18n="p-c-price">Gratis</div>
@@ -80,13 +83,10 @@
       <ul class="plan-features">
         <li><span class="check">✓</span><span data-i18n="p-c-f1">Catalogo libri completo</span></li>
         <li><span class="check">✓</span><span data-i18n="p-c-f2">Mappa fisica degli scaffali</span></li>
-        <li><span class="check">✓</span><span data-i18n="p-c-f3">Scansione ISBN</span></li>
-        <li><span class="check">✓</span><span data-i18n="p-c-f4">Account famiglia + ruoli</span></li>
-        <li><span class="check">✓</span><span data-i18n="p-c-f5">Wishlist, valutazioni e prestiti</span></li>
-        <li><span class="check">✓</span><span data-i18n="p-c-f6">Import da Goodreads</span></li>
-        <li><span class="check">✓</span><span data-i18n="p-c-f7">Export CSV / JSON</span></li>
-        <li><span class="check">✓</span><span data-i18n="p-c-f8">Multilingua (EN, IT, ES, FR)</span></li>
-        <li><span class="cross">–</span><span data-i18n="p-c-f9">Modulo AI Pro</span></li>
+        <li><span class="check">✓</span><span data-i18n="p-c-f3">Account famiglia + ruoli</span></li>
+        <li><span class="check">✓</span><span data-i18n="p-c-f4">Wishlist, prestiti ed export</span></li>
+        <li><span class="check">✓</span><span data-i18n="p-c-f5">Circolo dei lettori</span></li>
+        <li><span class="cross">–</span><span data-i18n="p-c-f6">Kids Mode e modulo AI</span></li>
       </ul>
       <a href="../manuals/it/" data-href-it="../manuals/it/" data-href-en="../manuals/" class="plan-cta outline" data-i18n="p-c-cta">
         Leggi il manuale →
@@ -95,36 +95,54 @@
 
     <!-- ASSISTITO -->
     <div class="pricing-card">
+      <div class="plan-kicker" data-i18n="p-a-kicker">Gestito da me</div>
       <div class="badge badge-neutral badge-soon" data-i18n="p-a-badge">Presto disponibile</div>
       <div class="plan-name" data-i18n="p-a-name">Assistito</div>
       <div class="plan-tagline" data-i18n="p-a-tagline">Avere Jinbocho senza pensieri tecnici</div>
-      <div class="plan-price" style="font-size:28px; margin-top:8px;" data-i18n="p-p-price">Presto disponibile</div>
+      <div class="plan-price" style="font-size:28px; margin-top:8px;" data-i18n="p-a-price">Presto disponibile</div>
       <div class="plan-price-note" data-i18n="p-a-price-note">Prima installazione guidata · Infrastruttura a carico dell'utente</div>
       <ul class="plan-features">
         <li><span class="check">✓</span><span data-i18n="p-a-f1">Tutto di Community</span></li>
-        <li><span class="check">✓</span><span data-i18n-html="p-a-f2"><strong>Prima installazione in produzione</strong><br><small style="color:var(--ink-soft)">Configurazione Docker Compose o deploy cloud (Render + Neon) a cura mia</small></span></li>
-        <li><span class="check">✓</span><span data-i18n="p-a-f3">Verifica funzionamento e test post-deploy</span></li>
-        <li><span class="cross">–</span><span data-i18n="p-a-f4">Modulo AI Pro</span></li>
+        <li><span class="check">✓</span><span data-i18n-html="p-a-f2"><strong>Installazione guidata da me</strong><br><small style="color:var(--ink-soft)">Docker Compose o cloud (Render + Neon), verifica e test post-deploy</small></span></li>
+        <li><span class="cross">–</span><span data-i18n="p-a-f3">Kids Mode e modulo AI</span></li>
       </ul>
       <p class="plan-soon-note" data-i18n="p-a-soon-note">Entro la fine del 2026 Jinbocho verrà finalizzato e potrà essere installato definitivamente. Scrivici per ricevere informazioni.</p>
       <a href="mailto:jinbochoapp@gmail.com" class="plan-cta outline" data-i18n="p-a-cta">Contattaci</a>
     </div>
 
+    <!-- EDUCATION -->
+    <div class="pricing-card">
+      <div class="plan-kicker" data-i18n="p-e-kicker">Gestito da me</div>
+      <div class="badge badge-neutral badge-soon" data-i18n="p-e-badge">Presto disponibile</div>
+      <div class="plan-name" data-i18n="p-e-name">Education</div>
+      <div class="plan-tagline" data-i18n="p-e-tagline">Community + Kids Mode, senza AI</div>
+      <div class="plan-price" style="font-size:28px; margin-top:8px;" data-i18n="p-e-price">Presto disponibile</div>
+      <div class="plan-price-note" data-i18n="p-e-price-note">Licenza commerciale · Self-hosted · Installazione guidata inclusa</div>
+      <ul class="plan-features">
+        <li><span class="check">✓</span><span data-i18n="p-e-f1">Tutto di Community</span></li>
+        <li><span class="check">✓</span><span data-i18n="p-e-f2">Installazione guidata inclusa</span></li>
+        <li><span class="check">✓</span><span data-i18n-html="p-e-f3"><strong>Modulo Kids Mode</strong><br><small style="color:var(--ink-soft)">Account bambini, sessioni di lettura, quiz, diario, percorsi di lettura, sfide familiari — senza dipendere dal modulo AI</small></span></li>
+        <li><span class="check">✓</span><span data-i18n="p-e-f4">Licenza commerciale e supporto incluso</span></li>
+        <li><span class="cross">–</span><span data-i18n="p-e-f5">Modulo AI Pro</span></li>
+      </ul>
+      <p class="plan-soon-note" data-i18n="p-e-soon-note">Entro la fine del 2026 Jinbocho verrà finalizzato e potrà essere installato definitivamente. Scrivici per ricevere informazioni.</p>
+      <a href="mailto:jinbochoapp@gmail.com" class="plan-cta outline" data-i18n="p-e-cta">Contattaci</a>
+    </div>
+
     <!-- PRO -->
     <div class="pricing-card featured">
+      <div class="plan-kicker" data-i18n="p-p-kicker">Gestito da me</div>
       <div class="badge badge-soon" data-i18n="p-p-badge">Presto disponibile</div>
       <div class="plan-name" data-i18n="p-p-name">Pro</div>
-      <div class="plan-tagline" data-i18n="p-p-tagline">Community + modulo AI Pro</div>
+      <div class="plan-tagline" data-i18n="p-p-tagline">Community + Kids Mode + modulo AI Pro</div>
       <div class="plan-price" style="font-size:28px; margin-top:8px;" data-i18n="p-p-price">Presto disponibile</div>
       <div class="plan-price-note" data-i18n="p-p-price-note">Licenza commerciale · Self-hosted · Infrastruttura a carico dell'utente</div>
       <ul class="plan-features">
-        <li><span class="check">✓</span><span data-i18n="p-p-f1">Tutto di Community</span></li>
-        <li><span class="check">✓</span><span data-i18n="p-p-f2">Prima installazione guidata</span></li>
-        <li><span class="check">✓</span><span data-i18n-html="p-p-f3"><strong>Pacchetto funzionalità AI</strong><br><small style="color:var(--ink-soft)">Descrizione automatica, suggerimento tag e un LLM che verifica uno scaffale da una foto e propone i libri da aggiungere</small></span></li>
-        <li><span class="check">✓</span><span data-i18n-html="p-p-f4">Compatibile con qualsiasi provider LLM<br><small style="color:var(--ink-soft)">OpenAI, Gemini, Groq, Ollama…</small></span></li>
-        <li><span class="check">✓</span><span data-i18n="p-p-f5">Licenza commerciale inclusa</span></li>
-        <li><span class="check">✓</span><span data-i18n="p-p-f6">Supporto via email</span></li>
-        <li style="color:var(--ink-soft); font-style:italic; border-bottom:none; padding-top:4px;"><small data-i18n="p-p-f7">+ altre funzionalità AI in arrivo</small></li>
+        <li><span class="check">✓</span><span data-i18n="p-p-f1">Tutto di Community + Kids Mode</span></li>
+        <li><span class="check">✓</span><span data-i18n="p-p-f2">Installazione guidata inclusa</span></li>
+        <li><span class="check">✓</span><span data-i18n-html="p-p-f3"><strong>Pacchetto funzionalità AI</strong><br><small style="color:var(--ink-soft)">Descrizione automatica, suggerimento tag, verifica scaffale da foto</small></span></li>
+        <li><span class="check">✓</span><span data-i18n="p-p-f4">Licenza commerciale e supporto via email incluso</span></li>
+        <li style="color:var(--ink-soft); font-style:italic; border-bottom:none; padding-top:4px;"><small data-i18n="p-p-f5">+ altre funzionalità AI in arrivo</small></li>
       </ul>
       <p class="plan-soon-note" data-i18n="p-p-soon-note">Entro la fine del 2026 Jinbocho verrà finalizzato e potrà essere installato definitivamente. Scrivici per ricevere informazioni.</p>
       <a href="mailto:jinbochoapp@gmail.com" class="plan-cta solid" data-i18n="p-p-cta">Contattaci</a>
@@ -143,12 +161,14 @@
           <th data-i18n="p-t-h1">Funzionalità</th>
           <th data-i18n="p-t-h2">Community</th>
           <th><span data-i18n="p-t-h3">Assistito</span><br><small style="font-weight:400; text-transform:none; letter-spacing:0; color:var(--ink-soft); font-size:11px;" data-i18n="p-t-h3-soon">Presto disponibile</small></th>
-          <th><span data-i18n="p-t-h4">Pro</span><br><small style="font-weight:400; text-transform:none; letter-spacing:0; color:var(--ink-soft); font-size:11px;" data-i18n="p-t-h4-soon">Presto disponibile</small></th>
+          <th><span data-i18n="p-t-h4">Education</span><br><small style="font-weight:400; text-transform:none; letter-spacing:0; color:var(--ink-soft); font-size:11px;" data-i18n="p-t-h4-soon">Presto disponibile</small></th>
+          <th><span data-i18n="p-t-h5">Pro</span><br><small style="font-weight:400; text-transform:none; letter-spacing:0; color:var(--ink-soft); font-size:11px;" data-i18n="p-t-h5-soon">Presto disponibile</small></th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td data-i18n="p-t-r1">Catalogo libri</td>
+          <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
@@ -158,9 +178,11 @@
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
+          <td><span class="t-check">✓</span></td>
         </tr>
         <tr>
           <td data-i18n="p-t-r3">Scansione ISBN (camera mobile)</td>
+          <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
@@ -170,9 +192,11 @@
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
+          <td><span class="t-check">✓</span></td>
         </tr>
         <tr>
           <td data-i18n="p-t-r5">Stato lettura e posizione sullo scaffale</td>
+          <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
@@ -182,9 +206,18 @@
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
+          <td><span class="t-check">✓</span></td>
+        </tr>
+        <tr>
+          <td><span data-i18n="p-t-rbc">Circolo dei lettori</span><br><small style="color:var(--ink-soft); font-weight:400;" data-i18n="p-t-rbc-s">Cicli di lettura condivisa, discussione, votazione, incontri, storico letture</small></td>
+          <td><span class="t-check">✓</span></td>
+          <td><span class="t-check">✓</span></td>
+          <td><span class="t-check">✓</span></td>
+          <td><span class="t-check">✓</span></td>
         </tr>
         <tr>
           <td data-i18n="p-t-r7">Import da Goodreads</td>
+          <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
@@ -194,9 +227,11 @@
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
+          <td><span class="t-check">✓</span></td>
         </tr>
         <tr>
           <td data-i18n="p-t-r9">Multilingua (EN, IT, ES, FR)</td>
+          <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
@@ -206,9 +241,18 @@
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
+          <td><span class="t-check">✓</span></td>
         </tr>
         <tr>
           <td data-i18n="p-t-r11">Prima installazione guidata in produzione</td>
+          <td><span class="t-cross">–</span></td>
+          <td><span class="t-check">✓</span></td>
+          <td><span class="t-check">✓</span></td>
+          <td><span class="t-check">✓</span></td>
+        </tr>
+        <tr>
+          <td><span data-i18n="p-t-rkids">Kids Mode</span><br><small style="color:var(--ink-soft); font-weight:400;" data-i18n="p-t-rkids-s">Account bambini, sessioni di lettura, quiz, diario, percorsi di lettura, sfide familiari</small></td>
+          <td><span class="t-cross">–</span></td>
           <td><span class="t-cross">–</span></td>
           <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
@@ -217,10 +261,12 @@
           <td><span data-i18n="p-t-r12">Pacchetto funzionalità AI</span><br><small style="color:var(--ink-soft); font-weight:400;" data-i18n="p-t-r12s">Descrizione automatica, suggerimento tag, verifica scaffale da foto con libri proposti</small></td>
           <td><span class="t-cross">–</span></td>
           <td><span class="t-cross">–</span></td>
+          <td><span class="t-cross">–</span></td>
           <td><span class="t-check">✓</span></td>
         </tr>
         <tr>
           <td data-i18n="p-t-r13">Compatibilità LLM (OpenAI, Gemini, Groq, Ollama…)</td>
+          <td><span class="t-cross">–</span></td>
           <td><span class="t-cross">–</span></td>
           <td><span class="t-cross">–</span></td>
           <td><span class="t-check">✓</span></td>
@@ -230,11 +276,13 @@
           <td><span class="t-cross">–</span></td>
           <td><span class="t-cross">–</span></td>
           <td><span class="t-check">✓</span></td>
+          <td><span class="t-check">✓</span></td>
         </tr>
         <tr>
           <td data-i18n="p-t-r15">Supporto via email</td>
           <td><span class="t-cross">–</span></td>
           <td><span class="t-cross">–</span></td>
+          <td><span class="t-check">✓</span></td>
           <td><span class="t-check">✓</span></td>
         </tr>
       </tbody>
@@ -274,6 +322,11 @@
   <div class="faq-item">
     <div class="faq-q" data-i18n="p-faq6-q">Il costo del server è incluso?</div>
     <div class="faq-a" data-i18n-html="p-faq6-a">No. In tutti i piani il software è self-hosted: il costo dell'infrastruttura (server, VPS, NAS o cloud provider) è interamente a carico dell'utente. Per un deploy su Render + Neon il costo di partenza può essere zero (free tier) o pochi euro al mese a seconda del traffico. Scrivi a <a href="mailto:jinbochoapp@gmail.com">jinbochoapp@gmail.com</a> per una stima personalizzata.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q" data-i18n="p-faq7-q">Qual è la differenza tra Education e Pro?</div>
+    <div class="faq-a" data-i18n="p-faq7-a">Stessa installazione guidata e stesso supporto. Education aggiunge solo il modulo Kids Mode (account bambini, letture, quiz, diario, percorsi di lettura) senza il modulo AI — pensato per famiglie e scuole che vogliono la parte educativa senza il costo/infrastruttura dell'intelligenza artificiale. Pro include entrambi i moduli, Kids Mode e AI.</div>
   </div>
 </section>
 

@@ -45,6 +45,7 @@ nav:
       - Come catalogare la biblioteca di casa: compare/come-catalogare-biblioteca-di-casa.md
       - Sapere su quale scaffale è un libro: compare/sapere-su-quale-scaffale-e-un-libro.md
       - Jinbocho vs Libib vs Skoolib: compare/jinbocho-vs-libib-vs-skoolib.md
+      - La filosofia dietro Kids Mode: philosophy/la-filosofia-di-kids-mode.md
   - Manuale Sviluppatori:
       - Panoramica: developer/index.md
       - Prerequisiti: developer/01-prerequisites.md
@@ -72,6 +73,8 @@ nav:
       - Progressi di lettura: user/10-reading-progress.md
       - Prestiti: user/16-loans.md
       - Lista dei desideri: user/17-wishlist.md
+      - Circolo dei lettori: user/19-book-club.md
+      - Kids Mode: user/18-kids-mode.md
       - Esperienza mobile: user/11-mobile.md
       - Lingua e aspetto: user/12-localization.md
       - Domande frequenti: user/13-faq.md

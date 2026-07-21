@@ -23,6 +23,8 @@ Tutto quello che ti serve per usare Jinbocho — dall'aggiunta del primo libro a
 | 15 | [Presentazione del libro e AI](15-book-presentation.md) | Riassunti generati dall'AI e consigli di lettura personalizzati |
 | 16 | [Prestiti](16-loans.md) | Prestare libri a un membro o a chiunque altro, scadenze, pagina In prestito |
 | 17 | [Lista dei desideri](17-wishlist.md) | Tieni una lista prioritaria dei libri da aggiungere |
+| 18 | [Kids Mode](18-kids-mode.md) | Account bambini, sessioni di lettura, diario, quiz, percorsi di lettura, sfide di famiglia — indipendente dal modulo AI |
+| 19 | [Circolo dei lettori](19-book-club.md) | Cicli di lettura condivisa, discussione, votazione, incontri, storico letture — gratis in ogni edizione, anche Community |
 
 ---
 
@@ -60,6 +62,14 @@ Tutto quello che ti serve per usare Jinbocho — dall'aggiunta del primo libro a
 
 → [Prestiti](16-loans.md) — traccia chi lo ha, da quando, e quando deve tornare
 
+### Voglio attivare Kids Mode per i miei figli
+
+→ [Kids Mode](18-kids-mode.md) — account bambini, sessioni di lettura, diario, quiz, sfide di famiglia
+
+### Voglio leggere un libro insieme al resto della biblioteca
+
+→ [Circolo dei lettori](19-book-club.md) — avvia un ciclo di lettura, discuti, vota il prossimo libro
+
 ### Qualcosa non funziona
 
 → [Risoluzione problemi](14-troubleshooting.md) o [Domande frequenti](13-faq.md)
@@ -80,6 +90,7 @@ fisici. Prende il nome dal famoso quartiere dei libri a Tokyo, e ti permette di:
 - Tenere una lista dei desideri dei libri da aggiungere
 - Esportare la biblioteca in CSV o JSON, o importare una biblioteca Goodreads esistente
 - Prestare libri e tenere traccia di chi li ha
+- Leggere un libro insieme al gruppo con il Circolo dei lettori gratuito, e tenerne lo storico
 
 Jinbocho funziona nel browser — nessuna installazione necessaria. Funziona su
 telefoni, tablet e computer. Ogni biblioteca può avere più membri con diversi

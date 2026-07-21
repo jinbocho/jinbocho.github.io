@@ -44,6 +44,7 @@ nav:
       - Catalog your home library: compare/catalog-your-home-library.md
       - Track which shelf a book is on: compare/track-which-shelf-a-book-is-on.md
       - Jinbocho vs Libib vs Skoolib: compare/jinbocho-vs-libib-vs-skoolib.md
+      - The philosophy behind Kids Mode: philosophy/kids-mode.md
   - Developer Manual:
       - Overview: developer/index.md
       - Prerequisites: developer/01-prerequisites.md
@@ -71,6 +72,8 @@ nav:
       - Reading Progress: user/10-reading-progress.md
       - Loans: user/16-loans.md
       - Wishlist: user/17-wishlist.md
+      - Book Club: user/19-book-club.md
+      - Kids Mode: user/18-kids-mode.md
       - Mobile Experience: user/11-mobile.md
       - Language & Appearance: user/12-localization.md
       - FAQ: user/13-faq.md

@@ -24,6 +24,8 @@ to managing a shared library with multiple members.
 | 15 | [Book Presentation & AI](15-book-presentation.md) | AI-generated book summaries and personalised recommendations |
 | 16 | [Loans](16-loans.md) | Lend books to a member or to anyone else, due dates, the On Loan page |
 | 17 | [Wishlist](17-wishlist.md) | Keep a priority list of books you want to add next |
+| 18 | [Kids Mode](18-kids-mode.md) | Child accounts, reading sessions, journal, quizzes, reading paths, family challenges — independent of the AI module |
+| 19 | [Book Club](19-book-club.md) | Shared reading cycles, discussion, voting, meetings, reading history — free in every edition, including Community |
 
 ---
 
@@ -61,6 +63,14 @@ to managing a shared library with multiple members.
 
 → [Loans](16-loans.md) — track who has it, since when, and when it's due back
 
+### I want to set up Kids Mode for my children
+
+→ [Kids Mode](18-kids-mode.md) — child accounts, reading sessions, journal, quizzes, family challenges
+
+### I want to read a book together with the rest of the library
+
+→ [Book Club](19-book-club.md) — start a reading cycle, discuss, vote on the next book
+
 ### Something isn't working
 
 → [Troubleshooting](14-troubleshooting.md) — common fixes, or [FAQ](13-faq.md) for quick answers
@@ -81,6 +91,7 @@ district in Tokyo, it lets you:
 - Keep a wishlist of books you want to add next
 - Export your library as CSV or JSON, or import an existing Goodreads library
 - Lend books and keep track of who has them
+- Read a book together as a group with the free Book Club, and keep a history of it
 
 Jinbocho runs in the browser — no installation needed. It works on phones, tablets,
 and computers. Every library can have multiple members with different permission
