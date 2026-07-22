@@ -135,6 +135,9 @@ extra:
     - icon: fontawesome/brands/github
       link: https://github.com/jinbocho
       name: GitHub Organization
+    - icon: fontawesome/brands/instagram
+      link: https://instagram.com/jinbocho.app
+      name: Instagram
 
 extra_css:
   - assets/custom.css
