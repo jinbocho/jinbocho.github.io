@@ -99,7 +99,7 @@ If you find:
 Please:
 
 - Report on GitHub Issues
-- Email **jinbochoapp@gmail.com**
+- Email **support@jinbocho.eu**
 - Submit a PR with fixes
 
 ---

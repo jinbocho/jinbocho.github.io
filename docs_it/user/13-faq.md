@@ -44,7 +44,7 @@ Raccolta delle domande più comuni su Jinbocho.
     singolo membro. Chiedi al tuo Admin di scaricare un
     **[backup completo](08-export-import.md#backup-e-ripristino)** (che include
     l'elenco membri, i libri, i prestiti e la cronologia di lettura), oppure
-    contatta **jinbochoapp@gmail.com** direttamente.
+    contatta **support@jinbocho.eu** direttamente.
 
 ---
 

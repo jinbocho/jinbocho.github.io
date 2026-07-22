@@ -195,7 +195,7 @@ There's no self-service "export my data" button for individual members yet.
 Ask your library's Admin to download a
 **[full backup](08-export-import.md#backup-restore)** (which includes the
 member roster, books, loans and reading history), or contact
-**jinbochoapp@gmail.com** directly.
+**support@jinbocho.eu** directly.
 
 ---
 

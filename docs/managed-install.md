@@ -19,7 +19,7 @@ If you'd rather skip the technical setup, a managed installation service is avai
 
 Contact us for a quote based on your infrastructure and requirements.
 
-📩 jinbochoapp@gmail.com
+📩 support@jinbocho.eu
 
 ---
 
